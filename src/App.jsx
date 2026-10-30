@@ -3,6 +3,7 @@
    slide out to the left, popped entries slide out to the right before unmounting. */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useBuy } from './engine.jsx';
+import ShopPicker from './screens/ShopPicker.jsx';
 import { STORE, P, inr, calcBill, nextOffer, V2 } from './data.js';
 import { Ring } from './ui.jsx';
 import { renderSheet, MODALS } from './Sheets.jsx';
@@ -160,6 +161,7 @@ export default function App() {
       <Pill />
       <Layer />
       <Notif />
+      <ShopPicker />
       <div className={'ba-toast' + (S.toast ? ' on' : '')} role="status">{msg}</div>
     </div>
   );

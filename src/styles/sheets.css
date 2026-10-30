@@ -39,3 +39,12 @@
 .bsh-vtop img { flex: none; width: 64px; height: 64px; border-radius: 12px; object-fit: cover; }
 .bsh-vq { margin-bottom: -8px; }
 .bsh-vfoot { display: flex; gap: 8px; padding-top: 4px; }
+
+/* More Options → shop type switcher (prototype): opens the shop-type picker */
+.bsh .bsh-shop { display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 8px; padding: 10px 12px; border: 1px solid #e3e3e3; border-radius: 15px; background: #fdfdfd; text-align: left; transition: transform .15s, background-color .2s; }
+.bsh .bsh-shop:active { transform: scale(.98); background: #fbf3f3; }
+.bsh-shop i { flex: none; width: 24px; height: 24px; background: var(--r); -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
+.bsh-shop span { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.bsh-shop small { font-size: 11px; font-weight: 500; color: var(--mt2); }
+.bsh-shop b { font-size: 15px; font-weight: 500; letter-spacing: -0.3px; color: #000; }
+.bsh-shop em { flex: none; font-style: normal; font-size: 14px; font-weight: 500; color: var(--r); }

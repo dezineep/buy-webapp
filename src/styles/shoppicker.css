@@ -1,0 +1,41 @@
+/* BUY · SHOP TYPE PICKER — full-screen layer over the app. Cards follow the app's outlined style: 1px stroke,
+   hard shadow in the stroke colour when selected (same as the bulk pack cards), icons tinted through CSS masks. */
+.bsp { position: absolute; inset: 0; z-index: 80; display: flex; flex-direction: column; background: linear-gradient(180deg, #fbeaea 0, #fff 260px); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .35s, transform .35s cubic-bezier(.2, .8, .2, 1); }
+.bsp.on { opacity: 1; transform: none; pointer-events: auto; }
+.bsp-scr { flex: 1; min-height: 0; overflow-y: auto; padding: calc(var(--sat, 0px) + 28px) 16px 24px; scrollbar-width: none; }
+.bsp-scr::-webkit-scrollbar { display: none; }
+
+.bsp-top { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 24px; }
+.bsp-badge { padding: 4px 10px; border: 1px solid var(--r); border-radius: 33px; background: #fff; font-size: 11px; font-weight: 600; letter-spacing: -0.2px; color: var(--r); }
+.bsp-top h1 { margin: 0; font-size: 26px; font-weight: 600; line-height: 1.15; letter-spacing: -0.8px; color: #000; }
+.bsp-top p { margin: 0; font-size: 14px; line-height: 1.5; letter-spacing: -0.28px; color: var(--mt); }
+
+.bsp-list { display: flex; flex-direction: column; gap: 10px; }
+.bsp .bsp-card { display: flex; flex-direction: column; padding: 12px; border: 1px solid #e3e3e3; border-radius: 16px; background: #fff; text-align: left; transition: border-color .25s, box-shadow .25s, transform .15s; }
+.bsp .bsp-card:active { transform: scale(.985); }
+.bsp .bsp-card.on { border-color: var(--r); box-shadow: 2px 3px 0 var(--r); }
+.bsp-row { display: flex; align-items: center; gap: 12px; }
+.bsp-ic { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #f6f6f6; transition: background-color .25s; }
+.bsp-ic i, .bsp-cat i { display: block; width: 24px; height: 24px; background: #696969; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; transition: background-color .25s; }
+.bsp-card.on .bsp-ic { background: var(--pk3); }
+.bsp-card.on .bsp-ic i { background: var(--r); }
+.bsp-t { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.bsp-t b { font-size: 16px; font-weight: 600; line-height: 1.2; letter-spacing: -0.4px; color: #000; }
+.bsp-t small { font-size: 12px; font-weight: 500; line-height: 1.2; letter-spacing: -0.24px; color: var(--mt2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bsp-radio { flex: none; width: 20px; height: 20px; border: 1.5px solid #c9c9c9; border-radius: 50%; transition: border-color .25s, border-width .25s; }
+.bsp-card.on .bsp-radio { border: 6px solid var(--r); }
+
+/* category preview: collapsed rows open on the selected card */
+.bsp-cats { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s cubic-bezier(.2, .8, .2, 1); }
+.bsp-card.on .bsp-cats { grid-template-rows: 1fr; }
+.bsp-cats-in { min-height: 0; overflow: hidden; display: flex; flex-wrap: wrap; gap: 8px 4px; }
+.bsp-card.on .bsp-cats-in { padding-top: 12px; }
+.bsp-cat { width: calc((100% - 12px) / 4); display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 2px; border-radius: 12px; background: #faf6f6; opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s; }
+.bsp-card.on .bsp-cat { opacity: 1; transform: none; }
+.bsp-card.on .bsp-cat:nth-child(n+5) { transition-delay: .05s; }
+.bsp-card.on .bsp-cat:nth-child(n+9) { transition-delay: .1s; }
+.bsp-cat i { background: var(--r); }
+.bsp-cat small { font-size: 10px; font-weight: 500; line-height: 1.2; letter-spacing: -0.2px; color: #696969; text-align: center; }
+
+.bsp-foot { flex: none; padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px)); background: #fff; box-shadow: 0 -6px 20px rgba(0, 0, 0, .06); }
+.bsp-foot .ba-btn { overflow: hidden; text-overflow: ellipsis; }

@@ -63,14 +63,21 @@ export default function Order({ entry }) {
   } else {
     ill = <Img f="ill-delivered.png" w={191} h={124} cls="bo-ill box" />;
     h = 'Your order has been delivered!';
-    p = `Your order from ${STORE.name} has reached you safely. Thank you for shopping with us, we hope you love the fit!`;
+    p = `Your order from ${STORE.name} has reached you safely. Thank you for shopping with us, we hope you love it!`;
   }
   const at = t.dispatched || new Date();
   return (
     <div className={'bo st-' + st}><Head title={title} />
       <div className="bo-body">
         <div className="bo-info">
-          {ill}
+          {/* the illustration lives in an animated stage: placed = box floats while the tick pulses, packed / on the way
+              = the scooter rides with speed lines and a moving road, delivered = box settles with twinkling sparkles */}
+          <div className={'bo-art ' + (st === 'packed' || st === 'dispatched' ? 'ride' : st === 'delivered' ? 'box' : 'placed')}>
+            {ill}
+            {st === 'packed' || st === 'dispatched' ? <><span className="bo-speed" aria-hidden="true"><i /><i /><i /></span><span className="bo-road" aria-hidden="true" /></> : null}
+            {st === 'placed' || st === 'cancelled' ? <i className="bo-pulse" aria-hidden="true" /> : null}
+            {st === 'delivered' ? <span className="bo-sparks" aria-hidden="true"><i /><i /><i /><i /></span> : null}
+          </div>
           <span className="bo-chip">{st === 'delivered' || st === 'cancelled' ? `Order #${o.id}` : `OTP : ${o.otp}`}</span>
           <div className="bo-msg"><h3 className="bo-h">{h}</h3><p className="bo-p">{p}</p></div>
           {small ? <p className="bo-small">{small}</p> : null}
@@ -91,11 +98,11 @@ export default function Order({ entry }) {
           </div>
         ) : null}
         <div className="bo-btns">
-          {st !== 'delivered' && st !== 'cancelled' ? <>
-            <button className="ba-btn wide" onClick={A.myorders}>Track Order Status</button>
-            <button className="ba-btn wide soft" onClick={A.home}>Continue Shopping</button>
-          </> : null}
-          {st !== 'cancelled' ? <button className="ba-btn wide soft" onClick={() => { if (!downloadReceipt(o)) A.toast('Receipt downloaded'); }}>Download Order Receipt</button> : null}
+          {st !== 'delivered' && st !== 'cancelled' ? <button className="ba-btn wide" onClick={A.myorders}>Track Order Status</button> : null}
+          <div className="bo-pair">
+            <button className="bo-ob" onClick={A.home}>Continue Shopping</button>
+            {st !== 'cancelled' ? <button className="bo-ob" onClick={() => { if (!downloadReceipt(o)) A.toast('Receipt downloaded'); }}>Download Receipt</button> : null}
+          </div>
         </div>
         <OrderSummary o={o} />
       </div>

@@ -6,6 +6,12 @@
    Sheets : more, sort, amount, offers, variants{pid}, custom{pid}, quick{pid} (modal), details, pay, unlock{id} (modal) */
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import { P, OFFERS, PARTNER, STORE, IMG, GIFT, calcBill, lineInfo, lineKey, defaultSel, seedOrders, seedRefunds, seedAddresses } from './data.js';
+import { applyShop } from './shops.js';
+
+/* the prototype opens on the shop-type picker; the last pick is remembered so it can be confirmed with one tap */
+const SHOP_KEY = 'buy.shop';
+const savedShop = (() => { try { return localStorage.getItem(SHOP_KEY) || 'fashion'; } catch { return 'fashion'; } })();
+applyShop(savedShop);
 
 const Ctx = createContext(null);
 export const useBuy = () => useContext(Ctx);
@@ -18,6 +24,7 @@ const initState = () => ({
   stack: [entry('home')], cart: [], cat: 'all', search: '', sort: 'rel', user: null, addr: null,
   orders: seedOrders(), refunds: seedRefunds(), addresses: seedAddresses(), unlocked: new Set(), checkout: false, fresh: {},
   sel: {}, sheet: null, pill: null, toast: null, notif: null, heroI: 0, rtab: 'pending', ofilter: 'all',
+  shop: savedShop, picker: true,
 });
 
 export function BuyProvider({ children }) {
@@ -131,7 +138,7 @@ export function BuyProvider({ children }) {
     if (!o) return;
     if (status !== 'accepted') o.status = status;
     o.times[status] = new Date();
-    const msg = { accepted: 'The store has accepted your order', packed: 'Your order has been packed', dispatched: `${PARTNER.name} is on the way. Your OTP is ${o.otp}`, delivered: 'Order delivered. Enjoy your new outfit!' }[status];
+    const msg = { accepted: 'The store has accepted your order', packed: 'Your order has been packed', dispatched: `${PARTNER.name} is on the way. Your OTP is ${o.otp}`, delivered: 'Order delivered. Enjoy your purchase!' }[status];
     commit();
     if (msg) notify(msg, id);
   };
@@ -144,6 +151,13 @@ export function BuyProvider({ children }) {
     back, home, go, toast, openSheet, closeSheet, selOf, commit,
     close: closeSheet,
     store: () => { closeSheet(); go('store'); },
+    openpicker: () => { closeSheet(); S.picker = true; commit(); },
+    pickshop: id => {
+      applyShop(id); S.shop = id; S.cat = 'all'; S.prevCat = 'all'; S.picker = false;
+      try { localStorage.setItem(SHOP_KEY, id); } catch { /* private mode */ }
+      if (S.stack.length > 1) pop(1);
+      commit();
+    },
     m17: () => toast('BUY is a product of Modulus Seventeen'),
     share: () => { const url = `modulusbuy.com/${STORE.slug}`; if (navigator.share) navigator.share({ title: STORE.name, url: 'https://' + url }).catch(() => {}); else toast(`Store link copied: ${url}`); },
     more: () => openSheet('more'),

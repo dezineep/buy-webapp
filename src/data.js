@@ -141,7 +141,9 @@ export const customUnit = (p, sel, n) => Math.round(unitPrice(p, sel) * Math.max
 export const packPrice = (p, sel, pack) => {
   const u = unitPrice(p, sel);
   if (pack.custom) return customUnit(p, sel, pack.n) * pack.n;
-  return Math.round(u * pack.n * (pack.f || 1));
+  // selections and cart lines only keep { n }: the pack's price factor comes from the product's own pack list
+  const f = pack.f || (p.packs.find(x => x.n === pack.n) || {}).f || 1;
+  return Math.round(u * pack.n * f);
 };
 export const packKey = pk => (pk.custom ? 'c' + pk.n : String(pk.n));
 export const selLabel = (p, sel) => p.opts.map(o => sel[o.name]).filter(Boolean).join(' · ');

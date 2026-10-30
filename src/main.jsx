@@ -15,6 +15,7 @@ import './styles/store.css';
 import './styles/refunds.css';
 import './styles/addresses.css';
 import './styles/search.css';
+import './styles/shoppicker.css';
 import './styles/app.css';
 
 createRoot(document.getElementById('root')).render(<BuyProvider><App /></BuyProvider>);

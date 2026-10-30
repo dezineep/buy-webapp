@@ -5,6 +5,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useBuy } from './engine.jsx';
 import { P, PRODUCTS, V2, FG, STORE, OFFERS, inr, calcBill, unitPrice, mrpOf, packPrice, customUnit, lineKey, selLabel, packText } from './data.js';
+import { shopOf } from './shops.js';
+import { iconUrl } from './catIcons.js';
 import { SheetHead, Ring, PriceBox, PriceRow, BigStep, ICO, MiniCard } from './ui.jsx';
 import { PackCards, OptionGroups } from './screens/Product.jsx';
 
@@ -32,6 +34,11 @@ function More() {
           <Tile on={A.support} icon="ic-support.svg" l1="Store" l2="Support" />
           {u ? <Tile on={A.logout} icon="ic-logout.svg" l1="Log Out" l2="Now" /> : <Tile on={A.details} icon="ic-logout.svg" l1="Log In" l2="Now" />}
         </div>
+        <button className="bsh-shop" onClick={A.openpicker}>
+          <i style={{ WebkitMaskImage: `url("${iconUrl(shopOf(S.shop).icon)}")`, maskImage: `url("${iconUrl(shopOf(S.shop).icon)}")` }} aria-hidden="true" />
+          <span><small>Shop type</small><b>{shopOf(S.shop).name}</b></span>
+          <em>Change</em>
+        </button>
       </div>
     </div>
   );

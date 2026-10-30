@@ -68,3 +68,35 @@
 .bo-sum .bo-copy:active, .brd-card .bo-copy:active { background: rgba(165, 34, 38, .08); }
 /* delivered frame uses Medium for the summary labels */
 .st-delivered .bo-sum .bo-sum-h, .st-delivered .bo-row-t b { font-weight: 500; }
+
+/* ---------- animated illustration stage ---------- */
+.bo-art { position: relative; display: grid; place-items: center; margin-top: 10px; } /* room for the float so the header never clips the box */
+.bo-art.placed .bo-ill { animation: bo-in .6s cubic-bezier(.34, 1.56, .64, 1) both, bo-float 2.6s 0.6s ease-in-out infinite; }
+.bo-pulse { position: absolute; left: 33px; top: 47px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #a52226; opacity: 0; animation: bo-pulse 1.8s .7s ease-out infinite; }
+.bo-art.placed .bo-pulse { animation-name: bo-pulse, bo-float-y; animation-duration: 1.8s, 2.6s; animation-delay: .7s, .6s; animation-iteration-count: infinite, infinite; animation-timing-function: ease-out, ease-in-out; }
+@keyframes bo-pulse { 0% { transform: scale(.8); opacity: .9; } 100% { transform: scale(2.1); opacity: 0; } }
+@keyframes bo-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes bo-float-y { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+.bo-art.ride .bo-ill { animation: bo-in .6s cubic-bezier(.34, 1.56, .64, 1) both, bo-ride .5s .6s ease-in-out infinite alternate; transform-origin: 60% 90%; }
+@keyframes bo-ride { from { transform: translateY(0) rotate(0); } to { transform: translateY(-2px) rotate(-1.2deg); } }
+.bo-speed { position: absolute; left: -22px; top: 46%; display: grid; gap: 6px; }
+.bo-speed i { display: block; width: 30px; height: 2px; border-radius: 2px; background: #3c3c3c; animation: bo-line .7s linear infinite; }
+.bo-speed i:nth-child(2) { width: 20px; margin-left: 8px; animation-delay: .23s; }
+.bo-speed i:nth-child(3) { width: 26px; animation-delay: .46s; }
+@keyframes bo-line { 0% { transform: translateX(14px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateX(-18px); opacity: 0; } }
+.bo-road { position: absolute; left: -10px; right: 0; bottom: 1px; height: 2px; overflow: hidden; background: repeating-linear-gradient(90deg, #3c3c3c 0 14px, transparent 14px 26px); background-size: 26px 2px; animation: bo-road .45s linear infinite; opacity: .55; }
+@keyframes bo-road { to { background-position: -26px 0; } }
+.bo-art.box .bo-ill { animation: bo-in .6s cubic-bezier(.34, 1.56, .64, 1) both, bo-float 3s .6s ease-in-out infinite; }
+.bo-sparks i { position: absolute; width: 10px; height: 10px; background: #f2b233; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); animation: bo-twinkle 1.6s ease-in-out infinite; }
+.bo-sparks i:nth-child(1) { left: -4px; top: 6px; }
+.bo-sparks i:nth-child(2) { right: -2px; top: 18px; width: 8px; height: 8px; background: #a52226; animation-delay: .4s; }
+.bo-sparks i:nth-child(3) { left: 18px; bottom: 4px; width: 7px; height: 7px; background: #01ae0f; animation-delay: .8s; }
+.bo-sparks i:nth-child(4) { right: 22px; top: -6px; width: 9px; height: 9px; animation-delay: 1.2s; }
+@keyframes bo-twinkle { 0%, 100% { transform: scale(.3) rotate(0); opacity: 0; } 50% { transform: scale(1) rotate(45deg); opacity: 1; } }
+.ba-static .bo-art * { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .bo-art * { animation: none !important; } }
+
+/* secondary actions side by side: white, red stroke, hard shadow, 44px (smaller than the primary button) */
+.bo-pair { display: flex; gap: 12px; width: 100%; }
+.bo-ob { flex: 1 1 0; min-width: 0; display: grid; place-items: center; height: 44px; padding: 0 10px; border: 1px solid var(--r, #a52226) !important; border-radius: 16px !important; background: #fff !important; box-shadow: 2px 3px 0 #000; font-size: 14px; font-weight: 500; line-height: 1.2; letter-spacing: -0.3px; color: var(--r, #a52226) !important; white-space: nowrap; transition: transform .15s, box-shadow .15s; }
+.bo-ob:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #000; }
