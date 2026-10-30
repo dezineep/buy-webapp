@@ -2,6 +2,7 @@
    more    Figma 1164:8920 (no "Coming soon" badges: every tile works)
    sort / amount / offers / details / pay / unlock / custom / quick — same as the demo
    variants  select size / colour + bulk pack for a product straight from the grid (same chips as the product page) */
+import { useEffect, useRef } from 'react';
 import { useBuy } from './engine.jsx';
 import { P, V2, FG, STORE, OFFERS, inr, calcBill, unitPrice, mrpOf, packPrice, customUnit, lineKey } from './data.js';
 import { SheetHead, Ring, PriceBox, BigStep, ICO } from './ui.jsx';
@@ -102,7 +103,7 @@ function Variants({ pid }) {
   );
 }
 
-const KEYS = [['1', ''], ['2', 'ABC'], ['3', 'DEF'], ['4', 'GHI'], ['5', 'JKL'], ['6', 'MNO'], ['7', 'PQRS'], ['8', 'TUV'], ['9', 'WXYZ'], null, ['0'], ['⌫']];
+/* custom quantity: a plain numeric field, so the phone's own number keyboard opens */
 function Custom({ pid }) {
   const { S, A } = useBuy();
   const p = P(pid), s = A.selOf(pid), c = p.custom;
@@ -113,15 +114,13 @@ function Custom({ pid }) {
     <><SheetHead title="Custom Quantity" sub={`${p.name} · Minimum Qty: ${c.min} ${c.units}`} />
       <div className="bv-cq">
         <div className="bv-fld"><p className="bv-lbl"><span>Number of {c.units}</span><b>*</b></p>
-          <div className="bv-in"><span className="bv-v">{S.cq?.v ? S.cq.v : <i>0</i>}<em className="bv-caret" /></span>
+          <div className="bv-in"><input className="bv-num" type="text" inputMode="numeric" pattern="[0-9]*" enterKeyHint="done" autoFocus placeholder="0" aria-label={`Number of ${c.units}`}
+            value={S.cq?.v || ''} onChange={e => A.cqset(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && ok) A.setcustom(pid); }} />
             <span className="bv-unit"><button className="on">{c.units[0].toUpperCase() + c.units.slice(1)}</button></span></div></div>
         <div className="bv-tot"><div><small>Total Price</small><b>{inr(n ? per * n : 0)}</b></div><div className="r"><small>Rate per {c.unit}</small><span>{inr(per)}/{c.unit}</span></div></div>
         <p className={'bv-err' + ((n && n < c.min) || n > c.max ? '' : ' hint')}>{n && n < c.min ? `Minimum quantity is ${c.min} ${c.units}` : n > c.max ? `Maximum ${c.max} ${c.units} per order` : 'Bigger quantity, lower price per ' + c.unit}</p>
         <button className="ba-btn wide" onClick={() => A.setcustom(pid)} disabled={!ok}>Set Quantity</button>
-      </div>
-      <div className="bv-keys">{KEYS.map((k, i) => !k ? <span key={i} />
-        : k[0] === '⌫' ? <button key={i} className="bv-del" onClick={() => A.key('⌫')} aria-label="Delete"><img src={FG + 'variants/ic-key-delete.png'} width="26" height="22" alt="" /></button>
-        : <button key={i} className={k.length > 1 && k[1] ? '' : 'solo'} onClick={() => A.key(k[0])}><span>{k[0]}</span>{k[1] ? <small>{k[1]}</small> : null}</button>)}</div></>
+      </div></>
   );
 }
 
@@ -130,16 +129,58 @@ function Quick({ pid }) {
   const p = P(pid);
   const pk = { n: p.packs[0].n };
   const line = !p.opts.length && S.cart.find(l => l.key === lineKey(pid, {}, pk));
+  const root = useRef(null), track = useRef(null), drag = useRef(null), busy = useRef(false), timer = useRef(0);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const modal = () => root.current && root.current.closest('.ba-modal');
+  /* expand: the modal grows from its centred card into the full screen (FLIP: pin its current box, then animate box,
+     corners and padding to the screen edges); the image settles where the product page gallery sits, then the
+     product page takes over showing the same photo. Back / close during the grow cancels it (openfull re-checks). */
+  const expand = () => {
+    const m = modal(); if (!m || busy.current) return;
+    busy.current = true;
+    const r = m.getBoundingClientRect(), pr = m.parentElement.getBoundingClientRect();
+    const t = track.current, img = t ? Math.round(t.scrollLeft / (t.clientWidth || 1)) : 0;
+    Object.assign(m.style, { transition: 'none', transform: 'none', opacity: 1, top: r.top - pr.top + 'px', left: r.left - pr.left + 'px', right: pr.right - r.right + 'px', height: r.height + 'px' });
+    void m.offsetHeight;
+    m.classList.add('qv-full');
+    Object.assign(m.style, { transition: '', top: '0px', left: '0px', right: '0px', height: pr.height + 'px' });
+    timer.current = setTimeout(() => A.openfull(pid, img), 400);
+  };
+  /* vertical drags only: the first 8px decide the axis, so swiping through the photos never moves the card */
+  const onTouchStart = e => { if (busy.current) return; const t = e.touches[0]; drag.current = { x: t.clientX, y: t.clientY, dy: 0, axis: '' }; };
+  const onTouchMove = e => {
+    const d = drag.current; if (!d) return;
+    const t = e.touches[0], dx = t.clientX - d.x, dy = t.clientY - d.y;
+    if (!d.axis) { if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return; d.axis = Math.abs(dy) > Math.abs(dx) ? 'y' : 'x'; }
+    if (d.axis !== 'y') return;
+    d.dy = dy;
+    const m = modal(); if (!m) return;
+    m.style.transition = 'none';
+    // follow the finger upwards (with resistance), barely move when dragged down
+    const off = dy < 0 ? dy * 0.45 : dy * 0.15;
+    m.style.transform = `translateY(calc(-50% + ${off}px)) scale(${dy < 0 ? 1 + Math.min(-dy, 160) / 1600 : 1})`;
+  };
+  const onTouchEnd = () => {
+    const d = drag.current; drag.current = null;
+    const m = modal(); if (!m || !d || d.axis !== 'y') return;
+    m.style.transition = '';
+    if (d.dy < -70) expand();
+    else if (d.dy > 90) { m.style.transform = ''; A.close(); }
+    else m.style.transform = '';
+  };
+  const onWheel = e => { if (e.deltaY > 30 && Math.abs(e.deltaY) > Math.abs(e.deltaX)) expand(); };
   return (
-    <div className="bp-qv">
-      <div className="bp-qv-media"><div className="bp-track">{p.img.map(i => <img key={i} src={i} alt={p.name} />)}</div>
+    <div className="bp-qv" ref={root} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchCancel={onTouchEnd} onWheel={onWheel}>
+      <i className="bp-qv-grab" aria-hidden="true" />
+      <div className="bp-qv-media"><div className="bp-track" ref={track}>{p.img.map(i => <img key={i} src={i} alt={p.name} />)}</div>
         <i className="bp-qv-fade" /><button className="bp-qv-x" onClick={A.close} aria-label="Close">{ICO.close()}</button></div>
       <div className="bp-qv-info">
-        <p className="bp-qv-name" onClick={() => A.product(pid)}>{p.name}</p>
+        <p className="bp-qv-name" onClick={expand}>{p.name}</p>
         <div className="bp-qv-b"><PriceBox price={p.price} mrp={p.mrp} big />
           <span className="bp-qv-ctl">{p.opts.length ? <button className="ba-btn" onClick={() => A.openSheet('variants', pid)}>Select Options</button>
             : line ? <BigStep line={line} /> : <button className="ba-btn" onClick={() => A.add(pid)}>Add to Cart</button>}</span></div>
-        <button className="bp-qv-more" onClick={() => A.product(pid)}>View full details</button>
+        {/* Figma 857:2201 button style: white, red stroke, radius 10, hard shadow, 16/500 red + 18px chevron */}
+        <button className="bp-qv-more" onClick={expand}>View full details<img src={V2 + 'product/ic-chev-red.svg'} width="18" height="18" alt="" /></button>
       </div>
     </div>
   );

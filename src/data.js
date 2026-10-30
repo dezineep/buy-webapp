@@ -180,6 +180,21 @@ export const sortedProducts = (S, cat = S.cat) => {
   return list;
 };
 
+/* search: every query word must be the start of a word in the product's name, category, tag or variant values
+   (so "red saree", "kurta xl", "shi" work, and "men" does not match "women"). Apostrophes are dropped on both sides,
+   so a typed ' matches the ’ in "Men’s". With no query the screen shows suggestions: best-rated products first. */
+export const searchTokens = s => s.toLowerCase().replace(/['’`]/g, '').split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+const haystack = p => searchTokens([p.name, (CATEGORIES.find(c => c.id === p.cat) || {}).label?.join(' '), p.cat, p.tag, ...p.opts.flatMap(o => o.values.map(v => v.v))].filter(Boolean).join(' '));
+export const searchProducts = (q, sort) => {
+  const words = searchTokens(q);
+  let list = words.length ? PRODUCTS.filter(p => { const h = haystack(p); return words.every(w => h.some(t => t.startsWith(w))); }) : [...PRODUCTS].sort((a, b) => b.rating - a.rating).slice(0, 8);
+  if (sort === 'low') list = [...list].sort((a, b) => a.price - b.price);
+  if (sort === 'high') list = [...list].sort((a, b) => b.price - a.price);
+  if (sort === 'off') list = [...list].sort((a, b) => off(b.price, b.mrp) - off(a.price, a.mrp));
+  return list;
+};
+export const catLabel = p => (CATEGORIES.find(c => c.id === p.cat) || { label: [''] }).label.join(' ');
+
 /* ---------- demo order history + refunds ---------- */
 const ADDR = { street: '23, 4th Cross, 6th Main', road: 'Near BDA Complex', area: 'HSR Layout', pin: '560102', city: 'Bengaluru', state: 'Karnataka' };
 const item = (pid, label, qty, price) => ({ pid, name: P(pid).name, label, qty, price, img: P(pid).img[0] });

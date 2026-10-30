@@ -1,13 +1,11 @@
 /* BUY · HOME — Figma 2167:7001. Every rule is scoped under .bh / .bh-* (plus the pill content inside .ba-pill). */
 .bh { position: relative; padding-bottom: 8px; }
 
-/* ---------- store bar: sticky, transparent over the banner, white once the banner is behind it (Figma 2167:7301: top 32) ---------- */
+/* ---------- store bar: overlays the banner (Figma 2167:7301: top 32) and scrolls away with it ---------- */
 .bh-top {
-  position: sticky; top: 0; z-index: 6; display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  height: calc(var(--sat, 0px) + 84px); margin-bottom: calc(-84px - var(--sat, 0px)); padding: calc(var(--sat, 0px) + 32px) 16px 12px;
-  background: rgba(255, 255, 255, 0); transition: background-color .3s ease;
+  position: absolute; top: 0; left: 0; right: 0; z-index: 6; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: calc(var(--sat, 0px) + 32px) 16px 0;
 }
-.bh-top.solid { background: #fff; }
 .bh-store { display: flex; align-items: center; gap: 8px; min-width: 0; text-align: left; }
 .bh-logo { flex: none; width: 40px; height: 40px; border: 1px solid #000; border-radius: 500px; object-fit: cover; background: #fff; }
 .bh-store-t { display: flex; flex-direction: column; justify-content: center; gap: 4px; min-width: 0; }
@@ -28,49 +26,52 @@
 .bh-dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(217, 217, 217, .57); transition: background-color .3s; }
 .bh-dots i.on { background: #fff; }
 
-/* ---------- "Deliver to" row (Figma 2167:7006, 16px below the banner) ---------- */
-.bh-deliver { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 16px 0; }
-.bh-addr { display: flex; align-items: center; gap: 4px; min-width: 0; text-align: left; }
-.bh-loc { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 30px; background: var(--r); }
-.bh-loc img { width: 14px; height: 14px; }
-.bh-addr-t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.bh-addr-t small { font-size: 10px; line-height: 1; letter-spacing: -0.07px; color: var(--r); }
+/* ---------- delivery bar (Figma 2170:7403) + category tabs: one block pinned to the top while the store bar scrolls away ---------- */
+.bh-stick { position: sticky; top: var(--sat, 0px); z-index: 5; padding: 16px 0 0; background: #fff; transition: box-shadow .3s; }
+.bh-stick.pinned { box-shadow: 0 8px 10px -8px rgba(0, 0, 0, .14); }
+/* the block keeps one height (no jump when it pins); once pinned, a white strip fills the safe area above it */
+.bh-stick.pinned::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: var(--sat, 0px); background: #fff; }
+.bh-deliver { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 16px; }
+.bh-addr { display: flex; align-items: center; gap: 8px; min-width: 0; text-align: left; }
+.bh-loc { flex: none; display: grid; place-items: center; padding: 5px 10px; border-radius: 30px; background: var(--r); }
+.bh-loc img { width: 20px; height: 20px; }
+.bh-addr-t { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.bh-addr-t small { font-size: 12px; line-height: 1; letter-spacing: -0.07px; color: var(--r); }
 .bh-addr-t > span { display: flex; align-items: center; gap: 4px; min-width: 0; }
-.bh-addr-t b { font-size: 12px; font-weight: 500; line-height: 1.2; letter-spacing: -0.1px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bh-addr-t b { font-size: 14px; font-weight: 500; line-height: 1.2; letter-spacing: -0.1px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bh-chev { flex: none; position: relative; width: 14px; height: 14px; transform: rotate(90deg); }
 .bh-chev img { position: absolute; inset: 21.88% 34.38%; width: 31.24%; height: 56.24%; }
-.bh-days { flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 13.852px; background: rgba(1, 174, 15, .1); font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.25px; color: #01ae0f; white-space: nowrap; }
-.bh-days img { width: 14px; height: 14px; }
-
-/* ---------- search + category tabs: one sticky block under the store bar ---------- */
-.bh-stick { position: sticky; top: calc(var(--sat, 0px) + 84px); z-index: 5; padding: 16px 0 0; background: #fff; transition: box-shadow .3s; }
-.bh-stick.pinned { box-shadow: 0 8px 10px -8px rgba(0, 0, 0, .14); }
-.bh .bh-search { height: auto; margin: 0 16px; padding: 16px; }
-.bh .bh-search input { height: 17px; line-height: 1.2; -webkit-appearance: none; appearance: none; }
-.bh .bh-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+/* search button (Figma 2170:7418): #ddd stroke, radius 20, p 5 10, 16px glyph centred in a 20px box */
+.bh-sbtn { flex: none; display: grid; place-items: center; width: 42px; height: 32px; border: 1px solid #ddd !important; border-radius: 20px !important; background: #fff !important; transition: transform .15s, border-color .2s; }
+.bh-sbtn:active { transform: scale(.94); border-color: var(--r) !important; }
+.bh-sbtn img { width: 16px; height: 16px; }
 
 /* category row (Figma 2167:7041: 60px items, gap 8, icon 24, label 10px #696969; selected red medium).
    Blinkit / Zepto tab: the selected tab is an outlined card that opens into the line under the row, with curved feet. */
 .bh-cats { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; margin-top: 8px; -webkit-overflow-scrolling: touch; }
 .bh-cats::-webkit-scrollbar { display: none; }
 .bh-cats-in { position: relative; display: flex; gap: 8px; width: max-content; min-width: 100%; padding: 8px 22px 0; }
-.bh-cats-in::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgba(165, 34, 38, .35); }
-.bh-cat { position: relative; z-index: 1; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 60px; padding: 8px 0 10px; color: #696969; transition: color .3s ease; -webkit-tap-highlight-color: transparent; }
+.bh-cats-in::after { content: ""; position: absolute; z-index: 0; left: 0; right: 0; bottom: 0; height: 1px; background: var(--r); }
+.bh-cat { position: relative; z-index: 2; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 60px; padding: 8px 0 10px; color: #696969; transition: color .3s ease; -webkit-tap-highlight-color: transparent; }
 .bh-cat-ic { display: block; width: 24px; height: 24px; background: currentColor; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
 .bh-cat > span { display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 400; line-height: 1.1; letter-spacing: -0.2px; text-align: center; white-space: nowrap; }
 .bh-cat.on { color: var(--r); }
 .bh-cat.on > span { font-weight: 500; }
 .bh-cat.on .bh-cat-ic { transform: scale(1.12); }
 .bh-cat:active .bh-cat-ic { transform: scale(.9); }
+/* selected tab: outlined top + sides that curve out (radius 10) into the row line; no line under the tab itself */
 .bh-cat-ind {
-  position: absolute; z-index: 0; left: 0; top: 2px; bottom: 0; border: 1px solid var(--r); border-bottom: 0; border-radius: 16px 16px 0 0;
+  --ft: 10px;
+  position: absolute; z-index: 1; left: 0; top: 2px; bottom: 0; border-radius: 16px 16px 0 0;
   background: linear-gradient(180deg, rgba(165, 34, 38, .1) 0%, #fff 78%); will-change: transform, width;
 }
+.bh-cat-ind::before { content: ""; position: absolute; inset: 0 0 var(--ft) 0; border: 1px solid var(--r); border-bottom: 0; border-radius: 16px 16px 0 0; }
+.bh-cat-ind i { position: absolute; bottom: 0; pointer-events: none; }
+.bh-cat-ind .gap { left: calc(var(--ft) * -1); right: calc(var(--ft) * -1); height: 1px; background: #fff; }
+.bh-cat-ind .ft { width: var(--ft); height: var(--ft); border-bottom: 1px solid var(--r); }
+.bh-cat-ind .ft.l { left: calc(1px - var(--ft)); border-right: 1px solid var(--r); border-bottom-right-radius: var(--ft); }
+.bh-cat-ind .ft.r { right: calc(1px - var(--ft)); border-left: 1px solid var(--r); border-bottom-left-radius: var(--ft); }
 .bh-cat-ind.anim { transition: transform .42s cubic-bezier(.22, 1, .36, 1), width .42s cubic-bezier(.22, 1, .36, 1); }
-/* white strip hides the base line under the tab, the feet curve the line up into the tab sides */
-.bh-cat-ind::before, .bh-cat-ind::after { content: ""; position: absolute; bottom: -1px; width: 12px; height: 12px; }
-.bh-cat-ind::before { left: -13px; background: radial-gradient(circle at 0 0, transparent 11.4px, var(--r) 11.6px, var(--r) 12.4px, #fff 12.6px); }
-.bh-cat-ind::after { right: -13px; background: radial-gradient(circle at 100% 0, transparent 11.4px, var(--r) 11.6px, var(--r) 12.4px, #fff 12.6px); }
 
 /* ---------- product count + sort (Figma 2167:7087) ---------- */
 .bh-count { display: flex; align-items: center; justify-content: space-between; height: 18px; margin: 16px 16px 8px; }

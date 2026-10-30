@@ -40,10 +40,17 @@ export function BuyProvider({ children }) {
     const n = Math.max(1, Math.min(depth, S.stack.length));
     if (n < S.stack.length) { S.stack = S.stack.slice(0, n); commit(); }
   };
-  const back = () => { if (history.state && history.state.buy) history.back(); else pop(); };
+  const back = () => { if (S.stack.length > 1 && history.state && history.state.buy > 1) history.back(); else pop(); };
   useEffect(() => {
     // the history entry we land on knows how deep the stack was when it was pushed
-    const onPop = e => pop(e.state && e.state.buy ? e.state.buy : 1);
+    // a smaller depth than now means the user jumped several entries back; anything else (including stale entries
+    // left from before a page reload) is a plain one-step back
+    history.replaceState({ buy: 1 }, '');
+    const onPop = e => {
+      // phone back with a sheet open only closes the sheet: put back the entry the browser just consumed
+      if (S.sheet && !S.sheet.bye) { closeSheet(); history.pushState({ buy: S.stack.length }, ''); return; }
+      const d = e.state && e.state.buy; pop(d && d < S.stack.length ? d : S.stack.length - 1);
+    };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
   }, []);
@@ -85,7 +92,8 @@ export function BuyProvider({ children }) {
         S.pill = { state: 'saved', offer: o, id: Date.now() }; commit();
         later('pill', () => { S.pill = { state: '', id: Date.now(), enter: true }; commit(); }, 2200);
       }, 1400);
-      if (cur().n !== 'home') later('unlock', () => openSheet('unlock', o.id), 250);
+      // the pill celebrates on home / search; elsewhere a pop-up does, unless another sheet is open
+      if (!['home', 'search'].includes(cur().n)) later('unlock', () => { if (!S.sheet || S.sheet.bye) openSheet('unlock', o.id); }, 250);
     }
     commit();
   };
@@ -157,7 +165,8 @@ export function BuyProvider({ children }) {
     sort: () => openSheet('sort'),
     setsort: s => { S.sort = s; closeSheet(); },
     setcat: c => { if (S.cat !== c) { S.prevCat = S.cat; S.cat = c; commit(); } },
-    search: v => { S.search = v; commit(); },
+    opensearch: () => { closeSheet(); S.q = ''; go('search'); },
+    setq: v => { S.q = v; commit(); },
     /* + on a card: products with sizes / colours open the variant sheet, the rest add one piece */
     add: pid => { const p = P(pid); if (p.opts.length) openSheet('variants', pid); else addLine(pid, {}, { n: p.packs[0].n }); },
     pinc: pid => { const lines = S.cart.filter(l => l.pid === pid); if (lines.length !== 1) openSheet('variants', pid); else changeKey(lines[0].key, 1); },
@@ -167,10 +176,16 @@ export function BuyProvider({ children }) {
     dec: key => changeKey(key, -1),
     product: pid => { closeSheet(); go('product', { pid }); },
     quick: pid => openSheet('quick', pid),
+    /* quick view finished growing to full screen: swap in the product page without a slide, drop the modal at once */
+    openfull: (pid, img = 0) => {
+      // the quick view may have been closed (back / ✕) while it was growing: then stay where we are
+      if (!S.sheet || S.sheet.name !== 'quick' || S.sheet.arg !== pid || S.sheet.bye) return;
+      S.sheet = null; S.stack = [...S.stack, entry('product', { pid, instant: true, img })]; history.pushState({ buy: S.stack.length }, ''); commit();
+    },
     selopt: (pid, name, v) => { const s = selOf(pid); s.sel = { ...s.sel, [name]: v }; commit(); },
     selpack: (pid, n) => { const s = selOf(pid); s.pack = { n }; commit(); },
     custom: pid => { S.cq = { v: '', pid }; openSheet('custom', pid); },
-    key: k => { S.cq.v = k === '⌫' ? S.cq.v.slice(0, -1) : (S.cq.v + k).replace(/^0+/, '').slice(0, 3); commit(); },
+    cqset: v => { S.cq.v = v.replace(/\D/g, '').replace(/^0+/, '').slice(0, 3); commit(); },
     setcustom: pid => { const n = +S.cq.v; const s = selOf(pid); s.pack = { n, custom: true }; closeSheet(); commit(); toast(`Custom quantity set: ${n} ${P(pid).custom.units}`); },
     cart: () => {
       closeSheet();

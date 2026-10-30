@@ -1,7 +1,8 @@
 /* BUY · HOME — Figma 2167:7001 (home with categories + new cart pill)
    Scroll behaviour (inside the .ba-scr scroller):
-   - .bh-top (store bar) is sticky over the banner; turns solid white once the banner has scrolled behind it.
-   - .bh-stick (search + category tabs) pins right below the store bar; .pinned adds a soft shadow.
+   - .bh-top (store bar) sits over the banner and scrolls away with it.
+   - .bh-stick (delivery bar, Figma 2170:7403, + category tabs) pins to the top; .pinned adds a soft shadow.
+     The search button in the delivery bar opens the separate search screen.
    Category tabs work like Blinkit / Zepto: an outlined tab slides to the selected category and opens into the
    line under the row; the product grid slides in from the side you moved towards (swipe the grid to switch too). */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -9,7 +10,7 @@ import { useBuy } from '../engine.jsx';
 import { STORE, CATEGORIES, V2, sortedProducts, cardTag } from '../data.js';
 import { ICO, Ctl, PriceBox } from '../ui.jsx';
 
-const H = V2 + 'home/';
+const H = V2 + 'home/', Q = V2 + 'search/';
 
 function Card({ p }) {
   const { A } = useBuy();
@@ -41,7 +42,7 @@ function CatTabs() {
   return (
     <div className="bh-cats" ref={row} role="tablist" aria-label="Categories">
       <div className="bh-cats-in">
-        {ind && <span className={'bh-cat-ind' + (ind.animate ? ' anim' : '')} style={{ transform: `translateX(${ind.x}px)`, width: ind.w }} aria-hidden="true" />}
+        {ind && <span className={'bh-cat-ind' + (ind.animate ? ' anim' : '')} style={{ transform: `translateX(${ind.x}px)`, width: ind.w }} aria-hidden="true"><i className="gap" /><i className="ft l" /><i className="ft r" /></span>}
         {CATEGORIES.map(c => (
           <button key={c.id} data-cat={c.id} role="tab" aria-selected={S.cat === c.id} className={'bh-cat' + (S.cat === c.id ? ' on' : '')} onClick={() => A.setcat(c.id)}>
             <i className="bh-cat-ic" style={{ WebkitMaskImage: `url(${c.icon})`, maskImage: `url(${c.icon})` }} />
@@ -56,7 +57,7 @@ function CatTabs() {
 export default function Home({ scRef }) {
   const { S, A } = useBuy();
   const top = useRef(null), stick = useRef(null), gridWrap = useRef(null);
-  const [solid, setSolid] = useState(false), [pinned, setPinned] = useState(false);
+  const [pinned, setPinned] = useState(false);
   const a = S.addr;
   const list = sortedProducts(S);
   const idx = CATEGORIES.findIndex(c => c.id === S.cat), prevIdx = CATEGORIES.findIndex(c => c.id === S.prevCat);
@@ -65,10 +66,8 @@ export default function Home({ scRef }) {
   useEffect(() => {
     const el = scRef.current; if (!el) return;
     const sync = () => {
-      const y = el.scrollTop;
-      const barH = top.current.offsetHeight;
-      setSolid(y >= 196 - barH - 2);
-      setPinned(stick.current.getBoundingClientRect().top - el.getBoundingClientRect().top <= barH + 1);
+      // pinned once it reaches its sticky offset (the safe-area inset)
+      setPinned(stick.current.getBoundingClientRect().top - el.getBoundingClientRect().top <= parseFloat(getComputedStyle(stick.current).top) + 1);
     };
     sync();
     el.addEventListener('scroll', sync, { passive: true });
@@ -85,7 +84,7 @@ export default function Home({ scRef }) {
   useEffect(() => {
     if (S.prevCat == null) return;
     const el = scRef.current, w = gridWrap.current.previousElementSibling; // the "N Products" row
-    const stickBottom = top.current.offsetHeight + stick.current.offsetHeight;
+    const stickBottom = stick.current.offsetHeight;
     const gridTop = w.getBoundingClientRect().top - el.getBoundingClientRect().top - 16;
     if (gridTop < stickBottom) el.scrollTo({ top: el.scrollTop + gridTop - stickBottom, behavior: 'smooth' });
   }, [S.cat]);
@@ -104,7 +103,7 @@ export default function Home({ scRef }) {
 
   return (
     <div className="bh">
-      <div ref={top} className={'bh-top' + (solid ? ' solid' : '')}>
+      <div ref={top} className="bh-top">
         <button className="bh-store" onClick={A.store}>
           <img className="bh-logo" src={STORE.logo} alt="" />
           <span className="bh-store-t"><b>{STORE.name} {ICO.verified()}</b><small>{STORE.area}</small></span>
@@ -119,21 +118,20 @@ export default function Home({ scRef }) {
         <div className="bh-hero-track" style={{ transform: `translateX(${-S.heroI * 100}%)` }}>{STORE.banners.map(b => <img key={b} src={b} alt="" />)}</div>
         <div className="bh-dots" aria-hidden="true">{STORE.banners.map((b, i) => <i key={b} className={i === S.heroI ? 'on' : ''} />)}</div>
       </div>
-      <div className="bh-deliver">
-        <button className="bh-addr" onClick={A.address}>
-          <span className="bh-loc"><img src={H + 'ic-locate.svg'} width="14" height="14" alt="" /></span>
-          <span className="bh-addr-t"><small>Deliver to</small><span><b>{a ? `${a.area}, ${a.city} - ${a.pin}` : 'Add your delivery address'}</b><i className="bh-chev"><img src={H + 'ic-chev.svg'} alt="" /></i></span></span>
-        </button>
-        <span className="bh-days">{ICO.scooterG()}{STORE.delivery}</span>
-      </div>
       <div ref={stick} className={'bh-stick' + (pinned ? ' pinned' : '')}>
-        <label className="ba-search bh-search">{ICO.search()}<input type="search" placeholder="Search for products, categories..." value={S.search} onChange={e => A.search(e.target.value)} aria-label="Search products" /></label>
+        <div className="bh-deliver">
+          <button className="bh-addr" onClick={A.address}>
+            <span className="bh-loc"><img src={Q + 'ic-locate.svg'} width="20" height="20" alt="" /></span>
+            <span className="bh-addr-t"><small>Deliver to</small><span><b>{a ? `${a.area}, ${a.city} - ${a.pin}` : 'Add your delivery address'}</b><i className="bh-chev"><img src={Q + 'ic-chev.svg'} alt="" /></i></span></span>
+          </button>
+          <button className="bh-sbtn" onClick={A.opensearch} aria-label="Search products"><img src={Q + 'ic-search.svg'} width="16" height="16" alt="" /></button>
+        </div>
         <CatTabs />
       </div>
       <div className="bh-count"><b>{list.length} Products</b><button onClick={A.sort}><img src={H + 'ic-sort.svg'} width="18" height="18" alt="" />Sort By</button></div>
       <div ref={gridWrap} className="bh-gridwrap" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <div key={S.cat} className={'bh-grid ' + dir}>
-          {list.length ? list.map(p => <Card key={p.id} p={p} />) : <p className="bh-empty">No products match “{S.search}”.</p>}
+          {list.length ? list.map(p => <Card key={p.id} p={p} />) : <p className="bh-empty">No products in this category yet.</p>}
         </div>
       </div>
     </div>

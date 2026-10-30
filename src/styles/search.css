@@ -1,0 +1,61 @@
+/* BUY · SEARCH — Figma 2170:7430. Scoped under .bq-* */
+.bq { min-height: 100%; background: #fff; }
+
+/* header (Figma 2170:7434): 49px white back button + field, #ddd strokes, radius 20, gap 4 */
+.bq-head { position: sticky; top: 0; z-index: 3; display: flex; gap: 4px; padding: calc(var(--sat, 0px) + 16px) 16px 16px; background: #fff; }
+.bq-back { flex: none; display: grid; place-items: center; width: 54px; height: 49px; border: 1px solid #ddd !important; border-radius: 20px !important; background: #fff !important; transition: transform .15s; }
+.bq-back:active { transform: scale(.94); }
+.bq-back img { width: 20px; height: 20px; }
+.bq-field { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; height: 49px; padding: 0 12px 0 16px; border: 1px solid #ddd; border-radius: 20px; background: #fff; transition: border-color .2s, box-shadow .2s; }
+.bq-field:focus-within { border-color: var(--r); box-shadow: 0 0 0 3px rgba(165, 34, 38, .08); }
+.bq-field input { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: none; padding: 0; font-size: 14px; line-height: 1.2; letter-spacing: -0.14px; color: #4b4b4b; -webkit-appearance: none; appearance: none; }
+.bq-field input::placeholder { color: #aba7a7; }
+.bq-field input::-webkit-search-cancel-button { -webkit-appearance: none; }
+.bq-clear { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; animation: bqPop .25s cubic-bezier(.34, 1.56, .64, 1); }
+.bq-clear:active { background: #f4f1f1; }
+.bq-clear img { width: 18px; height: 18px; }
+@keyframes bqPop { from { transform: scale(.4); opacity: 0; } }
+
+.bq-body { padding: 0 16px; }
+/* count + sort (Figma 2170:7453) */
+.bq-count { display: flex; align-items: center; justify-content: space-between; height: 18px; margin-bottom: 8px; }
+.bq-count span { font-size: 14px; line-height: 1.1; letter-spacing: -0.42px; color: #8f8f8f; }
+.bq-count button { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.42px; color: var(--r); }
+.bq-count button img { width: 18px; height: 18px; }
+
+/* rows (Figma 2170:7463): 60x61 image radius 12, gap 8, tags, 14/500 #4d4d4d name, price + % off inline, + on the right */
+.bq-list { display: flex; flex-direction: column; gap: 16px; }
+.bq-div { display: block; width: 100%; height: 1px; }
+.bq-row { display: flex; align-items: center; gap: 8px; animation: bqIn .35s cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes bqIn { from { opacity: 0; transform: translateY(8px); } }
+.bq-img { flex: none; width: 60px; height: 61px; border-radius: 12px; object-fit: cover; background: #f4f1f1; cursor: pointer; }
+.bq-info { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; }
+.bq-tags { display: flex; gap: 4px; }
+.bq-name { max-width: 100%; font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.28px; color: #4d4d4d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bq-name mark { background: none; color: var(--r); font-weight: 600; }
+.bq-pr { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
+.bq-ctl { flex: none; }
+
+/* ---------- nothing found: BUY-style illustration (black outlines, hard offset shadows, red + pink) ---------- */
+.bq-none { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 24px 8px 40px; text-align: center; animation: bqIn .4s cubic-bezier(.22, 1, .36, 1) both; }
+.bq-ill { display: block; overflow: visible; margin-bottom: 8px; }
+.bq-floor { fill: rgba(0, 0, 0, .08); animation: bqFloor 2.4s ease-in-out infinite; transform-origin: 104px 156px; }
+.bq-bag { animation: bqBob 2.4s ease-in-out infinite; transform-origin: 105px 150px; }
+.bq-hanger { animation: bqWobble 1.2s ease-in-out infinite alternate; transform-origin: 105px 43px; }
+.bq-eye { animation: bqBlink 3.6s infinite; transform-box: fill-box; transform-origin: center; }
+.bq-lens { animation: bqSweep 3.2s cubic-bezier(.65, 0, .35, 1) infinite; }
+.bq-qm { font: 700 22px "Plus Jakarta Sans", system-ui, sans-serif; fill: var(--r); }
+.bq-sparks { fill: none; stroke: var(--r); stroke-width: 2.5; stroke-linecap: round; animation: bqSpark 1.6s ease-in-out infinite alternate; }
+.bq-sparks circle { fill: #f2b233; stroke: none; }
+@keyframes bqBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes bqFloor { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.86); } }
+@keyframes bqWobble { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+@keyframes bqBlink { 0%, 44%, 50%, 100% { transform: scaleY(1); } 47% { transform: scaleY(.1); } }
+@keyframes bqSweep { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(-108px, -18px) rotate(-8deg); } 50% { transform: translate(-60px, 8px) rotate(4deg); } 75% { transform: translate(-14px, -30px) rotate(-4deg); } }
+@keyframes bqSpark { from { opacity: .25; } to { opacity: 1; } }
+.bq-none > b { font-size: 18px; font-weight: 600; letter-spacing: -0.36px; color: #000; }
+.bq-none > p { font-size: 13px; line-height: 1.5; color: #8f8f8f; }
+.bq-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
+.bq-chips button { padding: 8px 14px; border: 1px solid var(--r) !important; border-radius: 20px !important; background: #fff !important; box-shadow: var(--hard); font-size: 13px; font-weight: 500; color: var(--r) !important; transition: transform .15s, box-shadow .15s; }
+.bq-chips button:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #000; }
+@media (prefers-reduced-motion: reduce) { .bq-ill * { animation: none !important; } }

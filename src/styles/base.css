@@ -133,7 +133,7 @@
 /* + buttons (Figma 593:1828 white / 537:1162 pink): 38x30 incl. stroke, icon 20 */
 .ba-oplus, .ba-add { flex: none; display: grid; place-items: center; width: 38px; height: 30px; border: 1px solid var(--r) !important; border-radius: 999px !important; box-shadow: var(--hard); color: var(--r) !important; font-size: 20px; line-height: 1; transition: transform .15s, box-shadow .15s; }
 .ba-oplus { background: #fff !important; }
-.ba-add { background: var(--pk) !important; }
+.ba-add { background: #fff !important; }
 .ba-oplus:active, .ba-add:active, .ba-step button:active, .ba-ostep button:active { transform: translate(1px, 2px); }
 .ba-oplus:active, .ba-add:active { box-shadow: 1px 1px 0 #000; }
 .ba-oplus img, .ba-add img { width: 20px; height: 20px; }

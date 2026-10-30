@@ -11,17 +11,18 @@ import Product from './screens/Product.jsx';
 import Cart from './screens/Cart.jsx';
 import Address from './screens/Address.jsx';
 import Addresses from './screens/Addresses.jsx';
+import Search from './screens/Search.jsx';
 import Order from './screens/Order.jsx';
 import Orders from './screens/Orders.jsx';
 import Store from './screens/Store.jsx';
 import Refunds, { RefundDetail } from './screens/Refunds.jsx';
 
-const SCREENS = { home: Home, product: Product, cart: Cart, address: Address, addresses: Addresses, order: Order, orders: Orders, store: Store, refunds: Refunds, refund: RefundDetail };
+const SCREENS = { home: Home, product: Product, cart: Cart, address: Address, addresses: Addresses, search: Search, order: Order, orders: Orders, store: Store, refunds: Refunds, refund: RefundDetail };
 
 function Scr({ e, cls }) {
   const ref = useRef(null);
   const C = SCREENS[e.n];
-  const [enter, setEnter] = useState(e.n !== 'home');
+  const [enter, setEnter] = useState(e.n !== 'home' && !e.instant);
   useLayoutEffect(() => { if (enter) requestAnimationFrame(() => requestAnimationFrame(() => setEnter(false))); }, []);
   return (
     <div ref={ref} className={'ba-scr' + (enter ? ' in-r' : '') + (cls ? ' ' + cls : '')} data-n={e.n}>
@@ -32,22 +33,28 @@ function Scr({ e, cls }) {
 
 function Screens() {
   const { S } = useBuy();
+  // popped entries are worked out during render (not in an effect), so a screen that leaves the stack is never
+  // missing from the list for a render: it keeps its instance and simply switches to the slide-out class
+  const [prev, setPrev] = useState(S.stack);
   const [leaving, setLeaving] = useState([]);
-  const prev = useRef(S.stack);
-  useLayoutEffect(() => {
+  if (prev !== S.stack) {
     const keys = new Set(S.stack.map(e => e.k));
-    const gone = prev.current.filter(e => !keys.has(e.k));
-    prev.current = S.stack;
-    if (gone.length) {
-      setLeaving(l => [...l, ...gone]);
-      setTimeout(() => setLeaving(l => l.filter(x => !gone.includes(x))), 400);
-    }
-  }, [S.stack]);
+    const gone = prev.filter(e => !keys.has(e.k));
+    setPrev(S.stack);
+    if (gone.length) setLeaving(l => [...l.filter(x => !keys.has(x.k)), ...gone]);
+  }
+  useEffect(() => {
+    if (!leaving.length) return;
+    const batch = leaving, t = setTimeout(() => setLeaving(l => l.filter(x => !batch.includes(x))), 400);
+    return () => clearTimeout(t);
+  }, [leaving]);
   const top = S.stack.length - 1;
+  const keys = new Set(S.stack.map(e => e.k));
   return (
     <div className="ba-screens">
-      {S.stack.map((e, i) => <Scr key={e.k} e={e} cls={i < top ? 'under' : ''} />)}
-      {leaving.map(e => <Scr key={e.k} e={e} cls="out-r" />)}
+      {/* one keyed list, so moving from the stack to `leaving` never remounts a screen */}
+      {[...S.stack.map((e, i) => [e, i < top ? 'under' : '']), ...leaving.filter(e => !keys.has(e.k)).map(e => [e, 'out-r'])]
+        .map(([e, cls]) => <Scr key={e.k} e={e} cls={cls} />)}
     </div>
   );
 }
@@ -55,7 +62,8 @@ function Screens() {
 /* floating cart pill — Figma 2167:7332 (364 wide, p 10, radius 25, ring 30, CART + thumbs + chevrons) */
 function Pill() {
   const { S, A } = useBuy();
-  const show = S.stack[S.stack.length - 1].n === 'home' && S.cart.length > 0;
+  const top = S.stack[S.stack.length - 1].n;
+  const show = (top === 'home' || top === 'search') && S.cart.length > 0;
   const b = calcBill(S.cart), next = nextOffer(b.sub);
   const st = S.pill?.state || '';
   const box = useRef(null);
@@ -128,8 +136,22 @@ function Notif() {
   );
 }
 
+/* iOS Safari ignores interactive-widget=resizes-content, so the on-screen keyboard would cover bottom-anchored UI
+   (the cart pill on search). Publish the keyboard height as --kb from the visual viewport; on Android the layout
+   viewport already shrinks, so this stays 0 there. */
+function useKeyboardInset() {
+  useEffect(() => {
+    const vv = window.visualViewport; if (!vv) return;
+    const set = () => document.documentElement.style.setProperty('--kb', Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop)) + 'px');
+    set();
+    vv.addEventListener('resize', set); vv.addEventListener('scroll', set);
+    return () => { vv.removeEventListener('resize', set); vv.removeEventListener('scroll', set); };
+  }, []);
+}
+
 export default function App() {
   const { S } = useBuy();
+  useKeyboardInset();
   const [msg, setMsg] = useState('');
   useEffect(() => { if (S.toast) setMsg(S.toast.msg); }, [S.toast]);
   return (

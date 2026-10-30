@@ -2,7 +2,7 @@
    Bulk cards: each pack ("1 x Piece", "3 x Pieces" Best Value, …) + "Custom" (any quantity, sliding per-unit price).
    Select Variant: one chip row per option group (Size, Color). Tags above the name echo the chosen variant.
    Footer: Add to Cart -> [cart button with count] + stepper for the chosen variant/pack. */
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useBuy } from '../engine.jsx';
 import { P, PRODUCTS, inr, unitPrice, mrpOf, packPrice, customUnit, lineKey, calcBill } from '../data.js';
 import { Head, ICO, PriceBox, BigStep, MiniCard } from '../ui.jsx';
@@ -59,8 +59,10 @@ export default function Product({ entry }) {
   const { A } = useBuy();
   const p = P(entry.pid), s = A.selOf(entry.pid);
   const [open, setOpen] = useState(false);
-  const [slide, setSlide] = useState(0);
+  const [slide, setSlide] = useState(entry.img || 0);
   const gal = useRef(null);
+  // opened from an expanding quick view: start on the photo that was showing there
+  useLayoutEffect(() => { const g = gal.current; if (g && entry.img) g.scrollLeft = entry.img * g.clientWidth; }, []);
   const price = packPrice(p, s.sel, s.pack), mrp = mrpOf(p, unitPrice(p, s.sel)) * s.pack.n;
   const tags = [...p.opts.map(o => s.sel[o.name]), ...(p.opts.length ? [] : [p.tag]), s.pack.n > 1 ? `${s.pack.n} ${p.custom.units}` : null].filter(Boolean);
   const others = PRODUCTS.filter(x => x.id !== p.id && x.cat === p.cat).concat(PRODUCTS.filter(x => x.cat !== p.cat)).slice(0, 8);
