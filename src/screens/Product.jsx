@@ -51,7 +51,8 @@ export function ProductFoot({ pid }) {
   const line = S.cart.find(l => l.key === lineKey(pid, s.sel, s.pack));
   const n = calcBill(S.cart).count;
   const cartBtn = n ? <button className="bp2-cartbtn" onClick={A.cart} aria-label="View cart">{ICO.cart()}<em>{n}</em></button> : null;
-  if (line) return <>{cartBtn}<BigStep line={line} grow /></>;
+  // after adding (Figma 593:2459): "View Cart" + count and the stepper share the bar equally
+  if (line) return <><button className="bp2-cartbtn wide" onClick={A.cart}>{ICO.cart()}<span>View Cart</span><em>{n}</em></button><BigStep line={line} grow /></>;
   return <>{cartBtn}<button className="ba-btn grow" onClick={() => A.addsel(pid)}>Add to Cart</button></>;
 }
 

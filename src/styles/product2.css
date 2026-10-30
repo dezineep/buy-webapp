@@ -76,4 +76,6 @@
 .bp2-cartbtn { flex: none; display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 20px; border: 1px solid var(--r) !important; border-radius: 20px !important; background: rgba(165, 34, 38, .1) !important; box-shadow: 2px 4px 0 #000; transition: transform .15s, box-shadow .15s; animation: bp2Pop .35s cubic-bezier(.34, 1.56, .64, 1); }
 .bp2-cartbtn:active { transform: translate(1px, 2px); box-shadow: 1px 2px 0 #000; }
 .bp2-cartbtn img { width: 20px; height: 20px; }
+.bp2-cartbtn.wide { flex: 1 1 0; min-width: 0; justify-content: center; }
+.bp2-cartbtn span { font-size: 16px; font-weight: 500; line-height: 1.2; letter-spacing: -0.48px; color: var(--r); white-space: nowrap; }
 .bp2-cartbtn em { display: grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 51px; background: var(--r); font-size: 12px; font-style: normal; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; color: #f6e9ea; }
