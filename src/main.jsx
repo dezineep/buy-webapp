@@ -1,0 +1,19 @@
+import { createRoot } from 'react-dom/client';
+import { BuyProvider } from './engine.jsx';
+import App from './App.jsx';
+import './styles/base.css';
+import './styles/home.css';
+import './styles/product.css';
+import './styles/product2.css';
+import './styles/variants.css';
+import './styles/sheets.css';
+import './styles/cart.css';
+import './styles/address.css';
+import './styles/order.css';
+import './styles/orders.css';
+import './styles/store.css';
+import './styles/refunds.css';
+import './styles/addresses.css';
+import './styles/app.css';
+
+createRoot(document.getElementById('root')).render(<BuyProvider><App /></BuyProvider>);

@@ -1,0 +1,41 @@
+/* BUY · SHEETS — More Options (Figma 1164:8920, no "Coming soon" badges), Amount Summary (1710:4493), offers list,
+   variant picker (same chips / bulk cards as the product page). Sheet chrome comes from base.css. */
+.bsh-body { padding: 0 16px; }
+
+/* ---- More Options: profile row (Figma 1164:8998) ---- */
+.bsh-prof { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.bsh-av { flex: none; display: grid; place-items: center; padding: 8px; border-radius: 50px; background: rgba(165, 34, 38, .1); }
+.bsh-av img { display: block; width: 24px; height: 24px; }
+.bsh-who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; line-height: 1.2; white-space: nowrap; }
+.bsh-who b { font-size: 16px; font-weight: 500; letter-spacing: -0.16px; color: #3b3b3b; overflow: hidden; text-overflow: ellipsis; }
+.bsh-who small { font-size: 12px; font-weight: 400; letter-spacing: -0.12px; color: #9f9f9f; }
+.bsh .bsh-edit { flex: none; display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.42px; color: #a52226; white-space: nowrap; }
+.bsh-edit img { width: 18px; height: 18px; }
+
+/* ---- More Options: 3x2 tile grid (Figma 1164:8947) ---- */
+.bsh-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.bsh .bsh-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 8px; background: #fdfdfd; border: 1px solid #e3e3e3; border-radius: 15px; text-align: left; transition: transform .15s, background-color .2s; }
+.bsh .bsh-tile:active { transform: scale(.97); background: #fbf3f3; }
+.bsh-tile img { display: block; width: 24px; height: 24px; }
+.bsh-tile-l { font-size: 16px; font-weight: 500; line-height: 1.3; letter-spacing: -0.32px; color: #878787; white-space: nowrap; }
+
+/* ---- Amount Summary card (Figma 1710:4655) ---- */
+.bsh-amt { display: flex; flex-direction: column; gap: 8px; padding: 8px; margin-bottom: 24px; background: #fff; border: 1px solid #e2e2e2; border-radius: 15px; }
+.bsh-rows { display: flex; flex-direction: column; gap: 8px; }
+.bsh-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 14px; line-height: 1.1; letter-spacing: -0.28px; color: #716d6d; white-space: nowrap; }
+.bsh-row span:last-child { font-weight: 500; }
+.bsh-row .g { color: #01ae0f; }
+.bsh-dash { display: block; width: 100%; height: 1px; margin-bottom: -1px; }
+.bsh-tot { display: flex; justify-content: space-between; align-items: center; color: #000; white-space: nowrap; }
+.bsh-tot span { font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.32px; }
+.bsh-tot b { font-size: 20px; font-weight: 600; line-height: 1.2; }
+
+/* ---- Offers list ---- */
+.bsh-ofl { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+
+/* ---- variant picker ---- */
+.bsh-var .bsh-body { display: flex; flex-direction: column; gap: 16px; }
+.bsh-vtop { display: flex; align-items: center; gap: 12px; }
+.bsh-vtop img { flex: none; width: 64px; height: 64px; border-radius: 12px; object-fit: cover; }
+.bsh-vq { margin-bottom: -8px; }
+.bsh-vfoot { display: flex; gap: 8px; padding-top: 4px; }

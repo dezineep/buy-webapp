@@ -1,0 +1,201 @@
+/* BUY · sheets & modals. The layer (dim + container) lives in App; each sheet renders only its inner content.
+   more    Figma 1164:8920 (no "Coming soon" badges: every tile works)
+   sort / amount / offers / details / pay / unlock / custom / quick — same as the demo
+   variants  select size / colour + bulk pack for a product straight from the grid (same chips as the product page) */
+import { useBuy } from './engine.jsx';
+import { P, V2, FG, STORE, OFFERS, inr, calcBill, unitPrice, mrpOf, packPrice, customUnit, lineKey } from './data.js';
+import { SheetHead, Ring, PriceBox, BigStep, ICO } from './ui.jsx';
+import { PackCards, OptionGroups } from './screens/Product.jsx';
+import { AddrMenu } from './screens/Addresses.jsx';
+
+const M = V2 + 'more/';
+
+function More() {
+  const { S, A } = useBuy();
+  const u = S.user;
+  const Tile = ({ on, icon, l1, l2 }) => (
+    <button className="bsh-tile" onClick={on}><img src={M + icon} width="24" height="24" alt="" /><span className="bsh-tile-l">{l1}<br />{l2}</span></button>
+  );
+  return (
+    <div className="bsh bsh-more"><SheetHead title="More Options" sub="Profile & Options" />
+      <div className="bsh-body">
+        <div className="bsh-prof">
+          <span className="bsh-av"><img src={M + 'ic-user.svg'} width="24" height="24" alt="" /></span>
+          <span className="bsh-who"><b>{u ? u.name : 'Guest Shopper'}</b><small>{u ? '+91 ' + u.phone.replace(/(\d{5})(\d{5})/, '$1 $2') : 'Add details at checkout'}</small></span>
+          <button className="bsh-edit" onClick={A.details}>{u ? 'Edit Details' : 'Add Details'}<img src={M + 'ic-chev.svg'} width="18" height="18" alt="" /></button>
+        </div>
+        <div className="bsh-grid">
+          <Tile on={A.myorders} icon="ic-orders.svg" l1="My" l2="Orders" />
+          <Tile on={A.cart} icon="ic-cart.svg" l1="View" l2="Cart Items" />
+          <Tile on={A.address} icon="ic-address.svg" l1="Saved" l2="Addresses" />
+          <Tile on={A.refunds} icon="ic-refunds.svg" l1="My" l2="Refunds" />
+          <Tile on={A.support} icon="ic-support.svg" l1="Store" l2="Support" />
+          {u ? <Tile on={A.logout} icon="ic-logout.svg" l1="Log Out" l2="Now" /> : <Tile on={A.details} icon="ic-logout.svg" l1="Log In" l2="Now" />}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Sort() {
+  const { S, A } = useBuy();
+  return (
+    <><SheetHead title="Sort By" sub="Arrange products" />
+      <div className="bh-sortl">{[['rel', 'Relevance'], ['low', 'Price: low to high'], ['high', 'Price: high to low'], ['off', 'Biggest discount']].map(([k, l]) => (
+        <button key={k} className={(S.sort || 'rel') === k ? 'on' : ''} onClick={() => A.setsort(k)}><span>{l}</span><i /></button>
+      ))}</div></>
+  );
+}
+
+function Offers() {
+  const { S } = useBuy();
+  const b = calcBill(S.cart);
+  return (
+    <div className="bsh"><SheetHead title="Offers" sub="Available offers on this store" />
+      <div className="bsh-body bsh-ofl">{OFFERS.map(o => {
+        const ok = b.sub >= o.min;
+        return <div key={o.id} className={'ba-of' + (ok ? ' done' : '')}><Ring p={b.sub / o.min} kind={o.kind} /><div><b>{ok ? o.done : o.title}</b><small>{ok ? 'Applied to your cart' : <>Shop for <strong>{inr(o.min - b.sub)}</strong> more</>}</small></div></div>;
+      })}</div>
+    </div>
+  );
+}
+
+function Amount() {
+  const { S } = useBuy();
+  const b = calcBill(S.cart);
+  const disc = b.disc + (b.mrp - b.sub);
+  const Row = ({ l, v, cls }) => <div className="bsh-row"><span>{l}</span><span className={cls}>{v}</span></div>;
+  return (
+    <div className="bsh"><SheetHead title="Amount Summary" sub="View charges and discount applied" />
+      <div className="bsh-body"><div className="bsh-amt">
+        <div className="bsh-rows">
+          <Row l={`Subtotal (${b.count} item${b.count === 1 ? '' : 's'})`} v={inr(b.sub)} />
+          <Row l="Delivery Charge" v={b.delivery ? inr(b.delivery) : 'FREE'} cls={b.delivery ? '' : 'g'} />
+          <Row l="GST applied" v={inr(b.gst)} />
+          <Row l="Discount" v={'- ' + inr(disc)} cls="g" />
+        </div>
+        <img className="bsh-dash" src={FG + 'sheets/line-dash.svg'} alt="" />
+        <div className="bsh-tot"><span>Total Amount to Pay</span><b>{inr(b.total)}</b></div>
+      </div></div>
+    </div>
+  );
+}
+
+function Variants({ pid }) {
+  const { S, A } = useBuy();
+  const p = P(pid), s = A.selOf(pid);
+  const price = packPrice(p, s.sel, s.pack), mrp = mrpOf(p, unitPrice(p, s.sel)) * s.pack.n;
+  const line = S.cart.find(l => l.key === lineKey(pid, s.sel, s.pack));
+  return (
+    <div className="bsh bsh-var"><SheetHead title={p.name} sub="Select variant" />
+      <div className="bsh-body">
+        <div className="bsh-vtop"><img src={p.img[0]} alt="" /><PriceBox price={price} mrp={mrp} big /></div>
+        <OptionGroups p={p} s={s} />
+        <p className="bp2-ol bsh-vq">Quantity</p>
+        <PackCards p={p} s={s} />
+        <div className="bsh-vfoot">
+          {line ? <><button className="ba-btn soft grow" onClick={A.cart}>{ICO.cart()}View cart<em>{calcBill(S.cart).count}</em></button><BigStep line={line} grow /></>
+            : <button className="ba-btn wide" onClick={() => A.addsel(pid)}>Add to Cart · {inr(price)}</button>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const KEYS = [['1', ''], ['2', 'ABC'], ['3', 'DEF'], ['4', 'GHI'], ['5', 'JKL'], ['6', 'MNO'], ['7', 'PQRS'], ['8', 'TUV'], ['9', 'WXYZ'], null, ['0'], ['⌫']];
+function Custom({ pid }) {
+  const { S, A } = useBuy();
+  const p = P(pid), s = A.selOf(pid), c = p.custom;
+  const n = +(S.cq?.v || 0);
+  const ok = n >= c.min && n <= c.max;
+  const per = n ? customUnit(p, s.sel, n) : unitPrice(p, s.sel);
+  return (
+    <><SheetHead title="Custom Quantity" sub={`${p.name} · Minimum Qty: ${c.min} ${c.units}`} />
+      <div className="bv-cq">
+        <div className="bv-fld"><p className="bv-lbl"><span>Number of {c.units}</span><b>*</b></p>
+          <div className="bv-in"><span className="bv-v">{S.cq?.v ? S.cq.v : <i>0</i>}<em className="bv-caret" /></span>
+            <span className="bv-unit"><button className="on">{c.units[0].toUpperCase() + c.units.slice(1)}</button></span></div></div>
+        <div className="bv-tot"><div><small>Total Price</small><b>{inr(n ? per * n : 0)}</b></div><div className="r"><small>Rate per {c.unit}</small><span>{inr(per)}/{c.unit}</span></div></div>
+        <p className={'bv-err' + ((n && n < c.min) || n > c.max ? '' : ' hint')}>{n && n < c.min ? `Minimum quantity is ${c.min} ${c.units}` : n > c.max ? `Maximum ${c.max} ${c.units} per order` : 'Bigger quantity, lower price per ' + c.unit}</p>
+        <button className="ba-btn wide" onClick={() => A.setcustom(pid)} disabled={!ok}>Set Quantity</button>
+      </div>
+      <div className="bv-keys">{KEYS.map((k, i) => !k ? <span key={i} />
+        : k[0] === '⌫' ? <button key={i} className="bv-del" onClick={() => A.key('⌫')} aria-label="Delete"><img src={FG + 'variants/ic-key-delete.png'} width="26" height="22" alt="" /></button>
+        : <button key={i} className={k.length > 1 && k[1] ? '' : 'solo'} onClick={() => A.key(k[0])}><span>{k[0]}</span>{k[1] ? <small>{k[1]}</small> : null}</button>)}</div></>
+  );
+}
+
+function Quick({ pid }) {
+  const { S, A } = useBuy();
+  const p = P(pid);
+  const pk = { n: p.packs[0].n };
+  const line = !p.opts.length && S.cart.find(l => l.key === lineKey(pid, {}, pk));
+  return (
+    <div className="bp-qv">
+      <div className="bp-qv-media"><div className="bp-track">{p.img.map(i => <img key={i} src={i} alt={p.name} />)}</div>
+        <i className="bp-qv-fade" /><button className="bp-qv-x" onClick={A.close} aria-label="Close">{ICO.close()}</button></div>
+      <div className="bp-qv-info">
+        <p className="bp-qv-name" onClick={() => A.product(pid)}>{p.name}</p>
+        <div className="bp-qv-b"><PriceBox price={p.price} mrp={p.mrp} big />
+          <span className="bp-qv-ctl">{p.opts.length ? <button className="ba-btn" onClick={() => A.openSheet('variants', pid)}>Select Options</button>
+            : line ? <BigStep line={line} /> : <button className="ba-btn" onClick={() => A.add(pid)}>Add to Cart</button>}</span></div>
+        <button className="bp-qv-more" onClick={() => A.product(pid)}>View full details</button>
+      </div>
+    </div>
+  );
+}
+
+function Details() {
+  const { S, A } = useBuy();
+  const demo = { name: 'Ananya Rao', phone: '9876543210' };
+  const val = k => S.udraft?.[k] ?? S.user?.[k] ?? '';
+  // demo convenience: focusing an empty field fills in sample details
+  const fill = () => { if (!val('name') && !val('phone')) { A.udraft('name', demo.name); A.udraft('phone', demo.phone); } };
+  return (
+    <><SheetHead title="Your Details" sub="So the store can reach you about this order" />
+      <div className="bc-sh">
+        <label className="bc-field"><span>Full Name</span><input value={val('name')} onFocus={fill} onChange={e => A.udraft('name', e.target.value)} placeholder="e.g. Ananya Rao" autoComplete="name" /></label>
+        <label className="bc-field"><span>Phone Number</span><span className="bc-phone"><em>+91</em><input value={val('phone')} onFocus={fill} onChange={e => A.udraft('phone', e.target.value)} inputMode="numeric" maxLength={10} placeholder="98765 43210" autoComplete="tel-national" /></span></label>
+        <p className="bc-note">No password, no login. We only use this to share order updates.</p>
+        <p className="ba-err bc-err">{S.uerr}</p>
+        <button className="ba-btn wide" onClick={A.saveuser}>{S.checkout ? 'Continue to Address' : 'Save Details'}</button>
+      </div></>
+  );
+}
+
+function Pay() {
+  const { S, A } = useBuy();
+  const b = calcBill(S.cart);
+  const opts = [['UPI', 'Google Pay, PhonePe, Paytm & more', <img key="u" src={FG + 'cart/ic-upi.svg'} width="30" height="30" alt="" />], ['Credit / Debit Card', 'Visa, Mastercard, RuPay'], ['Net Banking', 'All major banks']];
+  return (
+    <div className="bc-pay"><SheetHead title="Modulus Seventeen Pay" sub={`Paying ${STORE.name}`} />
+      <div className="bc-sh">
+        <div className="bc-pay-amt"><small>Amount to pay</small><b>{inr(b.total)}</b><span className="bc-pay-n">{b.count} Item{b.count === 1 ? '' : 's'} · {STORE.name}</span></div>
+        <div className="bc-pay-o">{opts.map(([t, s, ic], i) => <label key={t}><input type="radio" name="bapm" defaultChecked={!i} /><span className="bc-pay-t"><b>{t}</b><small>{s}</small></span>{ic}</label>)}</div>
+        <p className="bc-note">Your money is held safely in the Modulus Seventeen gateway and settled to the store only after delivery.</p>
+        <button className="ba-btn wide" onClick={A.paynow}>Pay {inr(b.total)}</button>
+      </div>
+      <div className="bc-paying"><span className="bc-spin" /><b>Processing payment</b><small>Do not close this window</small></div>
+      <div className="bc-paid"><span className="bc-tick"><img src={FG + 'cart/ic-check-green.svg'} width="14" height="14" alt="" /></span><b>Payment successful</b><span className="bc-ok"><img src={FG + 'cart/ic-check-green.svg'} width="14" height="14" alt="" />{inr(b.total)} paid</span></div>
+    </div>
+  );
+}
+
+function Unlock({ id }) {
+  const { S, A } = useBuy();
+  const o = OFFERS.find(x => x.id === id) || OFFERS[0], b = calcBill(S.cart);
+  const btn = <button className="ba-btn outline wide bu-ok" onClick={A.close}>Woohoo! Thanks</button>;
+  if (o.id === 'free') return (
+    <div className="bu"><div className="bu-ill"><span className="bu-lines"><i /><i /><i /></span><img src="/assets/fig/scooter.svg" alt="" /></div>
+      <span className="bu-chip">Congrats!</span><p className="bu-big"><b>Free</b><s>₹49</s></p><p className="bu-sub">You unlocked Free Delivery</p>{btn}</div>
+  );
+  return (
+    <div className="bu"><div className="bu-tick"><span className="bu-rays">{Array.from({ length: 10 }, (_, i) => <i key={i} />)}</span><span className="bu-c"><svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg></span></div>
+      <p className="bu-t">{o.id === 'disc' ? 'Festive Offer' : 'Free Gift Unlocked'}</p><p className="bu-sub2">{o.id === 'disc' ? '50% Off Applied !' : 'Canvas Tote Bag added !'}</p>
+      <p className="bu-saved">You saved {inr(o.id === 'disc' ? b.disc : 299)}</p>{btn}<span className="bu-conf">{Array.from({ length: 14 }, (_, i) => <i key={i} />)}</span></div>
+  );
+}
+
+export const SHEETS = { more: More, sort: Sort, offers: Offers, amount: Amount, variants: Variants, custom: Custom, quick: Quick, details: Details, pay: Pay, unlock: Unlock, addrmenu: ({ id }) => <AddrMenu id={id} /> };
+export const MODALS = new Set(['quick', 'unlock']);
+export const renderSheet = (name, arg) => { const C = SHEETS[name]; return C ? <C pid={arg} id={arg} /> : null; };

@@ -1,0 +1,50 @@
+/* BUY · STORE DETAILS — Figma 1073:2453. Scoped under .bs-* */
+.bs-share img { width: 20px; height: 20px; }
+.bs-body { display: flex; flex-direction: column; gap: 24px; padding: 0 16px; margin-top: -9px; }
+.bs-body section { display: flex; flex-direction: column; gap: 8px; }
+
+/* banner 201 tall radius 20; logo 92 overlaps its bottom by 31px, 16px in from the banner edge */
+.bs-hero { position: relative; }
+.bs-ban { height: 201px; border-radius: 20px; overflow: hidden; background: #f5cccd; }
+.bs-ban img { width: 100%; height: 100%; object-fit: cover; }
+.bs-id { display: flex; align-items: flex-end; gap: 8px; margin: -31px 0 0 16px; position: relative; }
+.bs-logo { flex: none; width: 92px; height: 92px; border: 1px solid #000; border-radius: 500px; object-fit: cover; background: #fff; }
+.bs-idt { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding-bottom: 1px; }
+.bs-nm { display: flex; align-items: center; gap: 5px; }
+.bs-nm b { font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.48px; color: #000; white-space: nowrap; }
+.bs-nm img { width: 16px; height: 16px; }
+.bs-cat { margin-top: -4px; font-size: 10px; line-height: 1.1; letter-spacing: -0.2px; color: #a3a3a3; }
+.bs-loc { display: flex; align-items: center; gap: 2px; font-size: 10px; line-height: 1.1; letter-spacing: -0.2px; color: #777; white-space: nowrap; }
+.bs-loc img { width: 10px; height: 10px; }
+
+/* outline buttons (Figma 1712:4795): white, red stroke, radius 10, hard shadow, 16/500 red */
+.bs-two { display: flex; gap: 8px; margin-top: -8px; }
+.bs-ob { flex: 1 1 0; display: grid; place-items: center; padding: 10px 16px; border: 1px solid var(--r) !important; border-radius: 10px !important; background: #fff !important; box-shadow: var(--hard); font-size: 16px; font-weight: 500; line-height: 1.2; letter-spacing: -0.48px; color: var(--r) !important; white-space: nowrap; transition: transform .15s, box-shadow .15s; }
+.bs-ob:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #000; }
+
+.bs-sub { font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.28px; color: #000; }
+
+/* open days (Figma 1138:5865): cards p 8 radius 10, #8a8a8a stroke + shadow; closed #c4c4c4 */
+.bs-days { display: flex; gap: 8px; margin: 0 -16px; padding: 0 16px 4px; overflow-x: auto; scrollbar-width: none; }
+.bs-days::-webkit-scrollbar { display: none; }
+.bs-days span { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 72px; padding: 8px; border: 1px solid #8a8a8a; border-radius: 10px; background: #fff; box-shadow: 2px 3px 0 #8a8a8a; color: #8a8a8a; text-align: center; white-space: nowrap; }
+.bs-days span.off { border-color: #c4c4c4; box-shadow: 2px 3px 0 #c4c4c4; color: #c4c4c4; }
+.bs-days b { font-size: 16px; font-weight: 600; line-height: 1.1; letter-spacing: -0.4px; }
+.bs-days small { font-size: 10px; line-height: 1.6; letter-spacing: -0.25px; }
+
+/* map (Figma 1076:3818): 175 tall, #b3b1b1 stroke radius 14, pin + Get Directions overlay */
+.bs-map { position: relative; height: 175px; border: 1px solid #b3b1b1; border-radius: 14px; overflow: hidden; }
+.bs-mapimg { width: 100%; height: 100%; object-fit: cover; }
+.bs-pin { position: absolute; left: calc(50% - 42px); top: 89px; width: 36px; height: 39px; animation: bsPin 2.4s ease-in-out infinite; }
+@keyframes bsPin { 0%, 70%, 100% { transform: none; } 80% { transform: translateY(-6px); } }
+.bs-dir { position: absolute; right: 10px; bottom: 10px; flex: none; }
+
+/* offers (Figma 1076:3844) */
+.bs-ofl { display: flex; flex-direction: column; gap: 8px; }
+.bs-of { display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid #eaeaea; border-radius: 15px; }
+.bs-of img { flex: none; }
+.bs-of > div { display: flex; flex-direction: column; gap: 4px; white-space: nowrap; }
+.bs-of b { font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.32px; color: #585858; }
+.bs-of small { font-size: 12px; line-height: 1.1; letter-spacing: -0.24px; color: #a0a0a0; }
+.bs-of strong { font-weight: 500; color: var(--r); }
+.bs-about { font-size: 12px; line-height: 1.6; letter-spacing: -0.24px; color: #a0a0a0; }
