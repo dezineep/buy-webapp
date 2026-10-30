@@ -2,7 +2,9 @@
    Scroll behaviour (inside the .ba-scr scroller):
    - .bh-top (store bar) sits over the banner and scrolls away with it.
    - .bh-stick (delivery bar, Figma 2170:7403, + category tabs) pins to the top; .pinned adds a soft shadow.
-     The search button in the delivery bar opens the separate search screen.
+   - Search: at the top of the page it is the full search bar under the delivery row; once the block pins it morphs
+     (slides + shrinks) into the round search button beside "Deliver to" while the gap it leaves folds away, and
+     expands back when the page returns to the top. Either form opens the separate search screen.
    Category tabs work like Blinkit / Zepto: an outlined tab slides to the selected category and opens into the
    line under the row; the product grid slides in from the side you moved towards (swipe the grid to switch too). */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -124,8 +126,11 @@ export default function Home({ scRef }) {
             <span className="bh-loc"><img src={Q + 'ic-locate.svg'} width="20" height="20" alt="" /></span>
             <span className="bh-addr-t"><small>Deliver to</small><span><b>{a ? `${a.area}, ${a.city} - ${a.pin}` : 'Add your delivery address'}</b><i className="bh-chev"><img src={Q + 'ic-chev.svg'} alt="" /></i></span></span>
           </button>
-          <button className="bh-sbtn" onClick={A.opensearch} aria-label="Search products"><img src={Q + 'ic-search.svg'} width="16" height="16" alt="" /></button>
         </div>
+        <button className="bh-sbar" onClick={A.opensearch} aria-label="Search products">
+          <img src={Q + 'ic-search.svg'} width="16" height="16" alt="" /><span>Search for products, categories...</span>
+        </button>
+        <i className="bh-sgap" aria-hidden="true" />
         <CatTabs />
       </div>
       <div className="bh-count"><b>{list.length} Products</b><button onClick={A.sort}><img src={H + 'ic-sort.svg'} width="18" height="18" alt="" />Sort By</button></div>
