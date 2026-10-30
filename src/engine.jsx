@@ -138,7 +138,7 @@ export function BuyProvider({ children }) {
 
   /* ---------- actions ---------- */
   // saved addresses exist -> let the customer pick one (Swiggy style); none yet -> straight to the form
-  const toAddr = () => { if (S.addresses.length) go('addresses'); else { S.editing = null; S.draft = { type: 'home', label: 'Home' }; go('address'); } };
+  const toAddr = () => { if (S.addresses.length) go('addresses'); else { S.editing = null; S.addrMode = 'new'; S.draft = {}; go('address'); } };
 
   const A = {
     back, home, go, toast, openSheet, closeSheet, selOf, commit,
@@ -149,13 +149,13 @@ export function BuyProvider({ children }) {
     more: () => openSheet('more'),
     /* address book: opening it from the home "Deliver to" row / More sheet / cart picks the delivery address */
     address: () => { closeSheet(); S.checkout = false; S.toCart = false; go('addresses'); },
-    newaddr: () => { closeSheet(); S.editing = null; S.located = false; S.draft = { type: 'home', label: 'Home' }; go('address'); },
-    editaddr: id => { closeSheet(); const a = S.addresses.find(x => x.id === id); S.editing = id; S.located = true; S.draft = { ...a }; go('address'); },
+    /* Figma 2174:7989 "New Address" (search + map + form) and 2174:7773 "Your Current Location" (map + prefilled form) */
+    newaddr: () => { closeSheet(); S.editing = null; S.located = false; S.addrMode = 'new'; S.draft = {}; go('address'); },
+    curaddr: () => { closeSheet(); S.editing = null; S.located = true; S.addrMode = 'current'; S.draft = { ...SAMPLE_ADDR, dist: 1.4 }; go('address'); },
+    editaddr: id => { closeSheet(); const a = S.addresses.find(x => x.id === id); S.editing = id; S.located = true; S.addrMode = 'new'; S.draft = { ...a }; go('address'); },
     deladdr: id => { closeSheet(); S.addresses = S.addresses.filter(x => x.id !== id); if (S.addr && S.addr.id === id) S.addr = null; commit(); toast('Address deleted'); },
     shareaddr: id => { closeSheet(); const a = S.addresses.find(x => x.id === id); const t = `${a.label}: ${[a.street, a.road, a.area, a.city, a.pin].filter(Boolean).join(', ')}`; if (navigator.share) navigator.share({ text: t }).catch(() => {}); else { navigator.clipboard && navigator.clipboard.writeText(t).catch(() => {}); toast('Address copied to share'); } },
-    addrmenu: id => openSheet('addrmenu', id),
     requestaddr: () => window.open('https://wa.me/?text=' + encodeURIComponent(`Hi! Please share your delivery address for my ${STORE.name} order on BUY.`), '_blank'),
-    addrtype: t => { S.draft = S.draft || {}; S.draft.type = t; S.draft.label = t === 'other' ? '' : t === 'home' ? 'Home' : 'Office'; commit(); },
     pickaddr: id => {
       S.addr = S.addresses.find(x => x.id === id);
       if (S.toCart) { S.toCart = false; S.stack = S.stack.slice(0, -1); go('cart'); }
@@ -223,7 +223,6 @@ export function BuyProvider({ children }) {
       const miss = [['street', 'Street / Building'], ['area', 'Area / Locality'], ['city', 'City']].find(([k]) => !(a[k] || '').trim());
       if (miss) { S.aerr = `Please fill ${miss[1]}`; return commit(); }
       if (!/^\d{6}$/.test(a.pin || '')) { S.aerr = 'Enter a valid 6-digit pincode'; return commit(); }
-      if (a.type === 'other' && !(a.label || '').trim()) { S.aerr = 'Give this address a name, e.g. Gym'; return commit(); }
       S.aerr = '';
       const saved = { state: 'Karnataka', type: 'home', label: 'Home', phone: S.user?.phone || '', dist: +(0.5 + Math.random() * 4).toFixed(1), ...a, id: S.editing || 'a' + Date.now() };
       S.addresses = S.editing ? S.addresses.map(x => (x.id === S.editing ? saved : x)) : [saved, ...S.addresses];

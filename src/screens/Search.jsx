@@ -7,8 +7,8 @@
    Styles: styles/search.css (.bq-*) */
 import { Fragment, useLayoutEffect, useRef } from 'react';
 import { useBuy } from '../engine.jsx';
-import { V2, CATEGORIES, searchProducts, searchTokens, cardTag, catLabel, qtyInCart } from '../data.js';
-import { PriceRow, ICO } from '../ui.jsx';
+import { V2, CATEGORIES, searchProducts, searchTokens, catLabel, qtyInCart } from '../data.js';
+import { PriceRow, ICO, VariantChips } from '../ui.jsx';
 
 const Q = V2 + 'search/';
 
@@ -48,7 +48,8 @@ function Row({ p, q, i }) {
     <div className="bq-row" style={{ animationDelay: `${Math.min(i, 8) * 35}ms` }}>
       <img className="bq-img" src={p.img[0]} alt="" loading="lazy" onClick={() => A.quick(p.id)} />
       <button className="bq-info" onClick={() => A.product(p.id)}>
-        <span className="bq-tags"><span className="ba-tag">{catLabel(p)}</span><span className="ba-tag">{cardTag(p)}</span></span>
+        <span className="bq-tags"><span className="ba-tag">{catLabel(p)}</span></span>
+        <VariantChips p={p} max={3} rows={1} />
         <span className="bq-name"><Hl text={p.name} q={q} /></span>
         <span className="bq-pr"><PriceRow price={p.price} mrp={p.mrp} /><span className="ba-off">{off}% OFF</span></span>
       </button>

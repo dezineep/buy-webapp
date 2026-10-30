@@ -10,7 +10,7 @@ export default function Store() {
   const { A } = useBuy();
   return (
     <div className="bs">
-      <Head title="Store Details" right={<button className="ba-back bs-share" onClick={A.share} aria-label="Share"><img src={S_ + 'ic-send.svg'} alt="" width="20" height="20" /></button>} />
+      <Head title="Store Details" right={<button className="bp2-share" onClick={A.share} aria-label="Share store">{ICO.shareSoft()}</button>} />
       <div className="bs-body">
         <div className="bs-hero">
           <div className="bs-ban"><img src={STORE.banners[0]} alt="" /></div>

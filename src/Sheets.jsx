@@ -2,12 +2,11 @@
    more    Figma 1164:8920 (no "Coming soon" badges: every tile works)
    sort / amount / offers / details / pay / unlock / custom / quick — same as the demo
    variants  select size / colour + bulk pack for a product straight from the grid (same chips as the product page) */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useBuy } from './engine.jsx';
-import { P, V2, FG, STORE, OFFERS, inr, calcBill, unitPrice, mrpOf, packPrice, customUnit, lineKey } from './data.js';
-import { SheetHead, Ring, PriceBox, BigStep, ICO } from './ui.jsx';
+import { P, PRODUCTS, V2, FG, STORE, OFFERS, inr, calcBill, unitPrice, mrpOf, packPrice, customUnit, lineKey, selLabel, packText } from './data.js';
+import { SheetHead, Ring, PriceBox, PriceRow, BigStep, ICO, MiniCard } from './ui.jsx';
 import { PackCards, OptionGroups } from './screens/Product.jsx';
-import { AddrMenu } from './screens/Addresses.jsx';
 
 const M = V2 + 'more/';
 
@@ -124,17 +123,20 @@ function Custom({ pid }) {
   );
 }
 
+/* quick view (Instamart-style): scrollable body (photos, name, price, variants, quantity, full-details button) with a
+   sticky bottom bar (chosen variant + price + Add / stepper). Scrolling the body a little — or the full-details
+   button / the name — grows the card into the product page (FLIP: pin its box, animate box, corners and padding to
+   the screen edges; the photo lands where the gallery sits, on the same slide). Pulling down at the top closes it. */
 function Quick({ pid }) {
   const { S, A } = useBuy();
-  const p = P(pid);
-  const pk = { n: p.packs[0].n };
-  const line = !p.opts.length && S.cart.find(l => l.key === lineKey(pid, {}, pk));
-  const root = useRef(null), track = useRef(null), drag = useRef(null), busy = useRef(false), timer = useRef(0);
+  const p = P(pid), s = A.selOf(pid);
+  const price = packPrice(p, s.sel, s.pack), mrp = mrpOf(p, unitPrice(p, s.sel)) * s.pack.n;
+  const line = S.cart.find(l => l.key === lineKey(pid, s.sel, s.pack));
+  const label = [selLabel(p, s.sel), s.pack.n > 1 || s.pack.custom ? packText(p, s.pack) : (p.opts.length ? '' : p.tag || p.packs[0].label)].filter(Boolean).join(' · ');
+  const root = useRef(null), scroller = useRef(null), track = useRef(null), drag = useRef(null), busy = useRef(false), timer = useRef(0);
+  const [slide, setSlide] = useState(0);
   useEffect(() => () => clearTimeout(timer.current), []);
   const modal = () => root.current && root.current.closest('.ba-modal');
-  /* expand: the modal grows from its centred card into the full screen (FLIP: pin its current box, then animate box,
-     corners and padding to the screen edges); the image settles where the product page gallery sits, then the
-     product page takes over showing the same photo. Back / close during the grow cancels it (openfull re-checks). */
   const expand = () => {
     const m = modal(); if (!m || busy.current) return;
     busy.current = true;
@@ -144,43 +146,61 @@ function Quick({ pid }) {
     void m.offsetHeight;
     m.classList.add('qv-full');
     Object.assign(m.style, { transition: '', top: '0px', left: '0px', right: '0px', height: pr.height + 'px' });
+    if (scroller.current) scroller.current.scrollTo({ top: 0, behavior: 'smooth' });
     timer.current = setTimeout(() => A.openfull(pid, img), 400);
   };
-  /* vertical drags only: the first 8px decide the axis, so swiping through the photos never moves the card */
-  const onTouchStart = e => { if (busy.current) return; const t = e.touches[0]; drag.current = { x: t.clientX, y: t.clientY, dy: 0, axis: '' }; };
+  /* scroll freely until "View full details" is fully in view; scrolling 24px past that point opens the full page */
+  const more = useRef(null);
+  const onScroll = e => {
+    const sc = e.currentTarget, b = more.current; if (!b) return;
+    const btnBottom = b.getBoundingClientRect().bottom - sc.getBoundingClientRect().top + sc.scrollTop;
+    if (sc.scrollTop >= Math.max(24, btnBottom - sc.clientHeight + 24)) expand();
+  };
+  /* pull-down-to-close: vertical drags that start with the body scrolled to the top (first 8px decide the axis) */
+  const onTouchStart = e => { if (busy.current) return; const t = e.touches[0]; drag.current = { x: t.clientX, y: t.clientY, dy: 0, axis: '', top: !scroller.current || scroller.current.scrollTop <= 0 }; };
   const onTouchMove = e => {
-    const d = drag.current; if (!d) return;
+    const d = drag.current; if (!d || !d.top) return;
     const t = e.touches[0], dx = t.clientX - d.x, dy = t.clientY - d.y;
-    if (!d.axis) { if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return; d.axis = Math.abs(dy) > Math.abs(dx) ? 'y' : 'x'; }
-    if (d.axis !== 'y') return;
+    if (!d.axis) { if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return; d.axis = Math.abs(dy) > Math.abs(dx) && dy > 0 ? 'down' : 'other'; }
+    if (d.axis !== 'down') return;
     d.dy = dy;
     const m = modal(); if (!m) return;
     m.style.transition = 'none';
-    // follow the finger upwards (with resistance), barely move when dragged down
-    const off = dy < 0 ? dy * 0.45 : dy * 0.15;
-    m.style.transform = `translateY(calc(-50% + ${off}px)) scale(${dy < 0 ? 1 + Math.min(-dy, 160) / 1600 : 1})`;
+    m.style.transform = `translateY(calc(-50% + ${Math.max(0, dy) * 0.35}px))`;
   };
   const onTouchEnd = () => {
     const d = drag.current; drag.current = null;
-    const m = modal(); if (!m || !d || d.axis !== 'y') return;
-    m.style.transition = '';
-    if (d.dy < -70) expand();
-    else if (d.dy > 90) { m.style.transform = ''; A.close(); }
-    else m.style.transform = '';
+    const m = modal(); if (!m || !d || d.axis !== 'down') return;
+    m.style.transition = ''; m.style.transform = '';
+    if (d.dy > 90) A.close();
   };
-  const onWheel = e => { if (e.deltaY > 30 && Math.abs(e.deltaY) > Math.abs(e.deltaX)) expand(); };
   return (
-    <div className="bp-qv" ref={root} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchCancel={onTouchEnd} onWheel={onWheel}>
+    <div className="bp-qv" ref={root} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchCancel={onTouchEnd}>
       <i className="bp-qv-grab" aria-hidden="true" />
-      <div className="bp-qv-media"><div className="bp-track" ref={track}>{p.img.map(i => <img key={i} src={i} alt={p.name} />)}</div>
-        <i className="bp-qv-fade" /><button className="bp-qv-x" onClick={A.close} aria-label="Close">{ICO.close()}</button></div>
-      <div className="bp-qv-info">
-        <p className="bp-qv-name" onClick={expand}>{p.name}</p>
-        <div className="bp-qv-b"><PriceBox price={p.price} mrp={p.mrp} big />
-          <span className="bp-qv-ctl">{p.opts.length ? <button className="ba-btn" onClick={() => A.openSheet('variants', pid)}>Select Options</button>
-            : line ? <BigStep line={line} /> : <button className="ba-btn" onClick={() => A.add(pid)}>Add to Cart</button>}</span></div>
-        {/* Figma 857:2201 button style: white, red stroke, radius 10, hard shadow, 16/500 red + 18px chevron */}
-        <button className="bp-qv-more" onClick={expand}>View full details<img src={V2 + 'product/ic-chev-red.svg'} width="18" height="18" alt="" /></button>
+      <div className="bp-qv-scroll" ref={scroller} onScroll={onScroll}>
+        <div className="bp-qv-media">
+          <div className="bp-track" ref={track} onScroll={e => setSlide(Math.round(e.currentTarget.scrollLeft / (e.currentTarget.clientWidth || 1)))}>{p.img.map(i => <img key={i} src={i} alt={p.name} />)}</div>
+          <i className="bp-qv-fade" /><button className="bp-qv-x" onClick={A.close} aria-label="Close">{ICO.close()}</button>
+          {p.img.length > 1 ? <div className="bp-qv-dots">{p.img.map((i, k) => <i key={i} className={k === slide ? 'on' : ''} />)}</div> : null}
+        </div>
+        <div className="bp-qv-info">
+          {/* the chosen variant, as on the product page (price lives in the bottom bar) */}
+          <div className="bp-qv-head">
+            <div className="bp2-tags">{[...p.opts.map(o => s.sel[o.name]), ...(p.opts.length ? [] : [p.tag || p.packs[0].label]), s.pack.n > 1 || s.pack.custom ? packText(p, s.pack) : null].filter(Boolean).map(t => <span key={t} className="ba-tag">{t}</span>)}</div>
+            <p className="bp-qv-name" onClick={expand}>{p.name}</p>
+          </div>
+          {p.opts.length ? <OptionGroups p={p} s={s} /> : null}
+          <div className="bp-qv-qty"><p className="bp2-ol">Quantity</p><PackCards p={p} s={s} /></div>
+          {/* Figma 857:2201 button style: white, red stroke, radius 10, hard shadow, 16/500 red + 18px chevron */}
+          <button className="bp-qv-more" ref={more} onClick={expand}>View full details<img src={V2 + 'product/ic-chev-red.svg'} width="18" height="18" alt="" /></button>
+          <div className="bp-qv-desc"><p className="bp2-h">Description</p><p>{p.desc}</p></div>
+          <div className="bp-qv-sim"><p className="bp2-h">Similar products</p>
+            <div className="bx-hlist">{PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 6).map(o => <MiniCard key={o.id} p={o} />)}</div></div>
+        </div>
+      </div>
+      <div className="bp-qv-foot">
+        <div className="bp-qv-sum"><small>{label || 'Standard'}</small><PriceRow price={price} mrp={mrp} /></div>
+        {line ? <BigStep line={line} /> : <button className="ba-btn" onClick={() => A.addsel(pid)}>Add</button>}
       </div>
     </div>
   );
@@ -237,6 +257,6 @@ function Unlock({ id }) {
   );
 }
 
-export const SHEETS = { more: More, sort: Sort, offers: Offers, amount: Amount, variants: Variants, custom: Custom, quick: Quick, details: Details, pay: Pay, unlock: Unlock, addrmenu: ({ id }) => <AddrMenu id={id} /> };
+export const SHEETS = { more: More, sort: Sort, offers: Offers, amount: Amount, variants: Variants, custom: Custom, quick: Quick, details: Details, pay: Pay, unlock: Unlock };
 export const MODALS = new Set(['quick', 'unlock']);
 export const renderSheet = (name, arg) => { const C = SHEETS[name]; return C ? <C pid={arg} id={arg} /> : null; };

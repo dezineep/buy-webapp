@@ -25,7 +25,29 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
 .ba-pill { width: 100%; border-radius: 25px; --ring: 30px; }
 
 /* quick view: grab handle + a clear "View full details" button; swiping up grows the card into the product page */
-.bp-qv { touch-action: pan-x; }
+.bp-qv { max-height: min(620px, calc(100dvh - 190px - var(--sat) - var(--sab))); }
+/* scrollable body (bleeds to the card edges so chip rows can scroll under the padding) + sticky Add bar */
+.bp-qv-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; margin: 0 -16px; padding: 0 16px 12px; }
+.bp-qv-scroll::-webkit-scrollbar { display: none; }
+.bp-qv .bp-qv-media .bp-track { height: 300px; }
+.bp-qv .bp-qv-fade { top: 212px; }
+.bp-qv .bp-qv-dots { position: absolute; z-index: 1; top: 276px; left: 50%; transform: translateX(-50%); }
+.bp-qv .bp-qv-info { gap: 16px; margin-top: 4px; }
+.bp-qv-qty { display: flex; flex-direction: column; gap: 8px; }
+.bp-qv-head { display: flex; flex-direction: column; gap: 8px; }
+.bp-qv-desc { display: flex; flex-direction: column; gap: 4px; }
+.bp-qv-desc p:last-child { font-size: 14px; line-height: 1.6; letter-spacing: -0.28px; color: #a5a5a5; }
+.bp-qv-sim { display: flex; flex-direction: column; gap: 8px; }
+.bp-qv-foot { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 -16px -16px; padding: 14px 18px 19px 16px; border-top: 1px solid #eee; border-radius: 0 0 24px 24px; background: #fff; box-shadow: 0 -6px 12px -10px rgba(0, 0, 0, .25); }
+.bp-qv-sum { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.bp-qv-sum small { font-size: 12px; line-height: 1.2; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* price stands out (22/600); right padding 18 = 16 + the button's 2px hard shadow, so both sides look equal */
+.bp-qv-sum .ba-price { align-items: flex-end; gap: 6px; }
+.bp-qv-sum .ba-price b { font-size: 22px; line-height: 1.1; letter-spacing: -0.3px; }
+.bp-qv-sum .ba-price s { font-size: 13px; margin-bottom: 2px; }
+.bp-qv-sum .ba-price s::after { top: 9px; }
+.bp-qv-foot .ba-btn { flex: none; height: 46px; padding: 0 40px; }
+.bp-qv-foot .ba-step.big { flex: none; height: 46px; }
 .bp-qv-grab { display: block; width: 40px; height: 4px; margin: -6px auto 10px; border-radius: 4px; background: #d9d9d9; }
 /* Figma 857:2201 ("Order Again" button style): white, 1px red stroke, radius 10, hard shadow 2px 3px, p 8 16, 16/500 red,
    18px chevron after the label; full width here */
@@ -41,9 +63,10 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
 .ba-modal.qv-full::before { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, #f9e7e8 var(--sat, 0px), #fff calc(var(--sat, 0px) + 98px)); animation: qvTint .4s ease both; }
 @keyframes qvTint { from { opacity: 0; } }
 .ba-layer:has(.qv-full) { pointer-events: none; }
-.qv-full .bp-qv-info, .qv-full .bp-qv-x, .qv-full .bp-qv-fade { opacity: 0; transition: opacity .2s; }
+.qv-full .bp-qv-info, .qv-full .bp-qv-x, .qv-full .bp-qv-fade, .qv-full .bp-qv-dots, .qv-full .bp-qv-foot { opacity: 0; transition: opacity .2s; }
+.qv-full .bp-qv-scroll { overflow: hidden; }
 .qv-full .bp-qv-grab { opacity: 0; height: 0; margin: 0 auto; transition: opacity .2s, height .4s, margin .4s; }
-.qv-full .bp-qv-media .bp-track { height: 330px; border-radius: 15px; transition: height .4s cubic-bezier(.22, 1, .36, 1), border-radius .4s; }
+.qv-full.ba-modal .bp-qv-media .bp-track { height: 330px; border-radius: 15px; transition: height .4s cubic-bezier(.22, 1, .36, 1), border-radius .4s; }
 .ba-layer:has(.qv-full) .ba-dim { opacity: 0; transition: opacity .4s; }
 .bp-qv-media .bp-track { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; display: flex; }
 .bp-qv-media .bp-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; }

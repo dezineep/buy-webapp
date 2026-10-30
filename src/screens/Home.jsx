@@ -9,8 +9,8 @@
    line under the row; the product grid slides in from the side you moved towards (swipe the grid to switch too). */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useBuy } from '../engine.jsx';
-import { STORE, CATEGORIES, V2, sortedProducts, cardTag } from '../data.js';
-import { ICO, Ctl, PriceBox } from '../ui.jsx';
+import { STORE, CATEGORIES, V2, sortedProducts } from '../data.js';
+import { ICO, Ctl, PriceBox, VariantChips } from '../ui.jsx';
 
 const H = V2 + 'home/', Q = V2 + 'search/';
 
@@ -20,7 +20,7 @@ function Card({ p }) {
     <div className="bh-card">
       <div className="bh-card-img" onClick={() => A.quick(p.id)}><img src={p.img[0]} alt={p.name} loading="lazy" /></div>
       <span className="bh-card-ctl"><Ctl pid={p.id} /></span>
-      <div className="bx-tagrow"><span className="ba-tag">{cardTag(p)}</span><span className="bx-rate">{ICO.star()}{p.rating}</span></div>
+      <VariantChips p={p} />
       <p className="bh-card-name" onClick={() => A.product(p.id)}>{p.name}</p>
       <div className="bh-card-pr" onClick={() => A.product(p.id)}><PriceBox price={p.price} mrp={p.mrp} /></div>
     </div>

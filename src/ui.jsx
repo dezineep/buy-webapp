@@ -1,6 +1,6 @@
 /* Shared UI atoms (classes styled in styles/base.css). Icons are the Figma exports from file FBuShw2V6BDtlsMePanuS7. */
 import { useBuy } from './engine.jsx';
-import { FG, V2, inr, off, P, qtyInCart } from './data.js';
+import { FG, V2, inr, off, P, qtyInCart, SWATCH } from './data.js';
 
 const B = FG + 'base/';
 const ic = (src, w, h = w) => <img src={src} width={w} height={h} alt="" aria-hidden="true" />;
@@ -19,7 +19,6 @@ export const ICO = {
   shareSoft: () => ic(V2 + 'product/ic-share.svg', 20),
   more: () => ic(V2 + 'home/ic-more.svg', 20),
   cart: () => ic(V2 + 'product/ic-cart.svg', 20),
-  star: () => ic(V2 + 'home/ic-star.svg', 14),
   verified: () => ic(V2 + 'home/ic-verified.svg', 16),
   scooterG: () => ic(V2 + 'home/ic-scooter-green.svg', 14),
   m17: () => ic(V2 + 'home/logo-m17.png', 29, 20),
@@ -106,6 +105,24 @@ export const BigStep = ({ line, grow }) => {
   );
 };
 
+/* variant chips on product cards: the first attribute only (Size), its first `max` values as chips and a "+N" chip
+   for the rest; products without variants show their pack / size tag */
+export function VariantChips({ p, max = 2, rows = 1 }) {
+  if (!p.opts.length) return <div className="bx-vc"><div className="bx-vrow"><span className="ba-tag">{p.tag || p.packs[0].label}</span></div></div>;
+  return (
+    <div className="bx-vc">
+      {p.opts.slice(0, rows).map(o => (
+        <div key={o.name} className="bx-vrow" aria-label={`${o.name}: ${o.values.map(v => v.v).join(', ')}`}>
+          {o.values.slice(0, max).map(v => (
+            <span key={v.v} className="ba-tag">{o.name === 'Color' ? <i className="bx-sw" style={{ background: SWATCH[v.v] || '#ccc' }} /> : null}{v.v}</span>
+          ))}
+          {o.values.length > max ? <span className="ba-tag more">+{o.values.length - max}</span> : null}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* "Add more to your order" card (Figma 2167:5763): 160 wide, + pill over the image's bottom-left corner */
 export function MiniCard({ p }) {
   const { A } = useBuy();
@@ -113,7 +130,7 @@ export function MiniCard({ p }) {
     <div className="bx-mini">
       <div className="bx-mini-img" onClick={() => A.quick(p.id)}><img src={p.img[0]} alt={p.name} loading="lazy" /></div>
       <span className="bx-mini-ctl"><Ctl pid={p.id} /></span>
-      <div className="bx-tagrow"><span className="ba-tag">{p.opts.length ? `${p.opts[0].values.length} Options` : p.tag || p.packs[0].label}</span><span className="bx-rate">{ICO.star()}{p.rating}</span></div>
+      <VariantChips p={p} />
       <p className="bx-mini-name" onClick={() => A.product(p.id)}>{p.name}</p>
       <div onClick={() => A.product(p.id)}><PriceBox price={p.price} mrp={p.mrp} /></div>
     </div>

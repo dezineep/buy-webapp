@@ -3,6 +3,7 @@
 import { useBuy } from '../engine.jsx';
 import { FG, PARTNER, MON, STORE, fmtTime, fmtDay, fmtLong } from '../data.js';
 import { Head, ICO } from '../ui.jsx';
+import { downloadReceipt } from '../receipt.js';
 
 const O = FG + 'order/';
 const Img = ({ f, w, h, cls }) => <img className={cls} src={O + f} width={w} height={h} alt="" aria-hidden="true" />;
@@ -89,10 +90,13 @@ export default function Order({ entry }) {
             </div>
           </div>
         ) : null}
-        {st !== 'delivered' && st !== 'cancelled' ? (
-          <div className="bo-btns"><button className="ba-btn wide" onClick={A.myorders}>Track Order Status</button>
-            <button className="ba-btn wide soft" onClick={A.home}>Continue Shopping</button></div>
-        ) : null}
+        <div className="bo-btns">
+          {st !== 'delivered' && st !== 'cancelled' ? <>
+            <button className="ba-btn wide" onClick={A.myorders}>Track Order Status</button>
+            <button className="ba-btn wide soft" onClick={A.home}>Continue Shopping</button>
+          </> : null}
+          {st !== 'cancelled' ? <button className="ba-btn wide soft" onClick={() => { if (!downloadReceipt(o)) A.toast('Receipt downloaded'); }}>Download Order Receipt</button> : null}
+        </div>
         <OrderSummary o={o} />
       </div>
     </div>

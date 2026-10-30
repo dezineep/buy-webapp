@@ -47,77 +47,77 @@ const PCS = [{ n: 1, label: '1 x Piece' }, { n: 3, label: '3 x Pieces', f: 0.85,
 const PIECE = { unit: 'pc', units: 'pcs', min: 2, max: 50, floor: 0.7 };
 
 export const PRODUCTS = [
-  { id: 'm1', cat: 'men', name: 'Heart Print Casual Shirt', img: [IMG + 'm-shirt-heart.jpg', IMG + 'm-shirts.jpg'], price: 899, mrp: 1299, rating: 4.6,
+  { id: 'm1', cat: 'men', name: 'Heart Print Casual Shirt', img: [IMG + 'm-shirt-heart.jpg', IMG + 'm-shirts.jpg'], price: 899, mrp: 1299,
     opts: [SIZES('S', 'M', 'L', { v: 'XL', d: 50 }), COLORS('Blue', 'White', 'Black')], packs: PCS, custom: PIECE,
     desc: 'A relaxed-fit cotton shirt with a playful all-over heart print. Breathable, soft on the skin and easy to dress up or down — pair it with chinos for brunch or denims for a night out.' },
-  { id: 'm2', cat: 'men', name: 'Checked Flannel Shirt', img: [IMG + 'm-check.jpg'], price: 1199, mrp: 1699, rating: 4.7,
+  { id: 'm2', cat: 'men', name: 'Checked Flannel Shirt', img: [IMG + 'm-check.jpg'], price: 1199, mrp: 1699,
     opts: [SIZES('M', 'L', 'XL', { v: 'XXL', d: 100 })], packs: PCS, custom: PIECE,
     desc: 'Brushed cotton flannel in a timeless black and grey check. Warm without the weight, with a structured collar and chest pocket.' },
-  { id: 'm3', cat: 'men', name: 'Sports Polo T-Shirt', img: [IMG + 'm-polo.jpg'], price: 699, mrp: 999, rating: 4.5,
+  { id: 'm3', cat: 'men', name: 'Sports Polo T-Shirt', img: [IMG + 'm-polo.jpg'], price: 699, mrp: 999,
     opts: [SIZES('S', 'M', 'L', 'XL'), COLORS('Black', 'Orange')], packs: PCS, custom: PIECE,
     desc: 'Quick-dry pique polo with a contrast collar. Moisture-wicking fabric keeps you cool on the field and off it.' },
-  { id: 'm4', cat: 'men', name: 'Linen Shirt Combo', img: [IMG + 'm-shirts.jpg', IMG + 'm-shirt-heart.jpg'], price: 1499, mrp: 2199, rating: 4.4, tag: 'Pack of 2',
+  { id: 'm4', cat: 'men', name: 'Linen Shirt Combo', img: [IMG + 'm-shirts.jpg', IMG + 'm-shirt-heart.jpg'], price: 1499, mrp: 2199, tag: 'Pack of 2',
     opts: [], packs: [{ n: 1, label: '1 Combo' }, { n: 2, label: '2 Combos' }, { n: 5, label: '5 Combos', f: 0.8, best: true }], custom: { unit: 'combo', units: 'combos', min: 2, max: 30, floor: 0.75 },
     desc: 'Two pure linen shirts in summer shades. Pre-washed for softness, cut for a modern regular fit.' },
 
-  { id: 'w1', cat: 'women', name: 'Floral Midi Dress', img: [IMG + 'w-floral.jpg'], price: 1299, mrp: 1899, rating: 4.8,
+  { id: 'w1', cat: 'women', name: 'Floral Midi Dress', img: [IMG + 'w-floral.jpg'], price: 1299, mrp: 1899,
     opts: [SIZES('XS', 'S', 'M', 'L'), COLORS('Black', 'Ivory')], packs: PCS, custom: PIECE,
     desc: 'A flowy long-sleeve midi in a delicate monochrome floral. Lined bodice, elastic cuffs and a flattering A-line skirt.' },
-  { id: 'w2', cat: 'women', name: 'Wide-leg Jumpsuit', img: [IMG + 'w-jumpsuit.jpg'], price: 1599, mrp: 2299, rating: 4.6,
+  { id: 'w2', cat: 'women', name: 'Wide-leg Jumpsuit', img: [IMG + 'w-jumpsuit.jpg'], price: 1599, mrp: 2299,
     opts: [SIZES('S', 'M', 'L')], packs: PCS, custom: PIECE,
     desc: 'One-and-done dressing: a crepe jumpsuit with a wrap neckline, tie waist and fluid wide legs.' },
-  { id: 'w3', cat: 'women', name: 'Red Satin Evening Dress', img: [IMG + 'w-red.jpg'], price: 2499, mrp: 3499, rating: 4.9, left: 3,
+  { id: 'w3', cat: 'women', name: 'Red Satin Evening Dress', img: [IMG + 'w-red.jpg'], price: 2499, mrp: 3499, left: 3,
     opts: [SIZES('XS', 'S', 'M', 'L', { v: 'XL', d: 150 })], packs: PCS, custom: PIECE,
     desc: 'Liquid satin that catches the light. A bias-cut silhouette with a draped neckline for evenings you want to remember.' },
-  { id: 'w4', cat: 'women', name: 'Printed Kaftan Dress', img: [IMG + 'w-kaftan.jpg'], price: 999, mrp: 1499, rating: 4.5,
+  { id: 'w4', cat: 'women', name: 'Printed Kaftan Dress', img: [IMG + 'w-kaftan.jpg'], price: 999, mrp: 1499,
     opts: [], packs: [{ n: 1, label: '1 x Piece' }, { n: 2, label: '2 x Pieces' }, { n: 5, label: '5 x Pieces', f: 0.8, best: true }], custom: PIECE, tag: 'Free Size',
     desc: 'Free-size viscose kaftan with an all-over boho print. Breezy, roomy and made for holidays.' },
 
-  { id: 'k1', cat: 'kids', name: 'Unicorn Party Dress', img: [IMG + 'k-unicorn.jpg'], price: 899, mrp: 1299, rating: 4.8,
+  { id: 'k1', cat: 'kids', name: 'Unicorn Party Dress', img: [IMG + 'k-unicorn.jpg'], price: 899, mrp: 1299,
     opts: [SIZES('2-3Y', '4-5Y', '6-7Y', '8-9Y')], packs: PCS, custom: PIECE,
     desc: 'Twirl-ready tulle dress with a sparkly unicorn bodice. Soft cotton lining so it never itches.' },
-  { id: 'k2', cat: 'kids', name: 'Boys Casual Jacket Set', img: [IMG + 'k-boy.jpg'], price: 1199, mrp: 1599, rating: 4.6,
+  { id: 'k2', cat: 'kids', name: 'Boys Casual Jacket Set', img: [IMG + 'k-boy.jpg'], price: 1199, mrp: 1599,
     opts: [SIZES('4-5Y', '6-7Y', '8-9Y', '10-11Y')], packs: PCS, custom: PIECE,
     desc: 'Layer-friendly jacket and tee combo in easy-care cotton. Built for playgrounds and puddles.' },
-  { id: 'k3', cat: 'kids', name: 'Polka Dot Long-sleeve Top', img: [IMG + 'k-polka.jpg'], price: 549, mrp: 799, rating: 4.7,
+  { id: 'k3', cat: 'kids', name: 'Polka Dot Long-sleeve Top', img: [IMG + 'k-polka.jpg'], price: 549, mrp: 799,
     opts: [SIZES('2-3Y', '4-5Y', '6-7Y'), COLORS('Black', 'Navy')], packs: PCS, custom: PIECE,
     desc: 'A classic black and white polka top with a soft round neck. Pairs with everything in their wardrobe.' },
-  { id: 'k4', cat: 'kids', name: 'Baby Onesie Pack', img: [IMG + 'k-onesies.jpg'], price: 799, mrp: 1199, rating: 4.9, tag: 'Pack of 3',
+  { id: 'k4', cat: 'kids', name: 'Baby Onesie Pack', img: [IMG + 'k-onesies.jpg'], price: 799, mrp: 1199, tag: 'Pack of 3',
     opts: [], packs: [{ n: 1, label: '1 Pack' }, { n: 2, label: '2 Packs' }, { n: 5, label: '5 Packs', f: 0.8, best: true }], custom: { unit: 'pack', units: 'packs', min: 2, max: 30, floor: 0.7 },
     desc: 'Three organic cotton onesies with envelope necks and snap closures. Gentle on newborn skin.' },
-  { id: 'k5', cat: 'kids', name: 'Kids Fleece Jacket', img: [IMG + 'k-fleece.jpg'], price: 1099, mrp: 1499, rating: 4.5,
+  { id: 'k5', cat: 'kids', name: 'Kids Fleece Jacket', img: [IMG + 'k-fleece.jpg'], price: 1099, mrp: 1499,
     opts: [SIZES('4-5Y', '6-7Y', '8-9Y'), COLORS('Grey', 'Blue')], packs: PCS, custom: PIECE,
     desc: 'Cosy zip-up fleece that keeps the chill out on school mornings. Machine washable, pill-resistant.' },
 
-  { id: 'f1', cat: 'formal', name: 'Classic Black Suit', img: [IMG + 'f-black.jpg'], price: 5999, mrp: 8999, rating: 4.8,
+  { id: 'f1', cat: 'formal', name: 'Classic Black Suit', img: [IMG + 'f-black.jpg'], price: 5999, mrp: 8999,
     opts: [SIZES('38', '40', '42', { v: '44', d: 300 })], packs: PCS, custom: PIECE,
     desc: 'A two-piece suit in a fine wool blend. Notch lapels, two-button closure and flat-front trousers.' },
-  { id: 'f2', cat: 'formal', name: 'Navy Blue Suit', img: [IMG + 'f-blue.jpg', IMG + 'f-blue2.jpg'], price: 5499, mrp: 7999, rating: 4.7,
+  { id: 'f2', cat: 'formal', name: 'Navy Blue Suit', img: [IMG + 'f-blue.jpg', IMG + 'f-blue2.jpg'], price: 5499, mrp: 7999,
     opts: [SIZES('38', '40', '42', '44')], packs: PCS, custom: PIECE,
     desc: 'The everyday power suit. Slim-cut navy with a soft shoulder and half canvas construction.' },
-  { id: 'f3', cat: 'formal', name: 'Pinstripe Blazer', img: [IMG + 'f-pin.jpg'], price: 3499, mrp: 4999, rating: 4.6,
+  { id: 'f3', cat: 'formal', name: 'Pinstripe Blazer', img: [IMG + 'f-pin.jpg'], price: 3499, mrp: 4999,
     opts: [SIZES('38', '40', '42')], packs: PCS, custom: PIECE,
     desc: 'Cream and black pinstripes with a sharp peak lapel. Throw it over a tee or wear it with the matching trousers.' },
-  { id: 'f4', cat: 'formal', name: 'White Formal Shirt', img: [IMG + 'f-white.jpg'], price: 999, mrp: 1499, rating: 4.7,
+  { id: 'f4', cat: 'formal', name: 'White Formal Shirt', img: [IMG + 'f-white.jpg'], price: 999, mrp: 1499,
     opts: [SIZES('38', '39', '40', '42', '44')], packs: PCS, custom: PIECE,
     desc: 'Crisp, wrinkle-resistant cotton poplin with a cutaway collar. The shirt every wardrobe needs.' },
 
-  { id: 'e1', cat: 'ethnic', name: 'White Floral Kurta Set', img: [IMG + 'e-kurta-w.jpg'], price: 1799, mrp: 2599, rating: 4.8,
+  { id: 'e1', cat: 'ethnic', name: 'White Floral Kurta Set', img: [IMG + 'e-kurta-w.jpg'], price: 1799, mrp: 2599,
     opts: [SIZES('S', 'M', 'L', 'XL')], packs: PCS, custom: PIECE,
     desc: 'Mul cotton kurta with delicate floral prints, paired with straight pants. Light, breathable and festive.' },
-  { id: 'e2', cat: 'ethnic', name: 'Pink Floral Kurta Set', img: [IMG + 'e-kurta-pink.jpg'], price: 1699, mrp: 2399, rating: 4.7,
+  { id: 'e2', cat: 'ethnic', name: 'Pink Floral Kurta Set', img: [IMG + 'e-kurta-pink.jpg'], price: 1699, mrp: 2399,
     opts: [SIZES('S', 'M', 'L', 'XL')], packs: PCS, custom: PIECE,
     desc: 'Blush pink kurta with hand-block florals and lace trims, with matching pants.' },
-  { id: 'e3', cat: 'ethnic', name: 'Men’s Cotton Kurta', img: [IMG + 'e-kurta-m.jpg'], price: 1299, mrp: 1799, rating: 4.6,
+  { id: 'e3', cat: 'ethnic', name: 'Men’s Cotton Kurta', img: [IMG + 'e-kurta-m.jpg'], price: 1299, mrp: 1799,
     opts: [SIZES('M', 'L', 'XL', 'XXL'), COLORS('Blue', 'White')], packs: PCS, custom: PIECE,
     desc: 'A straight-cut cotton kurta with a mandarin collar. Festive enough for pujas, easy enough for every day.' },
-  { id: 'e4', cat: 'ethnic', name: 'Green Silk Saree', img: [IMG + 'e-sari-green.jpg'], price: 3999, mrp: 5999, rating: 4.9, tag: 'Free Size',
+  { id: 'e4', cat: 'ethnic', name: 'Green Silk Saree', img: [IMG + 'e-sari-green.jpg'], price: 3999, mrp: 5999, tag: 'Free Size',
     opts: [], packs: [{ n: 1, label: '1 Saree' }, { n: 2, label: '2 Sarees' }, { n: 5, label: '5 Sarees', f: 0.85, best: true }], custom: { unit: 'saree', units: 'sarees', min: 2, max: 20, floor: 0.8 },
     desc: 'Pure silk saree in emerald green with a zari border and unstitched blouse piece.' },
-  { id: 'e5', cat: 'ethnic', name: 'Banarasi Red Saree', img: [IMG + 'e-sari-red.jpg'], price: 4999, mrp: 7499, rating: 4.8, tag: 'Free Size', left: 2,
+  { id: 'e5', cat: 'ethnic', name: 'Banarasi Red Saree', img: [IMG + 'e-sari-red.jpg'], price: 4999, mrp: 7499, tag: 'Free Size', left: 2,
     opts: [], packs: [{ n: 1, label: '1 Saree' }, { n: 2, label: '2 Sarees' }, { n: 5, label: '5 Sarees', f: 0.85, best: true }], custom: { unit: 'saree', units: 'sarees', min: 2, max: 20, floor: 0.8 },
     desc: 'Rich Banarasi weave in bridal red with gold motifs. Comes with a blouse piece.' },
-  { id: 'e6', cat: 'ethnic', name: 'Tiered Anarkali Dress', img: [IMG + 'e-tiered.jpg'], price: 2199, mrp: 2999, rating: 4.7,
+  { id: 'e6', cat: 'ethnic', name: 'Tiered Anarkali Dress', img: [IMG + 'e-tiered.jpg'], price: 2199, mrp: 2999,
     opts: [SIZES('S', 'M', 'L'), COLORS('Yellow', 'Blue')], packs: PCS, custom: PIECE,
     desc: 'A sunny tiered anarkali with an embroidered yoke. Full flare, full of festive cheer.' },
 ];
@@ -169,7 +169,8 @@ export const calcBill = lines => {
 export const nextOffer = sub => OFFERS.find(o => sub < o.min) || null;
 export const qtyInCart = (cart, pid) => cart.filter(l => l.pid === pid).reduce((a, l) => a + l.qty, 0);
 export const hasChoices = p => p.opts.length > 0;
-export const cardTag = p => (p.opts.length ? `${p.opts[0].values.length} Options` : p.tag || p.packs[0].label);
+/* swatch colours for the colour chips on product cards */
+export const SWATCH = { Blue: '#3b6fd8', White: '#ffffff', Black: '#1f1f1f', Orange: '#f28c28', Ivory: '#f4ecd8', Navy: '#1f2f5c', Grey: '#9a9a9a', Yellow: '#f2c230', Red: '#c62828' };
 
 export const sortedProducts = (S, cat = S.cat) => {
   let list = PRODUCTS.filter(p => (cat === 'all' || p.cat === cat) && (!S.search || p.name.toLowerCase().includes(S.search.toLowerCase())));
@@ -182,12 +183,12 @@ export const sortedProducts = (S, cat = S.cat) => {
 
 /* search: every query word must be the start of a word in the product's name, category, tag or variant values
    (so "red saree", "kurta xl", "shi" work, and "men" does not match "women"). Apostrophes are dropped on both sides,
-   so a typed ' matches the ’ in "Men’s". With no query the screen shows suggestions: best-rated products first. */
+   so a typed ' matches the ’ in "Men’s". With no query the screen shows suggestions: biggest discounts first. */
 export const searchTokens = s => s.toLowerCase().replace(/['’`]/g, '').split(/[^\p{L}\p{N}]+/u).filter(Boolean);
 const haystack = p => searchTokens([p.name, (CATEGORIES.find(c => c.id === p.cat) || {}).label?.join(' '), p.cat, p.tag, ...p.opts.flatMap(o => o.values.map(v => v.v))].filter(Boolean).join(' '));
 export const searchProducts = (q, sort) => {
   const words = searchTokens(q);
-  let list = words.length ? PRODUCTS.filter(p => { const h = haystack(p); return words.every(w => h.some(t => t.startsWith(w))); }) : [...PRODUCTS].sort((a, b) => b.rating - a.rating).slice(0, 8);
+  let list = words.length ? PRODUCTS.filter(p => { const h = haystack(p); return words.every(w => h.some(t => t.startsWith(w))); }) : [...PRODUCTS].sort((a, b) => off(b.price, b.mrp) - off(a.price, a.mrp)).slice(0, 8);
   if (sort === 'low') list = [...list].sort((a, b) => a.price - b.price);
   if (sort === 'high') list = [...list].sort((a, b) => b.price - a.price);
   if (sort === 'off') list = [...list].sort((a, b) => off(b.price, b.mrp) - off(a.price, a.mrp));
