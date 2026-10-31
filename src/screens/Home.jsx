@@ -1,7 +1,8 @@
 /* BUY · HOME — Figma 2167:7001 (home with categories + new cart pill)
    Scroll behaviour (inside the .ba-scr scroller):
    - .bh-top (store bar) sits over the banner and scrolls away with it.
-   - .bh-stick (delivery bar, Figma 2170:7403, + category tabs) pins to the top; .pinned adds a soft shadow.
+   - .bh-stick (delivery bar, Figma 2170:7403, + category tabs) pins to the top; once pinned the category photos fold
+     away and the tabs show their names only.
    - Search: at the top of the page it is the full search bar under the delivery row; once the block pins it morphs
      (slides + shrinks) into the round search button beside "Deliver to" while the gap it leaves folds away, and
      expands back when the page returns to the top. Either form opens the separate search screen.
@@ -27,24 +28,58 @@ function Card({ p }) {
   );
 }
 
+/* One SVG path draws the row line and the selected tab's outline (line → foot curve → up the side → rounded top →
+   down → foot curve → line), so the stroke is the same everywhere and nothing has to be masked out under the tab.
+   The tab slides by tweening its x / width; the tint behind it (.bh-cat-ind) follows the same values. */
+const FT = 10, RAD = 16, TOP = 2;
+const tabPath = (x, w, W, H) => {
+  const y = H - 0.5, L = x + 0.5, R = x + w - 0.5, t = TOP + 0.5;
+  return `M0 ${y}H${L - FT}A${FT} ${FT} 0 0 0 ${L} ${y - FT}V${t + RAD}A${RAD} ${RAD} 0 0 1 ${L + RAD} ${t}H${R - RAD}A${RAD} ${RAD} 0 0 1 ${R} ${t + RAD}V${y - FT}A${FT} ${FT} 0 0 0 ${R + FT} ${y}H${W}`;
+};
+const ease = t => 1 - Math.pow(1 - t, 4);
+
 function CatTabs() {
   const { S, A } = useBuy();
-  const row = useRef(null);
+  const row = useRef(null), inner = useRef(null), cur = useRef(null), raf = useRef(0);
   const [ind, setInd] = useState(null);
+  const [box, setBox] = useState({ W: 0, H: 0 });
+  const target = () => {
+    const b = row.current?.querySelector(`[data-cat="${S.cat}"]`);
+    return b ? { x: b.offsetLeft - 6, w: b.offsetWidth + 12 } : null;
+  };
   const place = (animate = true) => {
-    const r = row.current; if (!r) return;
-    const b = r.querySelector(`[data-cat="${S.cat}"]`); if (!b) return;
-    setInd({ x: b.offsetLeft - 6, w: b.offsetWidth + 12, animate });
+    const r = row.current, to = target(); if (!r || !to) return;
+    cancelAnimationFrame(raf.current);
+    const from = cur.current;
+    if (!animate || !from) { cur.current = to; setInd(to); }
+    else {
+      const t0 = performance.now();
+      const step = now => {
+        const k = ease(Math.min(1, (now - t0) / 420));
+        cur.current = { x: from.x + (to.x - from.x) * k, w: from.w + (to.w - from.w) * k };
+        setInd(cur.current);
+        if (k < 1) raf.current = requestAnimationFrame(step);
+      };
+      raf.current = requestAnimationFrame(step);
+    }
     // keep the selected tab comfortably in view
-    const target = b.offsetLeft - (r.clientWidth - b.offsetWidth) / 2;
-    r.scrollTo({ left: Math.max(0, target), behavior: animate ? 'smooth' : 'auto' });
+    const b = r.querySelector(`[data-cat="${S.cat}"]`);
+    r.scrollTo({ left: Math.max(0, b.offsetLeft - (r.clientWidth - b.offsetWidth) / 2), behavior: animate ? 'smooth' : 'auto' });
   };
   useLayoutEffect(() => { place(ind !== null); }, [S.cat]);
-  useEffect(() => { const f = () => place(false); window.addEventListener('resize', f); return () => window.removeEventListener('resize', f); }, [S.cat]);
+  useEffect(() => () => cancelAnimationFrame(raf.current), []);
+  // the row's size changes on resize and when the photos fold away while the header is pinned
+  useEffect(() => {
+    const el = inner.current; if (!el) return;
+    const ro = new ResizeObserver(() => { setBox({ W: el.offsetWidth, H: el.offsetHeight }); const to = target(); if (to) { cur.current = to; setInd(to); } });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [S.cat]);
   return (
     <div className="bh-cats" ref={row} role="tablist" aria-label="Categories">
-      <div className="bh-cats-in">
-        {ind && <span className={'bh-cat-ind' + (ind.animate ? ' anim' : '')} style={{ transform: `translateX(${ind.x}px)`, width: ind.w }} aria-hidden="true"><i className="gap" /><i className="ft l" /><i className="ft r" /></span>}
+      <div className="bh-cats-in" ref={inner}>
+        {ind && <span className="bh-cat-ind" style={{ transform: `translateX(${ind.x}px)`, width: ind.w }} aria-hidden="true" />}
+        {ind && box.W ? <svg className="bh-cat-line" width={box.W} height={box.H} aria-hidden="true"><path d={tabPath(ind.x, ind.w, box.W, box.H)} /></svg> : null}
         {CATEGORIES.map(c => (
           <button key={c.id} data-cat={c.id} role="tab" aria-selected={S.cat === c.id} className={'bh-cat' + (S.cat === c.id ? ' on' : '')} onClick={() => A.setcat(c.id)}>
             <span className="bh-cat-im">{c.img ? <img src={c.img} alt="" draggable="false" /> : <i className="bh-cat-ic" style={{ WebkitMaskImage: `url("${c.icon}")`, maskImage: `url("${c.icon}")` }} />}</span>
