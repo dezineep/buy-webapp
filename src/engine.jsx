@@ -2,7 +2,7 @@
    State lives in one mutable object (S) held in a ref; every action mutates it and calls commit() to re-render,
    exactly like the landing-page demo engine, so screens stay simple readers of S.
 
-   Screens: home, login, product{pid}, cart, address, order{id}, orders, store, refunds, refund{id}
+   Screens: home, login, category{cat}, product{pid}, cart, address, order{id}, orders, store, refunds, refund{id}
    Sheets : more, sort, amount, offers, variants{pid}, custom{pid}, quick{pid} (modal), otp, m17, pay, unlock{id} (modal) */
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import { P, OFFERS, PARTNER, STORE, IMG, GIFT, calcBill, lineInfo, lineKey, defaultSel, seedOrders, seedRefunds, seedAddresses } from './data.js';
@@ -156,6 +156,7 @@ export function BuyProvider({ children }) {
     back, home, go, toast, openSheet, closeSheet, selOf, commit,
     close: closeSheet,
     store: () => { closeSheet(); go('store'); },
+    opencat: cat => { closeSheet(); go('category', { cat }); },
     openpicker: () => { closeSheet(); S.picker = true; commit(); },
     pickshop: id => {
       applyShop(id); S.shop = id; S.cat = 'all'; S.prevCat = 'all'; S.picker = false;

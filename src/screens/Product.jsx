@@ -5,7 +5,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useBuy } from '../engine.jsx';
 import { P, PRODUCTS, inr, unitPrice, mrpOf, packPrice, customUnit, lineKey, calcBill } from '../data.js';
-import { Head, ICO, PriceBox, BigStep, MiniCard } from '../ui.jsx';
+import { Head, ICO, PriceBox, BigStep, MiniCard, CatRow } from '../ui.jsx';
 
 export function PackCards({ p, s }) {
   const { A } = useBuy();
@@ -89,6 +89,7 @@ export default function Product({ entry }) {
           </div>
           <PackCards p={p} s={s} />
           {p.opts.length ? <div className="bp2-var"><p className="bp2-h">Select Variant</p><OptionGroups p={p} s={s} /></div> : null}
+          <CatRow p={p} />
           <div className="bp2-dsc">
             <div className="bp2-dsc-t"><p className="bp2-h">Description</p><p className={'bp2-desc' + (open ? ' open' : '')}>{p.desc}</p></div>
             <button className={'bp2-more' + (open ? ' open' : '')} onClick={() => setOpen(!open)}>{ICO.down()}<span>{open ? 'Read less' : 'Read more'}</span></button>

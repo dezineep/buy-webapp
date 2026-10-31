@@ -30,7 +30,6 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
 .bp-qv-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; margin: 0 -16px; padding: 0 16px 12px; }
 .bp-qv-scroll::-webkit-scrollbar { display: none; }
 .bp-qv .bp-qv-media .bp-track { height: 300px; }
-.bp-qv .bp-qv-fade { top: 212px; }
 .bp-qv .bp-qv-dots { position: absolute; z-index: 1; top: 276px; left: 50%; transform: translateX(-50%); }
 .bp-qv .bp-qv-info { gap: 16px; margin-top: 4px; }
 .bp-qv-qty { display: flex; flex-direction: column; gap: 8px; }
@@ -63,7 +62,7 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
 .ba-modal.qv-full::before { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, #f9e7e8 var(--sat, 0px), #fff calc(var(--sat, 0px) + 98px)); animation: qvTint .4s ease both; }
 @keyframes qvTint { from { opacity: 0; } }
 .ba-layer:has(.qv-full) { pointer-events: none; }
-.qv-full .bp-qv-info, .qv-full .bp-qv-x, .qv-full .bp-qv-fade, .qv-full .bp-qv-dots, .qv-full .bp-qv-foot { opacity: 0; transition: opacity .2s; }
+.qv-full .bp-qv-info, .qv-full .bp-qv-x, .qv-full .bp-qv-dots, .qv-full .bp-qv-foot { opacity: 0; transition: opacity .2s; }
 .qv-full .bp-qv-scroll { overflow: hidden; }
 .qv-full .bp-qv-grab { opacity: 0; height: 0; margin: 0 auto; transition: opacity .2s, height .4s, margin .4s; }
 .qv-full.ba-modal .bp-qv-media .bp-track { height: 330px; border-radius: 15px; transition: height .4s cubic-bezier(.22, 1, .36, 1), border-radius .4s; }

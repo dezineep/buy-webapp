@@ -190,7 +190,6 @@ function Quick({ pid }) {
         <div className="bp-qv-xpin"><button className="bp-qv-x" onClick={A.close} aria-label="Close">{ICO.close()}</button></div>
         <div className="bp-qv-media">
           <div className="bp-track" ref={track} onScroll={e => setSlide(Math.round(e.currentTarget.scrollLeft / (e.currentTarget.clientWidth || 1)))}>{p.img.map(i => <img key={i} src={i} alt={p.name} />)}</div>
-          <i className="bp-qv-fade" />
           {p.img.length > 1 ? <div className="bp-qv-dots">{p.img.map((i, k) => <i key={i} className={k === slide ? 'on' : ''} />)}</div> : null}
         </div>
         <div className="bp-qv-info">

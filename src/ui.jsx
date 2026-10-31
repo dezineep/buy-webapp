@@ -1,6 +1,6 @@
 /* Shared UI atoms (classes styled in styles/base.css). Icons are the Figma exports from file FBuShw2V6BDtlsMePanuS7. */
 import { useBuy } from './engine.jsx';
-import { FG, V2, inr, off, P, qtyInCart, SWATCH } from './data.js';
+import { FG, V2, inr, off, P, qtyInCart, SWATCH, CATEGORIES, PRODUCTS } from './data.js';
 
 const B = FG + 'base/';
 const ic = (src, w, h = w) => <img src={src} width={w} height={h} alt="" aria-hidden="true" />;
@@ -74,6 +74,23 @@ export function Ring({ p, kind }) {
 /* "+" that grows into a stepper: one pill whose width eases open while the − and the count fade in, so adding the
    first piece (and removing the last) morphs smoothly instead of swapping buttons. fill = the red filled stepper
    (cards); otherwise it stays white with red icons (search rows). */
+/* product page: the product's category above the description (Figma 2189:5456); opens the category screen */
+export function CatRow({ p }) {
+  const { A } = useBuy();
+  const c = CATEGORIES.find(x => x.id === p.cat);
+  if (!c || c.id === 'all') return null;
+  const n = PRODUCTS.filter(x => x.cat === c.id).length;
+  return (
+    <button className="bk-row" onClick={() => A.opencat(c.id)}>
+      <span className="bk-row-l">
+        <span className="bk-row-ic">{c.img ? <img src={c.img} alt="" /> : <i style={{ WebkitMaskImage: `url("${c.icon}")`, maskImage: `url("${c.icon}")` }} />}</span>
+        <span className="bk-row-t"><small>Category</small><b>{c.name || c.label.join(' ')}</b></span>
+      </span>
+      <span className="bk-row-r">{n} {n === 1 ? 'Product' : 'Products'}<i aria-hidden="true" /></span>
+    </button>
+  );
+}
+
 export function AddStep({ n, onAdd, onInc, onDec, fill, label }) {
   const on = n > 0;
   return (

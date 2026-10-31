@@ -1,0 +1,39 @@
+/* BUY · CATEGORY screen — Figma 2189:6079 / 2189:6682 */
+.bk { min-height: 100%; padding-bottom: 120px; }
+.bk-acts { display: flex; gap: 8px; margin-left: auto; }
+.bk-acts img { width: 20px; height: 20px; }
+.bk-sic, .bk-xic { display: block; flex: none; background: var(--r); -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
+.bk-sic { width: 20px; height: 20px; -webkit-mask-image: url(/assets/v2/search/ic-search.svg); mask-image: url(/assets/v2/search/ic-search.svg); }
+.bk-xic { width: 16px; height: 16px; -webkit-mask-image: url(/assets/v2/search/ic-clear.svg); mask-image: url(/assets/v2/search/ic-clear.svg); }
+
+/* searching: the round search button shrinks into its corner while the bar opens beneath the header from that
+   same corner (clip-path reveal right → left, rows grow so the grid slides down) */
+.bk-sbtn { transform-origin: right center; transition: transform .32s cubic-bezier(.22, 1, .36, 1), opacity .2s, width .32s cubic-bezier(.22, 1, .36, 1), padding .32s cubic-bezier(.22, 1, .36, 1), margin .32s cubic-bezier(.22, 1, .36, 1); }
+.ba .bk.searching .bk-sbtn { opacity: 0; transform: scale(.5); width: 0; padding: 0; margin-right: -8px; pointer-events: none; }
+.bk-sbar-wrap { display: grid; grid-template-rows: 0fr; margin: 0 16px; transition: grid-template-rows .36s cubic-bezier(.22, 1, .36, 1), margin .36s cubic-bezier(.22, 1, .36, 1); }
+.bk.searching .bk-sbar-wrap { grid-template-rows: 1fr; margin-bottom: 16px; }
+.bk-sbar-in { min-height: 0; overflow: hidden; }
+.bk-sbar { display: flex; align-items: center; justify-content: space-between; gap: 4px; padding: 16px; border-radius: 20px; background: var(--pk3); opacity: 0; transform: translateY(-12px); clip-path: inset(0 0 0 85% round 20px); transition: opacity .2s, transform .36s cubic-bezier(.22, 1, .36, 1), clip-path .42s cubic-bezier(.22, 1, .36, 1); }
+.bk.searching .bk-sbar { opacity: 1; transform: none; clip-path: inset(0 0 0 0 round 20px); }
+.bk-sbar .bk-sic { width: 16px; height: 16px; }
+.ba .bk-sbar input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; padding: 0; font: inherit; font-size: 14px; line-height: 1.2; letter-spacing: -0.14px; color: var(--r); }
+.bk-sbar input::placeholder { color: rgba(165, 34, 38, .5); }
+.bk-sbar button { flex: none; display: grid; place-items: center; width: 24px; height: 18px; }
+
+.bk-count { display: flex; align-items: center; justify-content: space-between; height: 18px; margin: 0 16px 16px; }
+.bk-count b { font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.48px; color: #000; }
+.bk-count button { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.42px; color: var(--r); }
+.bk-count button img { width: 18px; height: 18px; }
+
+/* product page: category row above the description (Figma 2189:5456) */
+.ba .bk-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 20px; background: #fff; text-align: left; transition: transform .15s, background-color .2s; }
+.ba .bk-row:active { transform: scale(.985); background: #fbf3f3; }
+.bk-row-l { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.bk-row-ic { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 28px; overflow: hidden; background: #fbeee4; }
+.bk-row-ic img { width: 30px; height: 30px; object-fit: contain; }
+.bk-row-ic i { width: 16px; height: 16px; background: var(--r); -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
+.bk-row-t { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.bk-row-t small { font-size: 10px; line-height: 1.1; letter-spacing: -0.2px; color: #a5a5a5; }
+.bk-row-t b { font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.35px; color: var(--r); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bk-row-r { flex: none; display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 1.1; letter-spacing: -0.24px; color: #8e8e8e; }
+.bk-row-r i { width: 14px; height: 14px; background: #8e8e8e; -webkit-mask: url(/assets/m17/arrow-right.svg) center / contain no-repeat; mask: url(/assets/m17/arrow-right.svg) center / contain no-repeat; }

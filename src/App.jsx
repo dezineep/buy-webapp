@@ -17,9 +17,10 @@ import Order from './screens/Order.jsx';
 import Orders from './screens/Orders.jsx';
 import Store from './screens/Store.jsx';
 import Login from './screens/Login.jsx';
+import Category from './screens/Category.jsx';
 import Refunds, { RefundDetail } from './screens/Refunds.jsx';
 
-const SCREENS = { home: Home, login: Login, product: Product, cart: Cart, address: Address, addresses: Addresses, search: Search, order: Order, orders: Orders, store: Store, refunds: Refunds, refund: RefundDetail };
+const SCREENS = { home: Home, login: Login, category: Category, product: Product, cart: Cart, address: Address, addresses: Addresses, search: Search, order: Order, orders: Orders, store: Store, refunds: Refunds, refund: RefundDetail };
 
 function Scr({ e, cls }) {
   const ref = useRef(null);
@@ -65,7 +66,7 @@ function Screens() {
 function Pill() {
   const { S, A } = useBuy();
   const top = S.stack[S.stack.length - 1].n;
-  const show = (top === 'home' || top === 'search') && S.cart.length > 0;
+  const show = (top === 'home' || top === 'search' || top === 'category') && S.cart.length > 0;
   const b = calcBill(S.cart), next = nextOffer(b.sub);
   const st = S.pill?.state || '';
   const box = useRef(null);

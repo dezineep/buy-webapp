@@ -58,8 +58,7 @@
 .ba-modal:has(> .bp-qv) { border-radius: 24px; padding: 16px; }
 .bp-qv { display: flex; flex-direction: column; }
 .bp-qv-media { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.bp-qv-media .bp-track { align-self: stretch; height: 347px; border-radius: 16px 16px 0 0; }
-.bp-qv-fade { position: absolute; left: 0; right: 0; top: 259px; height: 88px; pointer-events: none; background: linear-gradient(0deg, #fff 13.551%, rgba(255, 255, 255, 0) 90.654%); }
+.bp-qv-media .bp-track { align-self: stretch; height: 347px; border-radius: 16px; }
 .bp-qv-x { position: absolute; top: 4px; right: 4px; width: 60px; height: 42px; display: grid; place-items: center; border: 1px solid var(--r) !important; border-radius: 16px !important; background: #fff !important; transition: transform .15s; }
 .bp-qv-x:active { transform: scale(.94); }
 .bp-qv-x img { width: 20px; height: 20px; }

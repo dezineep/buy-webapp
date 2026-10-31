@@ -15,7 +15,7 @@ import { ICO, Ctl, PriceBox, VariantChips } from '../ui.jsx';
 
 const H = V2 + 'home/', Q = V2 + 'search/';
 
-function Card({ p }) {
+export function Card({ p }) {
   const { A } = useBuy();
   return (
     <div className="bh-card">
