@@ -77,7 +77,7 @@
 
 /* ---------- empty cart ---------- */
 .bc-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px 32px 120px; text-align: center; }
-.bc-empty img { width: 168px; height: auto; margin-bottom: 8px; }
+
 .bc-empty b { font-size: 20px; font-weight: 500; line-height: 1.1; letter-spacing: -0.4px; color: #000; }
 .bc-empty p { font-size: 12px; line-height: 1.1; letter-spacing: -0.24px; color: #777; margin-bottom: 16px; }
 
@@ -161,3 +161,26 @@
 .bc-addr span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bc-addr b { color: #111; font-weight: 500; }
 .bc-addr em { font-style: normal; flex: none; color: #a52226; font-weight: 600; font-size: 12px; text-decoration: underline; }
+
+/* empty-cart illustration (see EmptyCart in Cart.jsx) */
+.bc-ill { display: block; width: 220px; height: 170px; margin-bottom: 4px; overflow: visible; }
+.bc-ill * { transform-box: fill-box; transform-origin: center; }
+.bc-floor { fill: #f4e3e3; animation: bcFloor 2.4s ease-in-out infinite; }
+.bc-sparks path, .bc-speed path { fill: none; stroke: #a52226; stroke-width: 2.5; stroke-linecap: round; }
+.bc-sparks circle { fill: #f2b233; }
+.bc-sparks > * { animation: bcSpark 1.6s ease-in-out infinite alternate; }
+.bc-sparks > :nth-child(2) { animation-delay: .4s; } .bc-sparks > :nth-child(3) { animation-delay: .8s; } .bc-sparks > :nth-child(4) { animation-delay: 1.2s; }
+.bc-speed path { stroke: #3c3c3c; opacity: 0; animation: bcSpeed 2.4s ease-in-out infinite; }
+.bc-speed path:nth-child(2) { animation-delay: .12s; } .bc-speed path:nth-child(3) { animation-delay: .24s; }
+.bc-trolley { animation: bcRock 2.4s ease-in-out infinite; transform-origin: 50% 100%; }
+.bc-wheel { animation: bcSpin 2.4s ease-in-out infinite; }
+.bc-eye { animation: bcBlink 3.6s infinite; }
+.bc-parcel { animation: bcDrop 2.4s cubic-bezier(.5, 0, .75, 1) infinite; }
+@keyframes bcRock { 0%, 100% { transform: translateX(-8px) rotate(-1.5deg); } 50% { transform: translateX(8px) rotate(1.5deg); } }
+@keyframes bcSpin { 0%, 100% { transform: rotate(-120deg); } 50% { transform: rotate(120deg); } }
+@keyframes bcFloor { 0%, 100% { transform: translateX(-8px); } 50% { transform: translateX(8px); } }
+@keyframes bcSpeed { 0%, 15% { opacity: 0; transform: translateX(10px); } 35% { opacity: .7; } 55%, 100% { opacity: 0; transform: translateX(-10px); } }
+@keyframes bcBlink { 0%, 44%, 50%, 100% { transform: scaleY(1); } 47% { transform: scaleY(.1); } }
+@keyframes bcDrop { 0% { transform: translateY(-24px) rotate(-12deg); opacity: 0; } 20% { opacity: 1; } 62% { transform: translateY(30px) rotate(8deg); opacity: 1; } 78%, 100% { transform: translateY(40px) rotate(14deg) scale(.6); opacity: 0; } }
+@keyframes bcSpark { from { opacity: .25; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .bc-ill * { animation: none !important; } }

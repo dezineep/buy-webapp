@@ -9,6 +9,7 @@ import { Head, ICO, PriceBox, BigStep, MiniCard } from '../ui.jsx';
 
 export function PackCards({ p, s }) {
   const { A } = useBuy();
+  if (!p.custom) return null; // simple items: one piece, no bulk options
   const custom = s.pack.custom;
   const lo = customUnit(p, s.sel, p.custom.max), hi = unitPrice(p, s.sel);
   return (

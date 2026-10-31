@@ -30,11 +30,41 @@ function Bill() {
   );
 }
 
+/* empty cart: the trolley rocks on spinning wheels with a sad face, while a parcel keeps dropping towards it and
+   fading out before it lands (same outlined, hard-shadow style as the search "no results" illustration) */
+function EmptyCart() {
+  return (
+    <svg className="bc-ill" viewBox="0 0 220 170" width="220" height="170" aria-hidden="true">
+      <ellipse className="bc-floor" cx="114" cy="156" rx="70" ry="6" />
+      <g className="bc-sparks"><path d="M28 46v12M22 52h12" /><path d="M192 30v10M187 35h10" /><circle cx="196" cy="92" r="3.5" /><circle cx="22" cy="100" r="2.5" /></g>
+      <g className="bc-speed"><path d="M6 96h16" /><path d="M12 110h12" /><path d="M2 124h18" /></g>
+      <g className="bc-parcel">
+        <rect x="102" y="10" width="26" height="22" rx="3" fill="#f2b233" stroke="#000" strokeWidth="2.5" />
+        <path d="M115 10v22M102 18h26" stroke="#000" strokeWidth="2" />
+      </g>
+      <g className="bc-trolley">
+        <path d="M28 42h16l10 16" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M54 58h126l-12 56H66Z" transform="translate(4 5)" fill="#000" />
+        <path d="M54 58h126l-12 56H66Z" fill="#f4c8c9" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M54 58h126l-3 14H57Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M66 114l4 14h96" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <circle className="bc-eye" cx="104" cy="88" r="3" fill="#000" /><circle className="bc-eye" cx="130" cy="88" r="3" fill="#000" />
+        <path d="M107 103c4-5 16-5 20 0" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
+        {[[84, 141], [154, 141]].map(([x, y]) => (
+          <g key={x} transform={`translate(${x} ${y})`}>
+            <g className="bc-wheel"><circle r="10" fill="#fff" stroke="#000" strokeWidth="2.5" /><path d="M0-6v12M-6 0h12" stroke="#a52226" strokeWidth="2.2" strokeLinecap="round" /></g>
+          </g>
+        ))}
+      </g>
+    </svg>
+  );
+}
+
 export default function Cart() {
   const { S, A } = useBuy();
   if (!S.cart.length) return (
     <div className="bc"><Head title="Cart Items" />
-      <div className="bc-empty"><img src={PRODUCTS[0].img[0]} alt="" /><b>Your cart is empty</b><p>Find something you love at {STORE.name}.</p><button className="ba-btn" onClick={A.home}>Browse Products</button></div>
+      <div className="bc-empty"><EmptyCart /><b>Your cart is empty</b><p>Find something you love at {STORE.name}.</p><button className="ba-btn" onClick={A.home}>Browse Products</button></div>
     </div>
   );
   const b = calcBill(S.cart);

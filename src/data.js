@@ -45,6 +45,7 @@ const SIZES = (...v) => ({ name: 'Size', values: v.map(x => (typeof x === 'strin
 const COLORS = (...v) => ({ name: 'Color', values: v.map(x => ({ v: x })) });
 const PCS = [{ n: 1, label: '1 x Piece' }, { n: 3, label: '3 x Pieces', f: 0.85, best: true }];
 const PIECE = { unit: 'pc', units: 'pcs', min: 2, max: 50, floor: 0.7 };
+const ONE = [{ n: 1, label: '1 x Piece' }];
 
 export const PRODUCTS = [
   { id: 'm1', cat: 'men', name: 'Heart Print Casual Shirt', img: [IMG + 'm-shirt-heart.jpg', IMG + 'm-shirts.jpg'], price: 899, mrp: 1299,
@@ -120,6 +121,27 @@ export const PRODUCTS = [
   { id: 'e6', cat: 'ethnic', name: 'Tiered Anarkali Dress', img: [IMG + 'e-tiered.jpg'], price: 2199, mrp: 2999,
     opts: [SIZES('S', 'M', 'L'), COLORS('Yellow', 'Blue')], packs: PCS, custom: PIECE,
     desc: 'A sunny tiered anarkali with an embroidered yoke. Full flare, full of festive cheer.' },
+  // simple items: no variants and no bulk options, so "+" adds them straight to the cart
+  { id: 'a1', cat: 'acc', name: 'Classic Leather Wallet', img: [IMG + 'a-wallet.jpg'], price: 699, mrp: 999, tag: '1 Piece', opts: [], packs: ONE,
+    desc: 'Slim bi-fold in full-grain leather with six card slots and a note pocket. Ages beautifully.' },
+  { id: 'a2', cat: 'acc', name: 'Round Metal Sunglasses', img: [IMG + 'a-sunglasses.jpg'], price: 899, mrp: 1499, tag: 'UV 400', opts: [], packs: ONE,
+    desc: 'Featherweight gold frame with dark green UV400 lenses. Comes with a hard case and cloth.' },
+  { id: 'a3', cat: 'acc', name: 'White Trucker Cap', img: [IMG + 'a-cap.jpg'], price: 399, mrp: 599, tag: 'Free Size', opts: [], packs: ONE,
+    desc: 'Breathable mesh back and an adjustable snap strap. One size fits most.' },
+  { id: 'a4', cat: 'acc', name: 'Canvas Tote Bag', img: [IMG + 'a-tote.jpg'], price: 349, mrp: 499, tag: '1 Piece', opts: [], packs: ONE,
+    desc: 'Heavy cotton canvas tote with long handles. Fits a laptop, groceries and then some.' },
+  { id: 'a5', cat: 'acc', name: 'Steel Analog Watch', img: [IMG + 'a-watch.jpg'], price: 2499, mrp: 3999, tag: '1 Year Warranty', opts: [], packs: ONE,
+    desc: 'Two-tone stainless steel watch with a date window and 50m water resistance.' },
+  { id: 'a6', cat: 'acc', name: 'Eau de Parfum 50 ml', img: [IMG + 'a-perfume.jpg'], price: 1299, mrp: 1799, tag: '50 ml', opts: [], packs: ONE,
+    desc: 'A fresh woody fragrance with notes of bergamot, cedar and musk. Lasts all day.' },
+  { id: 'a7', cat: 'acc', name: 'Brown Leather Belt', img: [IMG + 'a-belt.jpg'], price: 599, mrp: 899, tag: 'Free Size', opts: [], packs: ONE,
+    desc: 'Genuine leather belt with a brushed metal buckle. Trim-to-fit, so one size fits all.' },
+  { id: 'a8', cat: 'acc', name: 'Striped Crew Socks', img: [IMG + 'a-socks.jpg'], price: 299, mrp: 449, tag: 'Pack of 3', opts: [], packs: ONE,
+    desc: 'Soft combed-cotton socks in three playful stripes. Cushioned sole, reinforced heel.' },
+  { id: 'a9', cat: 'acc', name: 'Satin Silk Scarf', img: [IMG + 'a-scarf.jpg'], price: 549, mrp: 799, tag: '1 Piece', opts: [], packs: ONE,
+    desc: 'Lightweight satin scarf with a soft sheen. Wear it on the neck, in the hair or on a bag.' },
+  { id: 'a10', cat: 'acc', name: 'Everyday Backpack', img: [IMG + 'a-backpack.jpg'], price: 1199, mrp: 1799, tag: '22 L', opts: [], packs: ONE,
+    desc: 'Water-resistant 22 L backpack with a padded laptop sleeve and a quick-grab front pocket.' },
 ];
 export const P = id => PRODUCTS.find(p => p.id === id);
 

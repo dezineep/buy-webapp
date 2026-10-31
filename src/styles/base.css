@@ -214,3 +214,25 @@
 .ba-notif small { font-size: 13px; line-height: 1.3; color: #000; }
 .ba-toast { position: absolute; z-index: 40; left: 50%; bottom: 96px; transform: translate(-50%, 30px); opacity: 0; width: max-content; max-width: 340px; padding: 10px 16px; border-radius: 20px; background: #000; color: #fff; font-size: 13px; line-height: 1.3; letter-spacing: -0.2px; text-align: center; transition: transform .4s cubic-bezier(.34, 1.56, .64, 1), opacity .3s; pointer-events: none; }
 .ba-toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* AddStep (ui.jsx): "+" pill that eases open into a − n + stepper. The + stays anchored on the right, so closed it
+   sits centred in the 38px pill and open it becomes the stepper's plus. */
+.ba-mc { position: relative; flex: none; display: inline-block; width: 38px; height: 30px; border: 1px solid var(--r); border-radius: 999px; background: #fff; box-shadow: var(--hard); overflow: hidden; transition: width .34s cubic-bezier(.22, 1, .36, 1), background-color .28s ease; }
+.ba-mc.on { width: var(--w); }
+.ba-mc.fill.on { background: var(--r); }
+.ba .ba-mc > button { position: absolute; top: 0; bottom: 0; width: 36px; display: grid; place-items: center; }
+.ba-mc-inc { right: 0; }
+.ba-mc-dec { left: 0; opacity: 0; transform: scale(.4); pointer-events: none; transition: opacity .2s, transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+.ba-mc.on .ba-mc-dec { opacity: 1; transform: none; pointer-events: auto; transition-delay: .08s; }
+.ba-mc img { width: 20px; height: 20px; }
+.ba-mc-p { grid-area: 1 / 1; display: grid; transition: opacity .25s ease, transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+.ba-mc.fill .ba-mc-p.white { opacity: 0; }
+.ba-mc.fill.on .ba-mc-p.white { opacity: 1; }
+.ba-mc.fill.on .ba-mc-p.red { opacity: 0; }
+.ba-mc.on .ba-mc-inc .ba-mc-p { transform: rotate(90deg); }
+.ba-mc b { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 16px; font-weight: 500; line-height: 1; color: var(--r); pointer-events: none; animation: baMcN .3s cubic-bezier(.34, 1.56, .64, 1); }
+.ba-mc.fill b { color: #fff; }
+.ba-mc:not(.on) b { display: none; }
+@keyframes baMcN { from { transform: translate(-50%, -50%) scale(.4); opacity: 0; } }
+.ba-mc > button:active { transform: translate(1px, 2px); }
+.ba-mc.on > .ba-mc-dec:active { transform: translate(1px, 2px); }

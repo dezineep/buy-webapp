@@ -71,17 +71,26 @@ export function Ring({ p, kind }) {
 }
 
 /* + button / red stepper used on product cards (Figma 2167:7131 / 2167:7167) */
+/* "+" that grows into a stepper: one pill whose width eases open while the − and the count fade in, so adding the
+   first piece (and removing the last) morphs smoothly instead of swapping buttons. fill = the red filled stepper
+   (cards); otherwise it stays white with red icons (search rows). */
+export function AddStep({ n, onAdd, onInc, onDec, fill, label }) {
+  const on = n > 0;
+  return (
+    <span className={'ba-mc' + (fill ? ' fill' : '') + (on ? ' on' : '')} style={{ '--w': n > 9 ? '96px' : '86px' }}>
+      <button className="ba-mc-dec" onClick={onDec} tabIndex={on ? 0 : -1} aria-hidden={!on} aria-label="Remove one">{fill ? ICO.minusW() : ICO.minus()}</button>
+      <b key={n} aria-live="polite">{on ? n : ''}</b>
+      <button className="ba-mc-inc" onClick={on ? onInc : onAdd} aria-label={on ? 'Add one' : label}>
+        <span className="ba-mc-p red">{ICO.plus()}</span>{fill ? <span className="ba-mc-p white">{ICO.plusW()}</span> : null}
+      </button>
+    </span>
+  );
+}
+
 export function Ctl({ pid }) {
   const { S, A } = useBuy();
   const p = P(pid), n = qtyInCart(S.cart, pid);
-  if (!n) return <button className="ba-add" onClick={() => A.add(pid)} aria-label={`Add ${p.name}`}>{ICO.plus()}</button>;
-  return (
-    <span className="ba-step">
-      <button onClick={() => A.pdec(pid)} aria-label="Remove one">{ICO.minusW()}</button>
-      <b>{n}</b>
-      <button onClick={() => A.pinc(pid)} aria-label="Add one">{ICO.plusW()}</button>
-    </span>
-  );
+  return <AddStep n={n} fill label={`Add ${p.name}`} onAdd={() => A.add(pid)} onInc={() => A.pinc(pid)} onDec={() => A.pdec(pid)} />;
 }
 
 export const OStep = ({ line }) => {

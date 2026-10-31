@@ -75,9 +75,9 @@ const PHOTO = {
   fashion: 'mens womens kids ethnic sports acc foot bags beauty inner watch eye hats',
   food: 'fresh frozen snacks dairy bakery cooking ready dine babyfood nonalc organic meat healthfood bev icecream',
   home: 'clean care kitchen decor furniture bedding storage candles plants lights laundry',
-  health: 'kit drinks fitness pcare',
+  health: 'kit devices kitdev drinks fitness pcare',
   stationery: 'writing paper art books school printing other',
-  electronics: 'appliances audio kitchenapp',
+  electronics: 'mobile laptops appliances audio smarthome gaming kitchenapp',
   baby: 'babyfood diapers skin toys clothes safety furniture books gear',
   auto: 'auto spares maint care bike',
   gift: 'novelty handmade cards festival flowers choco decor wrap frames',
@@ -97,7 +97,7 @@ const twoLines = s => {
 
 /* the clothing demo's own groups, for the fashion shop */
 const FASHION = { men: 'mens', formal: 'mens', women: 'womens', kids: 'kids', ethnic: 'ethnic' };
-const FASHION_PID = { m3: 'sports' };
+const FASHION_PID = { m3: 'sports', a1: 'acc', a2: 'eye', a3: 'hats', a4: 'bags', a5: 'watch', a6: 'beauty', a7: 'acc', a8: 'inner', a9: 'hats', a10: 'bags' };
 
 PRODUCTS.forEach(p => { p.base = p.cat; });
 

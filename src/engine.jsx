@@ -209,8 +209,7 @@ export function BuyProvider({ children }) {
     cart: () => {
       closeSheet();
       if (cur().n === 'cart') return;
-      if (!S.user) { S.toCart = true; openLogin(); return; }
-      if (!S.addr) { S.toCart = true; toAddr(); return; }
+      // the cart opens straight away; login and the delivery address are asked for at checkout
       go('cart');
     },
     offers: () => openSheet('offers'),

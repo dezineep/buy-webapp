@@ -8,22 +8,14 @@
 import { Fragment, useLayoutEffect, useRef } from 'react';
 import { useBuy } from '../engine.jsx';
 import { V2, searchProducts, searchTokens, qtyInCart } from '../data.js';
-import { PriceRow, ICO, VariantChips } from '../ui.jsx';
+import { PriceRow, ICO, VariantChips, AddStep } from '../ui.jsx';
 
 const Q = V2 + 'search/';
 
 /* white + button / outlined stepper (Figma 2170:7482) */
 function RowCtl({ pid }) {
   const { S, A } = useBuy();
-  const n = qtyInCart(S.cart, pid);
-  if (!n) return <button className="ba-oplus" onClick={() => A.add(pid)} aria-label="Add to cart"><img src={Q + 'ic-plus-red.svg'} width="20" height="20" alt="" /></button>;
-  return (
-    <span className="ba-ostep">
-      <button onClick={() => A.pdec(pid)} aria-label="Remove one">{ICO.minus()}</button>
-      <b>{n}</b>
-      <button onClick={() => A.pinc(pid)} aria-label="Add one">{ICO.plus()}</button>
-    </span>
-  );
+  return <AddStep n={qtyInCart(S.cart, pid)} label="Add to cart" onAdd={() => A.add(pid)} onInc={() => A.pinc(pid)} onDec={() => A.pdec(pid)} />;
 }
 
 /* highlight the start of every name word that a query word matched (same word-start rule as searchProducts) */

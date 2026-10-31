@@ -200,7 +200,7 @@ function Quick({ pid }) {
             <p className="bp-qv-name" onClick={expand}>{p.name}</p>
           </div>
           {p.opts.length ? <OptionGroups p={p} s={s} /> : null}
-          <div className="bp-qv-qty"><p className="bp2-ol">Quantity</p><PackCards p={p} s={s} /></div>
+          {p.custom ? <div className="bp-qv-qty"><p className="bp2-ol">Quantity</p><PackCards p={p} s={s} /></div> : null}
           {/* Figma 857:2201 button style: white, red stroke, radius 10, hard shadow, 16/500 red + 18px chevron */}
           <button className="bp-qv-more" ref={more} onClick={expand}>View full details<img src={V2 + 'product/ic-chev-red.svg'} width="18" height="18" alt="" /></button>
           <div className="bp-qv-desc"><p className="bp2-h">Description</p><p>{p.desc}</p></div>

@@ -56,12 +56,12 @@
 .bm-hero p { margin: 0; font-size: 13px; line-height: 1.5; letter-spacing: -0.2px; color: var(--mt); }
 .bm-hero b { font-weight: 600; color: #000; }
 .bm-apps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.bm-app { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 14px; border: 1px solid var(--c); border-radius: 18px; background: var(--bg); box-shadow: 2px 3px 0 var(--c); }
-.bm-app.buy { --c: #a52226; --bg: #fdf5f5; }
-.bm-app.sell { --c: #261f8e; --bg: #f5f5fd; }
-.bm-logo { height: 30px; width: auto; }
-.bm-who { padding: 4px 10px; border-radius: 33px; background: #fff; border: 1px solid var(--c); font-size: 11px; font-weight: 600; color: var(--c); }
-.bm-app p { flex: 1; margin: 0; font-size: 13px; line-height: 1.5; letter-spacing: -0.2px; color: #555; }
+.bm-app { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px; border: 1px solid #e3e3e3; border-radius: 15px; background: #fdfdfd; }
+.bm-app.buy { --c: #a52226; }
+.bm-app.sell { --c: #261f8e; }
+.bm-logo { height: 28px; width: auto; }
+.bm-who { font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; color: #878787; margin-top: -4px; }
+.bm-app p { flex: 1; margin: 0; font-size: 13px; line-height: 1.45; letter-spacing: -0.2px; color: #696969; }
 .bsh .bm-go, .ba-sheet .bm-go { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 600; color: var(--c); }
 .bm-go i { width: 18px; height: 18px; background: var(--c); -webkit-mask: url(/assets/m17/arrow-right.svg) center / contain no-repeat; mask: url(/assets/m17/arrow-right.svg) center / contain no-repeat; transition: transform .2s; }
 .bm-go:active i { transform: translateX(3px); }
