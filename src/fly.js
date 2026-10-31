@@ -1,4 +1,4 @@
-/* Fly-to-cart: when a product is added, a copy of its photo arcs from where it was tapped (card,
+/* Fly-to-cart: when a product is added, a copy of its photo glides down from where it was tapped (card,
    search row, variants sheet, quick view or product page — any visible img[data-fly=pid]) into its round thumbnail
    in the cart pill. The thumbnail stays hidden during the flight and pops in as the photo lands. Screens without the
    pill fly to the product page's "View Cart" button instead; with neither on screen nothing flies. */
@@ -60,13 +60,15 @@ export function flyToCart(pid, captured) {
     inner.append(img); outer.append(inner); document.body.append(outer);
     if (to.hide) to.el.style.opacity = '0';
 
-    const dur = 1150, lift = Math.min(120, Math.abs(ty - sy) * .35 + 40);
-    outer.animate([{ transform: 'translateX(0)' }, { transform: `translateX(${tx - sx}px)` }], { duration: dur, easing: 'cubic-bezier(.42, 0, .3, 1)', fill: 'forwards' });
+    // no lift: sideways motion eases out while the drop eases in, so the photo glides out and falls into the cart
+    // bar along a smooth downward curve, shrinking and rounding into the thumbnail as it goes
+    const dur = 1100;
+    outer.animate([{ transform: 'translateX(0)' }, { transform: `translateX(${tx - sx}px)` }], { duration: dur, easing: 'cubic-bezier(.25, .7, .4, 1)', fill: 'forwards' });
     inner.animate([
-      { transform: 'translateY(0) scale(1) rotate(0)', borderRadius: '14px', offset: 0 },
-      { transform: `translateY(${-lift}px) scale(${Math.max(.45, 64 / size)}) rotate(-8deg)`, borderRadius: '40%', offset: .36, easing: 'cubic-bezier(.33, 0, .67, 1)' },
-      { transform: `translateY(${ty - sy}px) scale(${end / size}) rotate(0)`, borderRadius: '50%', offset: 1 },
-    ], { duration: dur, easing: 'cubic-bezier(.3, .05, .35, 1)', fill: 'forwards' });
+      { transform: 'translateY(0) scale(1)', borderRadius: '14px', offset: 0 },
+      { transform: `translateY(${(ty - sy) * .18}px) scale(${Math.max(.42, 70 / size)})`, borderRadius: '35%', offset: .4 },
+      { transform: `translateY(${ty - sy}px) scale(${end / size})`, borderRadius: '50%', offset: 1 },
+    ], { duration: dur, easing: 'cubic-bezier(.45, 0, .6, 1)', fill: 'forwards' });
     const done = () => {
       outer.remove();
       if (to.hide) to.el.style.opacity = '';
