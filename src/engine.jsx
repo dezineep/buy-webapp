@@ -105,7 +105,9 @@ export function BuyProvider({ children }) {
         later('pill', () => { S.pill = { state: '', id: Date.now(), enter: true }; commit(); }, 2200);
       }, 1400);
       // the pill celebrates on home / search; elsewhere a pop-up does, unless another sheet is open
-      if (!['home', 'search'].includes(cur().n)) later('unlock', () => { if (!S.sheet || S.sheet.bye) openSheet('unlock', o.id); }, 250);
+      // screens with the floating cart bar already celebrate the unlock there, so the modal only shows elsewhere
+      const pillHere = () => ['home', 'search', 'category'].includes(cur().n);
+      if (!pillHere()) later('unlock', () => { if (!pillHere() && (!S.sheet || S.sheet.bye)) openSheet('unlock', o.id); }, 250);
     }
     commit();
   };
@@ -132,7 +134,7 @@ export function BuyProvider({ children }) {
     if (b.gift) o.items.push({ pid: 'gift', name: GIFT.name, label: 'Free', qty: 1, price: 0, img: IMG + 'm-shirts.jpg' });
     S.orders = [o, ...S.orders];
     S.cart = []; S.unlocked.clear(); S.checkout = false; S.pill = null;
-    reset(['order', { id: o.id }]);
+    reset(['order', { id: o.id, fresh: true }]);
     // the store moves the order along so the status screen comes alive
     const steps = [['accepted', 6000], ['packed', 14000], ['dispatched', 24000], ['delivered', 40000]];
     steps.forEach(([st, ms]) => setTimeout(() => setStatus(o.id, st), ms));

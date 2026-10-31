@@ -152,15 +152,43 @@ function useKeyboardInset() {
   }, []);
 }
 
+/* "Back to top": a small floating pill that shows once a product list has been scrolled well down (home, category,
+   search) and glides the list back up. It sits above the cart bar when that is showing. */
+const LIST_SCREENS = ['home', 'search', 'category'];
+function BackTop({ scroller }) {
+  const { S } = useBuy();
+  const top = S.stack[S.stack.length - 1].n;
+  const show = !!scroller && LIST_SCREENS.includes(top) && !S.sheet && !S.picker;
+  const withPill = (top === 'home' || top === 'search' || top === 'category') && S.cart.length > 0;
+  return (
+    <button className={'ba-totop' + (show ? ' on' : '') + (withPill ? ' up' : '')} tabIndex={show ? 0 : -1} aria-hidden={!show}
+      onClick={() => scroller && scroller.scrollTo({ top: 0, behavior: 'smooth' })}>
+      <i aria-hidden="true" />Back to top
+    </button>
+  );
+}
+
 export default function App() {
   const { S } = useBuy();
   useKeyboardInset();
   const [msg, setMsg] = useState('');
   useEffect(() => { if (S.toast) setMsg(S.toast.msg); }, [S.toast]);
+  // scroll events don't bubble, so catch them on the way down: remember the screen scroller once it is far down
+  const [far, setFar] = useState(null);
+  const onScroll = e => {
+    const el = e.target;
+    if (!el.classList || !el.classList.contains('ba-scr')) return;
+    const deep = el.scrollTop > 900;
+    setFar(f => (deep ? (f === el ? f : el) : (f === el ? null : f)));
+  };
+  // a different screen on top: its own scroll position decides again
+  const topK = S.stack[S.stack.length - 1].k;
+  useEffect(() => { setFar(null); }, [topK]);
   return (
-    <div className="ba">
+    <div className="ba" onScrollCapture={onScroll}>
       <Screens />
       <Pill />
+      <BackTop scroller={far} />
       <Layer />
       <Notif />
       <ShopPicker />

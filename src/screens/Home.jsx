@@ -111,6 +111,16 @@ export default function Home({ scRef }) {
     return () => el.removeEventListener('scroll', sync);
   }, []);
 
+  /* store bar intro: only the logo shows and spins, then the name / address and the three buttons fly out of it;
+     after ~8s the name and address tuck back into the logo (tap the logo for store details). Replays whenever the
+     shop-type picker closes (first open and every shop switch). */
+  const [intro, setIntro] = useState('i0');
+  useEffect(() => {
+    if (S.picker) { setIntro('i0'); return; }
+    const t1 = setTimeout(() => setIntro('i1'), 380), t2 = setTimeout(() => setIntro('i2'), 8800);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [S.picker, S.shop]);
+
   // banner auto-advance
   useEffect(() => {
     const t = setInterval(() => { S.heroI = (S.heroI + 1) % STORE.banners.length; A.commit(); }, 3600);
@@ -140,8 +150,8 @@ export default function Home({ scRef }) {
 
   return (
     <div className="bh">
-      <div ref={top} className="bh-top">
-        <button className="bh-store" onClick={A.store}>
+      <div ref={top} className={'bh-top ' + intro}>
+        <button className="bh-store" onClick={A.store} aria-label={`${STORE.name} store details`}>
           <img className="bh-logo" src={STORE.logo} alt="" />
           <span className="bh-store-t"><b>{STORE.name} {ICO.verified()}</b><small>{STORE.area}</small></span>
         </button>

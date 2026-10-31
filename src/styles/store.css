@@ -1,6 +1,6 @@
 /* BUY · STORE DETAILS — Figma 1073:2453. Scoped under .bs-* */
 .bs-share img { width: 20px; height: 20px; }
-.bs-body { display: flex; flex-direction: column; gap: 24px; padding: 0 16px; margin-top: -9px; }
+.bs-body { display: flex; flex-direction: column; gap: 24px; padding: 0 16px; } /* no negative margin: it slid the banner under the sticky header */
 .bs-body section { display: flex; flex-direction: column; gap: 8px; }
 
 /* banner 201 tall radius 20; logo 92 overlaps its bottom by 31px, 16px in from the banner edge */

@@ -4,6 +4,7 @@ import { useBuy } from '../engine.jsx';
 import { FG, PARTNER, MON, STORE, fmtTime, fmtDay, fmtLong } from '../data.js';
 import { Head, ICO } from '../ui.jsx';
 import { downloadReceipt } from '../receipt.js';
+import { PlacedArt, DeliveredArt } from './OrderArt.jsx';
 
 const O = FG + 'order/';
 const Img = ({ f, w, h, cls }) => <img className={cls} src={O + f} width={w} height={h} alt="" aria-hidden="true" />;
@@ -47,7 +48,7 @@ export default function Order({ entry }) {
   const arriveShort = `${arrive.getDate()} ${MON[arrive.getMonth()]}`;
   let ill, h, p, small = '';
   if (st === 'placed') {
-    ill = <Img f="ill-placed.png" w={130} h={104} cls="bo-ill placed" />;
+    ill = <PlacedArt />;
     h = 'Order Placed !';
     p = 'Your order has been placed successfully and the items are yet to be packed soon';
     small = `Order placed on ${fmtTime(o.placedAt)}, ${fmtLong(o.placedAt)}`;
@@ -57,26 +58,24 @@ export default function Order({ entry }) {
     p = <>Your order has been packed and is arriving on {arriveShort}.<br />{st === 'packed' ? 'Delivery partner is yet to be assigned to your order' : 'Delivery partner has been assigned to your order'}</>;
     if (st === 'packed') small = `Order Packed on ${fmtTime(t.packed || new Date())}, ${fmtLong(t.packed || new Date())}`;
   } else if (st === 'cancelled') {
-    ill = <Img f="ill-placed.png" w={130} h={104} cls="bo-ill placed" />;
+    ill = <PlacedArt />;
     h = 'Order Cancelled';
     p = 'This order was cancelled by the store. Your refund is being processed.';
   } else {
-    ill = <Img f="ill-delivered.png" w={191} h={124} cls="bo-ill box" />;
+    ill = <DeliveredArt />;
     h = 'Your order has been delivered!';
     p = `Your order from ${STORE.name} has reached you safely. Thank you for shopping with us, we hope you love it!`;
   }
   const at = t.dispatched || new Date();
   return (
-    <div className={'bo st-' + st}><Head title={title} />
+    <div className={'bo st-' + st + (entry.fresh ? ' fresh' : '')}><Head title={title} />
       <div className="bo-body">
         <div className="bo-info">
-          {/* the illustration lives in an animated stage: placed = box floats while the tick pulses, packed / on the way
-              = the scooter rides with speed lines and a moving road, delivered = box settles with twinkling sparkles */}
-          <div className={'bo-art ' + (st === 'packed' || st === 'dispatched' ? 'ride' : st === 'delivered' ? 'box' : 'placed')}>
+          {/* animated stage: placed / delivered are SVG (OrderArt.jsx), packed / on the way = the scooter rides with
+              speed lines and a moving road. key={st} replays the art when the status changes. */}
+          <div key={st} className={'bo-art ' + (st === 'packed' || st === 'dispatched' ? 'ride' : st === 'delivered' ? 'box' : 'placed')}>
             {ill}
             {st === 'packed' || st === 'dispatched' ? <><span className="bo-speed" aria-hidden="true"><i /><i /><i /></span><span className="bo-road" aria-hidden="true" /></> : null}
-            {st === 'placed' || st === 'cancelled' ? <i className="bo-pulse" aria-hidden="true" /> : null}
-            {st === 'delivered' ? <span className="bo-sparks" aria-hidden="true"><i /><i /><i /><i /></span> : null}
           </div>
           <span className="bo-chip">{st === 'delivered' || st === 'cancelled' ? `Order #${o.id}` : `OTP : ${o.otp}`}</span>
           <div className="bo-msg"><h3 className="bo-h">{h}</h3><p className="bo-p">{p}</p></div>

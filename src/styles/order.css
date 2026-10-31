@@ -100,3 +100,50 @@
 .bo-pair { display: flex; gap: 12px; width: 100%; }
 .bo-ob { flex: 1 1 0; min-width: 0; display: grid; place-items: center; height: 44px; padding: 0 10px; border: 1px solid var(--r, #a52226) !important; border-radius: 16px !important; background: #fff !important; box-shadow: 2px 3px 0 #000; font-size: 14px; font-weight: 500; line-height: 1.2; letter-spacing: -0.3px; color: var(--r, #a52226) !important; white-space: nowrap; transition: transform .15s, box-shadow .15s; }
 .bo-ob:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #000; }
+
+/* ---------- SVG status art (OrderArt.jsx) ---------- */
+.boa { display: block; overflow: visible; }
+/* only the animated parts get a centred origin: elements carrying a transform attribute (badge position, ray
+   angles) must keep SVG's default origin */
+.boa-shadow, .boa-box, .boa-badge-in, .boa-rays, .boa-ring, .boa-sparks > *, .boa-rise, .boa-confetti rect { transform-box: fill-box; transform-origin: center; }
+.boa-shadow { fill: #f4e1e1; animation: boaShadow .6s cubic-bezier(.34, 1.56, .64, 1) both; }
+.boa-box { transform-origin: 50% 100%; animation: boaDrop .7s cubic-bezier(.34, 1.5, .64, 1) both, boaBob 3s 1.8s ease-in-out infinite; }
+.boa-badge-in { animation: boaPop .5s cubic-bezier(.34, 1.8, .64, 1) .55s both; }
+.boa-tick { fill: none; stroke: #fff; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 40; stroke-dashoffset: 40; animation: boaDraw .45s cubic-bezier(.6, 0, .3, 1) .95s forwards; }
+.boa-rays line { stroke: #a52226; stroke-width: 2.4; stroke-linecap: round; }
+.boa-rays { animation: boaRays 2.4s cubic-bezier(.2, .8, .3, 1) 1.3s infinite; opacity: 0; }
+.boa-ring { fill: none; stroke: #a52226; stroke-width: 2; opacity: 0; animation: boaRing 2.4s ease-out 1.35s infinite; }
+.boa-sparks path { fill: none; stroke: #a52226; stroke-width: 2.4; stroke-linecap: round; }
+.boa-sparks circle { fill: #f2b233; }
+.boa-sparks > * { animation: boaSpark 1.6s ease-in-out 1.4s infinite alternate; opacity: 0; }
+.boa-sparks > :nth-child(2) { animation-delay: 1.8s; } .boa-sparks > :nth-child(3) { animation-delay: 2.1s; } .boa-sparks > :nth-child(4) { animation-delay: 2.4s; }
+/* delivered: flaps open at .55s (SMIL), then the badge rises out of the box */
+.boa-delivered .boa-badge-in { animation-delay: 1.15s; }
+.boa-delivered .boa-tick { animation-delay: 1.6s; }
+.boa-delivered .boa-rays { animation-delay: 1.9s; }
+.boa-delivered .boa-ring { animation-delay: 1.95s; }
+.boa-rise { animation: boaRise .75s cubic-bezier(.34, 1.45, .64, 1) 1.05s both; }
+.boa-confetti rect { opacity: 0; animation: boaConf 1.4s cubic-bezier(.2, .8, .3, 1) calc(1.75s + var(--i) * .04s) both; }
+@keyframes boaDrop { 0% { transform: translateY(-46px) scale(.9); opacity: 0; } 55% { transform: translateY(4px) scale(1.06, .92); opacity: 1; } 75% { transform: translateY(-3px) scale(.98, 1.03); } 100% { transform: none; } }
+@keyframes boaShadow { from { transform: scale(.3); opacity: 0; } }
+@keyframes boaBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes boaPop { 0% { transform: scale(0) rotate(-90deg); } 100% { transform: none; } }
+@keyframes boaDraw { to { stroke-dashoffset: 0; } }
+@keyframes boaRays { 0% { opacity: 0; transform: scale(.55); } 18% { opacity: 1; } 55% { opacity: 1; transform: scale(1.12); } 100% { opacity: 0; transform: scale(1.3); } }
+@keyframes boaRing { 0% { opacity: .7; transform: scale(1); } 100% { opacity: 0; transform: scale(2.1); } }
+@keyframes boaSpark { from { opacity: .2; transform: scale(.6) rotate(0); } to { opacity: 1; transform: scale(1.1) rotate(45deg); } }
+@keyframes boaRise { from { transform: translateY(0); } to { transform: translateY(-62px); } }
+@keyframes boaConf { 0% { opacity: 0; transform: translate(0, 18px) rotate(0); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 30px)) rotate(320deg); } }
+@media (prefers-reduced-motion: reduce) { .boa * { animation: none !important; } .boa-tick { stroke-dashoffset: 0; } }
+
+/* right after payment: the art plays first, then the rest of the screen rises in */
+.bo.fresh .bo-info > :not(.bo-art), .bo.fresh .bo-partner, .bo.fresh .bo-btns, .bo.fresh .bo-sum { animation: boRise .6s cubic-bezier(.22, 1, .36, 1) both; }
+.bo.fresh .bo-info > :not(.bo-art) { animation-delay: 1.55s; }
+.bo.fresh .bo-info > :nth-child(3) { animation-delay: 1.65s; }
+.bo.fresh .bo-info > :nth-child(4) { animation-delay: 1.75s; }
+.bo.fresh .bo-btns { animation-delay: 1.85s; }
+.bo.fresh .bo-sum { animation-delay: 1.98s; }
+.bo.fresh .bo-art { animation: boArtIn .5s cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes boRise { from { opacity: 0; transform: translateY(18px); } }
+@keyframes boArtIn { from { transform: translateY(70px) scale(1.15); } }
+.boa-delivered { margin-top: 26px; } /* room for the badge rising out of the box */

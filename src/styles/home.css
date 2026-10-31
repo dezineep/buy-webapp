@@ -165,3 +165,19 @@
 .bh-sortl button.on { color: #000; }
 .bh-sortl i { flex: none; width: 20px; height: 20px; border: 1.5px solid #c9c9c9; border-radius: 50%; transition: border .2s; }
 .bh-sortl .on i { border: 6px solid var(--r); }
+
+/* ---------- store bar intro (Home.jsx `intro`): i0 = logo only, i1 = everything out, i2 = name tucked back in ---------- */
+.bh-logo { transition: transform .9s cubic-bezier(.34, 1.4, .64, 1); }
+.bh-top.i0 .bh-logo { transform: rotate(-300deg) scale(.7); }
+.bh-top.i2 .bh-logo { transform: rotate(360deg); }
+.bh-store { gap: 0; }
+.bh-store-t { max-width: 230px; margin-left: 8px; transform-origin: left center; transition: max-width .7s cubic-bezier(.22, 1, .36, 1) .2s, margin .7s cubic-bezier(.22, 1, .36, 1) .2s, opacity .45s ease .3s, transform .7s cubic-bezier(.34, 1.4, .64, 1) .2s, filter .5s ease .2s; }
+.bh-top.i0 .bh-store-t, .bh-top.i2 .bh-store-t { max-width: 0; margin-left: 0; opacity: 0; transform: translateX(-24px) scale(.6); filter: blur(4px); }
+.bh-top.i2 .bh-store-t { transition-delay: 0s, 0s, 0s, 0s, 0s; }
+/* the buttons start stacked on the logo and spring out to their places one after another */
+.bh-btns > * { transition: transform .75s cubic-bezier(.34, 1.45, .64, 1), opacity .3s ease; }
+.bh-btns > :nth-child(1) { --fx: -230px; transition-delay: .35s; }
+.bh-btns > :nth-child(2) { --fx: -280px; transition-delay: .47s; }
+.bh-btns > :nth-child(3) { --fx: -330px; transition-delay: .59s; }
+.bh-top.i0 .bh-btns > * { opacity: 0; transform: translateX(var(--fx)) scale(.2) rotate(-200deg); transition-delay: 0s; }
+@media (prefers-reduced-motion: reduce) { .bh-top * { transition: none !important; } }
