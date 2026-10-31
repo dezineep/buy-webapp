@@ -38,7 +38,7 @@ function Row({ p, q, i }) {
   const off = Math.round((1 - p.price / p.mrp) * 100);
   return (
     <div className="bq-row" style={{ animationDelay: `${Math.min(i, 8) * 35}ms` }}>
-      <img className="bq-img" src={p.img[0]} alt="" loading="lazy" onClick={() => A.quick(p.id)} />
+      <img className="bq-img" src={p.img[0]} alt="" loading="lazy" data-fly={p.id} onClick={() => A.quick(p.id)} />
       <button className="bq-info" onClick={() => A.product(p.id)}>
         <VariantChips p={p} max={3} rows={1} />
         <span className="bq-name"><Hl text={p.name} q={q} /></span>

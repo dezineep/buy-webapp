@@ -7,6 +7,7 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import { P, OFFERS, PARTNER, STORE, IMG, GIFT, calcBill, lineInfo, lineKey, defaultSel, seedOrders, seedRefunds, seedAddresses } from './data.js';
 import { applyShop } from './shops.js';
+import { flyToCart, flySource } from './fly.js';
 
 /* the prototype opens on the shop-type picker; the last pick is remembered so it can be confirmed with one tap */
 const SHOP_KEY = 'buy.shop';
@@ -78,9 +79,11 @@ export function BuyProvider({ children }) {
   };
 
   /* ---------- cart ---------- */
-  const addLine = (pid, sel, pack) => {
+  // fly: the photo flies into the cart pill — on every "+" / "Add to Cart", never on stepper increments
+  const addLine = (pid, sel, pack, fly) => {
     const key = lineKey(pid, sel, pack);
     const l = S.cart.find(x => x.key === key);
+    if (fly) requestAnimationFrame(() => flyToCart(pid, typeof fly === 'object' ? fly : null));
     if (l) S.cart = S.cart.map(x => (x === l ? { ...x, qty: x.qty + 1 } : x));
     else S.cart = [...S.cart, { key, pid, sel: { ...sel }, pack: { ...pack }, qty: 1 }];
     cartChanged();
@@ -190,10 +193,15 @@ export function BuyProvider({ children }) {
     opensearch: () => { closeSheet(); S.q = ''; go('search'); },
     setq: v => { S.q = v; commit(); },
     /* + on a card: products with sizes / colours open the variant sheet, the rest add one piece */
-    add: pid => { const p = P(pid); if (p.opts.length) openSheet('variants', pid); else addLine(pid, {}, { n: p.packs[0].n }); },
+    add: pid => { const p = P(pid); if (p.opts.length) openSheet('variants', pid); else addLine(pid, {}, { n: p.packs[0].n }, true); },
     pinc: pid => { const lines = S.cart.filter(l => l.pid === pid); if (lines.length !== 1) openSheet('variants', pid); else changeKey(lines[0].key, 1); },
     pdec: pid => { const lines = S.cart.filter(l => l.pid === pid); if (lines.length > 1) openSheet('variants', pid); else if (lines[0]) changeKey(lines[0].key, -1); },
-    addsel: pid => { const s = selOf(pid); addLine(pid, s.sel, s.pack); },
+    addsel: pid => {
+      const s = selOf(pid);
+      // from the variants sheet: note where its photo is, close the sheet so the cart bar is in view, then fly
+      if (S.sheet && S.sheet.name === 'variants' && !S.sheet.bye) { const from = flySource(pid); closeSheet(); addLine(pid, s.sel, s.pack, from || true); return; }
+      addLine(pid, s.sel, s.pack, true);
+    },
     inc: key => changeKey(key, 1),
     dec: key => changeKey(key, -1),
     product: pid => { closeSheet(); go('product', { pid }); },

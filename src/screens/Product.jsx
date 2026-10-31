@@ -74,7 +74,7 @@ export default function Product({ entry }) {
       <div className="bp2-body">
         <div className="bp2-gal">
           <div className="bp2-track" ref={gal} onScroll={e => setSlide(Math.round(e.target.scrollLeft / e.target.clientWidth))}>
-            {p.img.map(i => <img key={i} src={i} alt={p.name} />)}
+            {p.img.map((i, k) => <img key={i} src={i} alt={p.name} data-fly={k ? undefined : p.id} />)}
           </div>
           {p.img.length > 1 && <div className="bp2-dots">{p.img.map((i, k) => <i key={i} className={k === slide ? 'on' : ''} />)}</div>}
         </div>

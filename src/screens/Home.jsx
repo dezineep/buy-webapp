@@ -19,7 +19,7 @@ export function Card({ p }) {
   const { A } = useBuy();
   return (
     <div className="bh-card">
-      <div className="bh-card-img" onClick={() => A.quick(p.id)}><img src={p.img[0]} alt={p.name} loading="lazy" /></div>
+      <div className="bh-card-img" onClick={() => A.quick(p.id)}><img src={p.img[0]} alt={p.name} loading="lazy" data-fly={p.id} /></div>
       <span className="bh-card-ctl"><Ctl pid={p.id} /></span>
       <VariantChips p={p} />
       <p className="bh-card-name" onClick={() => A.product(p.id)}>{p.name}</p>

@@ -154,7 +154,7 @@ export function MiniCard({ p }) {
   const { A } = useBuy();
   return (
     <div className="bx-mini">
-      <div className="bx-mini-img" onClick={() => A.quick(p.id)}><img src={p.img[0]} alt={p.name} loading="lazy" /></div>
+      <div className="bx-mini-img" onClick={() => A.quick(p.id)}><img src={p.img[0]} alt={p.name} loading="lazy" data-fly={p.id} /></div>
       <span className="bx-mini-ctl"><Ctl pid={p.id} /></span>
       <VariantChips p={p} />
       <p className="bx-mini-name" onClick={() => A.product(p.id)}>{p.name}</p>

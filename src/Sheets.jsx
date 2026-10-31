@@ -97,7 +97,7 @@ function Variants({ pid }) {
   return (
     <div className="bsh bsh-var"><SheetHead title={p.name} sub="Select variant" />
       <div className="bsh-body">
-        <div className="bsh-vtop"><img src={p.img[0]} alt="" /><PriceBox price={price} mrp={mrp} big /></div>
+        <div className="bsh-vtop"><img src={p.img[0]} alt="" data-fly={p.id} /><PriceBox price={price} mrp={mrp} big /></div>
         <OptionGroups p={p} s={s} />
         <p className="bp2-ol bsh-vq">Quantity</p>
         <PackCards p={p} s={s} />
@@ -189,7 +189,7 @@ function Quick({ pid }) {
         {/* close stays pinned to the top corner while the sheet scrolls (until it grows into the full page) */}
         <div className="bp-qv-xpin"><button className="bp-qv-x" onClick={A.close} aria-label="Close">{ICO.close()}</button></div>
         <div className="bp-qv-media">
-          <div className="bp-track" ref={track} onScroll={e => setSlide(Math.round(e.currentTarget.scrollLeft / (e.currentTarget.clientWidth || 1)))}>{p.img.map(i => <img key={i} src={i} alt={p.name} />)}</div>
+          <div className="bp-track" ref={track} onScroll={e => setSlide(Math.round(e.currentTarget.scrollLeft / (e.currentTarget.clientWidth || 1)))}>{p.img.map((i, k) => <img key={i} src={i} alt={p.name} data-fly={k ? undefined : p.id} />)}</div>
           {p.img.length > 1 ? <div className="bp-qv-dots">{p.img.map((i, k) => <i key={i} className={k === slide ? 'on' : ''} />)}</div> : null}
         </div>
         <div className="bp-qv-info">
