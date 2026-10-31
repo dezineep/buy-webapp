@@ -3,7 +3,7 @@
    Styles: styles/shoppicker.css (.bsp-*) */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useBuy } from '../engine.jsx';
-import { SHOPS } from '../shops.js';
+import { SHOPS, catPhoto } from '../shops.js';
 import { iconUrl } from '../catIcons.js';
 
 const Ic = ({ name, cls }) => { const u = `url("${iconUrl(name)}")`; return <i className={cls} style={{ WebkitMaskImage: u, maskImage: u }} aria-hidden="true" />; };
@@ -45,7 +45,7 @@ export default function ShopPicker() {
                 </span>
                 <span className="bsp-cats" aria-hidden={!on}>
                   <span className="bsp-cats-in">
-                    {s.cats.map(c => <span key={c.id} className="bsp-cat"><Ic name={c.icon} /><small>{c.label}</small></span>)}
+                    {s.cats.map(c => { const ph = catPhoto(s.id, c.id); return <span key={c.id} className="bsp-cat">{ph ? <img src={ph} alt="" loading="lazy" /> : <Ic name={c.icon} />}<small>{c.label}</small></span>; })}
                   </span>
                 </span>
               </button>

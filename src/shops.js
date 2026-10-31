@@ -1,7 +1,8 @@
 /* Shop types BUY caters to (official sheet "BUY · shop categories") and the demo store shown for each.
    The prototype opens on a shop-type picker; applyShop() then rewrites STORE, CATEGORIES and every product's `cat`
-   in place, so all screens keep importing the same objects. Category icons are Hugeicons from the Figma library
-   (see catIcons.js); fashion keeps the four Figma tab icons it was designed with.
+   in place, so all screens keep importing the same objects. Category tabs show real product photos (Zepto / Blinkit
+   style), cut from the supplied category image sheets into public/assets/cats/<shop>-<category>.webp. Categories
+   with no matching photo yet keep their Hugeicons line icon (catIcons.js) inside the same peach circle.
    The catalogue itself stays the clothing demo: for non-fashion shops the products are only spread across the
    shop's categories so every tab has something to show. */
 import { STORE, CATEGORIES, PRODUCTS, V2 } from './data.js';
@@ -69,6 +70,20 @@ export const SHOPS = [
       c('decor', 'Home Decor Gifts', 'wall-lamp'), c('wrap', 'Gift Wrapping', 'garlands'), c('frames', 'Photo Frames & Albums', 'image-02'),
       c('others', 'Others', 'package-01')] },
 ];
+/* categories that have a photo in public/assets/cats */
+const PHOTO = {
+  fashion: 'mens womens kids ethnic sports acc foot bags beauty inner watch eye hats',
+  food: 'fresh frozen snacks dairy bakery cooking ready dine babyfood nonalc organic meat healthfood bev icecream',
+  home: 'clean care kitchen decor furniture bedding storage candles plants lights laundry',
+  health: 'kit drinks fitness pcare',
+  stationery: 'writing paper art books school printing other',
+  electronics: 'appliances audio kitchenapp',
+  baby: 'babyfood diapers skin toys clothes safety furniture books gear',
+  auto: 'auto spares maint care bike',
+  gift: 'novelty handmade cards festival flowers choco decor wrap frames',
+};
+export const catPhoto = (shop, cat) => ((PHOTO[shop] || '').split(' ').includes(cat) ? `/assets/cats/${shop}-${cat}.webp` : null);
+
 export const shopOf = id => SHOPS.find(s => s.id === id) || SHOPS[0];
 
 /* tab labels sit on two short lines: break at the space closest to the middle */
@@ -90,8 +105,8 @@ export function applyShop(id) {
   const s = shopOf(id);
   const slug = s.store.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   Object.assign(STORE, { name: s.store, slug, category: s.kind, about: `At ${s.store}, ${s.about}. Honest prices. Easy returns.` });
-  CATEGORIES.splice(0, CATEGORIES.length, { id: 'all', label: ['All'], icon: H + 'cat-all.svg' },
-    ...s.cats.map(x => ({ id: x.id, label: twoLines(x.label), name: x.label, icon: iconUrl(x.icon) })));
+  CATEGORIES.splice(0, CATEGORIES.length, { id: 'all', label: ['All'], icon: H + 'cat-all.svg', img: s.id === 'tobacco' ? null : `/assets/cats/${s.id}-all.webp` },
+    ...s.cats.map(x => ({ id: x.id, label: twoLines(x.label), name: x.label, icon: iconUrl(x.icon), img: catPhoto(s.id, x.id) })));
   PRODUCTS.forEach((p, i) => {
     p.cat = s.id === 'fashion' ? FASHION_PID[p.id] || FASHION[p.base] : s.cats[i % s.cats.length].id;
   });

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useBuy } from './engine.jsx';
 import { P, PRODUCTS, V2, FG, STORE, OFFERS, inr, calcBill, unitPrice, mrpOf, packPrice, customUnit, lineKey, selLabel, packText } from './data.js';
 import { shopOf } from './shops.js';
+import { Otp } from './screens/Login.jsx';
 import { iconUrl } from './catIcons.js';
 import { SheetHead, Ring, PriceBox, PriceRow, BigStep, ICO, MiniCard } from './ui.jsx';
 import { PackCards, OptionGroups } from './screens/Product.jsx';
@@ -185,9 +186,11 @@ function Quick({ pid }) {
     <div className="bp-qv" ref={root} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchCancel={onTouchEnd}>
       <i className="bp-qv-grab" aria-hidden="true" />
       <div className="bp-qv-scroll" ref={scroller} onScroll={onScroll}>
+        {/* close stays pinned to the top corner while the sheet scrolls (until it grows into the full page) */}
+        <div className="bp-qv-xpin"><button className="bp-qv-x" onClick={A.close} aria-label="Close">{ICO.close()}</button></div>
         <div className="bp-qv-media">
           <div className="bp-track" ref={track} onScroll={e => setSlide(Math.round(e.currentTarget.scrollLeft / (e.currentTarget.clientWidth || 1)))}>{p.img.map(i => <img key={i} src={i} alt={p.name} />)}</div>
-          <i className="bp-qv-fade" /><button className="bp-qv-x" onClick={A.close} aria-label="Close">{ICO.close()}</button>
+          <i className="bp-qv-fade" />
           {p.img.length > 1 ? <div className="bp-qv-dots">{p.img.map((i, k) => <i key={i} className={k === slide ? 'on' : ''} />)}</div> : null}
         </div>
         <div className="bp-qv-info">
@@ -213,20 +216,28 @@ function Quick({ pid }) {
   );
 }
 
-function Details() {
-  const { S, A } = useBuy();
-  const demo = { name: 'Ananya Rao', phone: '9876543210' };
-  const val = k => S.udraft?.[k] ?? S.user?.[k] ?? '';
-  // demo convenience: focusing an empty field fills in sample details
-  const fill = () => { if (!val('name') && !val('phone')) { A.udraft('name', demo.name); A.udraft('phone', demo.phone); } };
+/* About Modulus Seventeen (the "17" button on the store bar): who makes BUY, what SELL is, and links to each landing page */
+const M17 = [
+  { id: 'buy', logo: 'logo-buy.svg', w: 80, who: 'For shoppers', text: 'Order from neighbourhood stores, pay online and track it live.', url: 'https://buy-preview.vercel.app', cta: 'Visit website' },
+  { id: 'sell', logo: 'logo-sell.svg', w: 82, who: 'For shop owners', text: 'Billing, stock, sales and your BUY store, all in one app.', url: 'https://sell-landing-page-woad.vercel.app', cta: 'Visit website' },
+];
+function About17() {
+  const open = u => window.open(u, '_blank', 'noopener');
   return (
-    <><SheetHead title="Your Details" sub="So the store can reach you about this order" />
-      <div className="bc-sh">
-        <label className="bc-field"><span>Full Name</span><input value={val('name')} onFocus={fill} onChange={e => A.udraft('name', e.target.value)} placeholder="e.g. Ananya Rao" autoComplete="name" /></label>
-        <label className="bc-field"><span>Phone Number</span><span className="bc-phone"><em>+91</em><input value={val('phone')} onFocus={fill} onChange={e => A.udraft('phone', e.target.value)} inputMode="numeric" maxLength={10} placeholder="98765 43210" autoComplete="tel-national" /></span></label>
-        <p className="bc-note">No password, no login. We only use this to share order updates.</p>
-        <p className="ba-err bc-err">{S.uerr}</p>
-        <button className="ba-btn wide" onClick={A.saveuser}>{S.checkout ? 'Continue to Address' : 'Save Details'}</button>
+    <><SheetHead title="Modulus Seventeen" sub="The team behind BUY & SELL" />
+      <div className="bm-body">
+        <div className="bm-hero">
+          <img src="/assets/m17/logo-mark.svg" width="64" height="47" alt="Modulus Seventeen" />
+          <p>One ecosystem for every Indian business. <b>SELL</b> runs the shop, <b>BUY</b> is where its customers order online, and both stay in sync.</p>
+        </div>
+        <div className="bm-apps">{M17.map(a => (
+          <div key={a.id} className={'bm-app ' + a.id}>
+            <img className="bm-logo" src={'/assets/m17/' + a.logo} width={a.w} height="40" alt={a.id.toUpperCase()} /><span className="bm-who">{a.who}</span>
+            <p>{a.text}</p>
+            <button className="bm-go" onClick={() => open(a.url)}>{a.cta}<i aria-hidden="true" /></button>
+          </div>
+        ))}</div>
+        <button className="ba-btn wide" onClick={() => open('https://modulusseventeen.com')}>Explore Modulus Seventeen</button>
       </div></>
   );
 }
@@ -264,6 +275,6 @@ function Unlock({ id }) {
   );
 }
 
-export const SHEETS = { more: More, sort: Sort, offers: Offers, amount: Amount, variants: Variants, custom: Custom, quick: Quick, details: Details, pay: Pay, unlock: Unlock };
+export const SHEETS = { more: More, sort: Sort, offers: Offers, amount: Amount, variants: Variants, custom: Custom, quick: Quick, otp: Otp, m17: About17, pay: Pay, unlock: Unlock };
 export const MODALS = new Set(['quick', 'unlock']);
 export const renderSheet = (name, arg) => { const C = SHEETS[name]; return C ? <C pid={arg} id={arg} /> : null; };

@@ -39,3 +39,5 @@
 
 .bsp-foot { flex: none; padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px)); background: #fff; box-shadow: 0 -6px 20px rgba(0, 0, 0, .06); }
 .bsp-foot .ba-btn { overflow: hidden; text-overflow: ellipsis; }
+.bsp-cat:has(img) { background: none; }
+.bsp-cat img { display: block; width: 44px; height: 44px; object-fit: contain; }

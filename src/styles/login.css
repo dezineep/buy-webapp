@@ -1,0 +1,47 @@
+/* BUY · LOG IN — Figma 724:2021 / 724:2507 (screen) and 724:2395 (OTP bottom sheet). Scoped under .bl-* */
+.bl { min-height: 100%; }
+.bl-body { display: flex; flex-direction: column; gap: 16px; padding: 8px 16px 140px; }
+.bl-f { display: flex; flex-direction: column; gap: 8px; }
+.bl-l { display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 500; line-height: 20px; letter-spacing: -0.375px; color: #000; }
+.bl-l i { font-style: normal; font-size: 14px; font-weight: 700; color: #fb2c36; }
+
+/* inputs: white, 1px #e4e4e4, radius 20; the focused field turns red (724:2021) */
+.bl .bl-in { width: 100%; border: 1px solid #e4e4e4; border-radius: 20px; background: #fff; transition: border-color .2s; }
+.bl .bl-in:focus-within, .bl input.bl-in:focus { border-color: var(--r); }
+.bl-ph { display: flex; align-items: center; gap: 6px; padding: 8px; }
+.bl-ph.ok { cursor: pointer; }
+.bl-ph.ok:focus-within { border-color: #e4e4e4; }
+.bl-cc { flex: none; display: flex; align-items: center; gap: 4px; padding: 8px 4px; font-size: 16px; color: var(--r); }
+.bl-cc img { width: 18px; height: 18px; }
+.bl .bl-ph input { flex: 1; min-width: 0; padding: 8px; border: 0; outline: 0; background: none; font: inherit; font-size: 16px; font-weight: 500; letter-spacing: 0; color: #000; }
+.bl .bl-ph.ok input { color: #686868; cursor: pointer; }
+.bl-ph input::placeholder { color: #939393; }
+.bl-ok { flex: none; width: 24px; height: 24px; animation: blPop .4s cubic-bezier(.34, 1.56, .64, 1); }
+.bl .bl-nm { padding: 16px; outline: 0; font: inherit; font-size: 16px; line-height: 1.1; letter-spacing: -0.4px; color: #000; }
+.bl-nm::placeholder { color: rgba(89, 89, 89, .5); }
+.bl-in-anim { animation: blIn .35s cubic-bezier(.2, .8, .2, 1); }
+@keyframes blIn { from { opacity: 0; transform: translateY(-8px); } }
+@keyframes blPop { from { transform: scale(.4); opacity: 0; } }
+.bl-err { min-height: 0; margin: -8px 0 0; }
+.bl-err:empty { display: none; }
+
+/* the action sits 36px above the bottom; with the keyboard open the layout viewport shrinks and it rides on top */
+.bl-foot { position: absolute; left: 16px; right: 16px; bottom: calc(36px + var(--kb, 0px)); z-index: 4; }
+
+/* OTP sheet (724:2395): 24px between blocks */
+.bl-otp { display: flex; flex-direction: column; gap: 24px; padding-bottom: 40px; }
+.bl-otp > .ba-sh-h { padding-bottom: 0; }
+.bl-otp > :not(.ba-sh-h) { margin-left: 16px; margin-right: 16px; }
+.bl-chg { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.bl-chg b { font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.32px; color: #000; }
+.bl .bl-link, .bl-otp .bl-link { font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.12px; color: var(--r); text-decoration: underline; text-underline-offset: 3px; }
+.bl-boxes { position: relative; display: flex; gap: 8px; cursor: text; }
+.bl-otp-in { position: absolute; inset: 0; width: 100%; opacity: 0; border: 0; font-size: 16px; caret-color: transparent; }
+.bl-box { flex: 1 1 0; min-width: 0; display: grid; place-items: center; height: 57px; border: 1px solid #e4e4e4; border-radius: 20px; background: #fff; font-size: 20px; color: #736d6d; pointer-events: none; transition: border-color .2s, background-color .2s; }
+.bl-box.f { color: #000; animation: blPop .25s cubic-bezier(.34, 1.56, .64, 1); }
+.bl-boxes:focus-within .bl-box.on { border-color: var(--r); background: var(--pk3); }
+.bl-otp .bl-err { margin: -16px 0 0; }
+.bl-re { display: flex; align-items: center; gap: 8px; }
+.bl-re span { font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.28px; color: #9a9a9a; }
+.bl-confirm { margin-top: 8px; }
+.bl-otp > .ba-btn.wide { width: auto; align-self: stretch; }

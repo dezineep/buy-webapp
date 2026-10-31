@@ -70,13 +70,17 @@
 .bh-cats::-webkit-scrollbar { display: none; }
 .bh-cats-in { position: relative; display: flex; gap: 8px; width: max-content; min-width: 100%; padding: 8px 22px 0; }
 .bh-cats-in::after { content: ""; position: absolute; z-index: 0; left: 0; right: 0; bottom: 0; height: 0; border-bottom: 1px solid var(--r); }
-.bh-cat { position: relative; z-index: 2; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 60px; padding: 8px 0 10px; color: #696969; transition: color .3s ease; -webkit-tap-highlight-color: transparent; }
-.bh-cat-ic { display: block; width: 24px; height: 24px; background: currentColor; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
-.bh-cat > span { display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 400; line-height: 1.1; letter-spacing: -0.2px; text-align: center; white-space: nowrap; }
+.bh-cat { position: relative; z-index: 2; flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 70px; padding: 8px 0 10px; color: #696969; transition: color .3s ease; -webkit-tap-highlight-color: transparent; }
+/* Zepto / Blinkit style: a real product photo in a soft peach circle (shops without photos keep a line icon there) */
+.bh-cat-im { position: relative; display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: #fbeee4; transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
+.bh-cat-im:has(img) { background: none; } /* the photos carry their own circle */
+.bh-cat-im img { position: absolute; inset: 0; width: 56px; height: 56px; object-fit: contain; }
+.bh-cat-ic { display: block; width: 26px; height: 26px; background: currentColor; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
+.bh-cat > span:last-child { display: flex; flex-direction: column; align-items: center; font-size: 11px; font-weight: 400; line-height: 1.15; letter-spacing: -0.2px; text-align: center; white-space: nowrap; }
 .bh-cat.on { color: var(--r); }
-.bh-cat.on > span { font-weight: 500; }
-.bh-cat.on .bh-cat-ic { transform: scale(1.12); }
-.bh-cat:active .bh-cat-ic { transform: scale(.9); }
+.bh-cat.on > span:last-child { font-weight: 600; }
+.bh-cat.on .bh-cat-im { transform: scale(1.06); }
+.bh-cat:active .bh-cat-im { transform: scale(.92); }
 /* selected tab: outlined top + sides that curve out (radius 10) into the row line; no line under the tab itself */
 .bh-cat-ind {
   --ft: 10px;

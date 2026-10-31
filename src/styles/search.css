@@ -28,7 +28,7 @@
 .bq-div { display: block; width: 100%; height: 1px; }
 .bq-row { display: flex; align-items: center; gap: 8px; animation: bqIn .35s cubic-bezier(.22, 1, .36, 1) both; }
 @keyframes bqIn { from { opacity: 0; transform: translateY(8px); } }
-.bq-img { flex: none; width: 60px; height: 61px; border-radius: 12px; object-fit: cover; background: #f4f1f1; cursor: pointer; }
+.bq-img { flex: none; align-self: stretch; width: 66px; height: auto; contain: size; border-radius: 12px; /* spans the text block so the photo lines up with the chips (top) and price (bottom) */ object-fit: cover; background: #f4f1f1; cursor: pointer; }
 .bq-info { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; }
 .bq-tags { display: flex; gap: 4px; }
 .bq-name { max-width: 100%; font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.28px; color: #4d4d4d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -55,7 +55,5 @@
 @keyframes bqSpark { from { opacity: .25; } to { opacity: 1; } }
 .bq-none > b { font-size: 18px; font-weight: 600; letter-spacing: -0.36px; color: #000; }
 .bq-none > p { font-size: 13px; line-height: 1.5; color: #8f8f8f; }
-.bq-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
-.bq-chips button { padding: 8px 14px; border: 1px solid var(--r) !important; border-radius: 20px !important; background: #fff !important; box-shadow: var(--hard); font-size: 13px; font-weight: 500; color: var(--r) !important; transition: transform .15s, box-shadow .15s; }
-.bq-chips button:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #000; }
+.bq-explore { margin-top: 16px; }
 @media (prefers-reduced-motion: reduce) { .bq-ill * { animation: none !important; } }

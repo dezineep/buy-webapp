@@ -78,3 +78,7 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
 .bv-num { flex: 1; min-width: 0; padding: 4px 4px 4px 12px; border: 0; outline: 0; background: none; font-size: 16px; font-weight: 500; letter-spacing: -0.48px; color: #454545; caret-color: var(--r); }
 .bv-num::placeholder { color: #b5b5b5; }
 .ba-sh-custom { padding-bottom: calc(24px + var(--sab)); }
+/* quick view close: a zero-height sticky row at the top of the scroll body, so the button keeps its spot over the
+   photo at rest and stays pinned while the body scrolls */
+.bp-qv-xpin { position: sticky; top: 4px; z-index: 3; height: 0; display: flex; justify-content: flex-end; padding-right: 4px; }
+.bp-qv-xpin .bp-qv-x { position: relative; top: 0; right: 0; flex: none; box-shadow: 0 2px 8px rgba(0, 0, 0, .08); }

@@ -2,8 +2,8 @@
    State lives in one mutable object (S) held in a ref; every action mutates it and calls commit() to re-render,
    exactly like the landing-page demo engine, so screens stay simple readers of S.
 
-   Screens: home, product{pid}, cart, address, order{id}, orders, store, refunds, refund{id}
-   Sheets : more, sort, amount, offers, variants{pid}, custom{pid}, quick{pid} (modal), details, pay, unlock{id} (modal) */
+   Screens: home, login, product{pid}, cart, address, order{id}, orders, store, refunds, refund{id}
+   Sheets : more, sort, amount, offers, variants{pid}, custom{pid}, quick{pid} (modal), otp, m17, pay, unlock{id} (modal) */
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import { P, OFFERS, PARTNER, STORE, IMG, GIFT, calcBill, lineInfo, lineKey, defaultSel, seedOrders, seedRefunds, seedAddresses } from './data.js';
 import { applyShop } from './shops.js';
@@ -37,6 +37,11 @@ export function BuyProvider({ children }) {
   const later = (name, fn, ms) => { clearTimeout(timers.current[name]); timers.current[name] = setTimeout(fn, ms); };
 
   const cur = () => S.stack[S.stack.length - 1];
+  const openLogin = () => {
+    S.login = { phone: S.user?.phone || '', name: S.user?.name || '', verified: !!S.user, otp: '', err: '', oerr: '' };
+    if (S.sheet) closeSheet();
+    if (cur().n !== 'login') go('login'); else commit();
+  };
   const toast = msg => { S.toast = { msg, id: Date.now() }; commit(); later('toast', () => { S.toast = null; commit(); }, 2200); };
 
   /* ---------- navigation (each push adds a browser history entry so the phone's back gesture works) ---------- */
@@ -158,7 +163,7 @@ export function BuyProvider({ children }) {
       if (S.stack.length > 1) pop(1);
       commit();
     },
-    m17: () => toast('BUY is a product of Modulus Seventeen'),
+    m17: () => openSheet('m17'),
     share: () => { const url = `modulusbuy.com/${STORE.slug}`; if (navigator.share) navigator.share({ title: STORE.name, url: 'https://' + url }).catch(() => {}); else toast(`Store link copied: ${url}`); },
     more: () => openSheet('more'),
     /* address book: opening it from the home "Deliver to" row / More sheet / cart picks the delivery address */
@@ -204,7 +209,7 @@ export function BuyProvider({ children }) {
     cart: () => {
       closeSheet();
       if (cur().n === 'cart') return;
-      if (!S.user) { S.toCart = true; S.udraft = null; openSheet('details'); return; }
+      if (!S.user) { S.toCart = true; openLogin(); return; }
       if (!S.addr) { S.toCart = true; toAddr(); return; }
       go('cart');
     },
@@ -212,23 +217,36 @@ export function BuyProvider({ children }) {
     amount: () => openSheet('amount'),
     checkout: () => {
       S.checkout = true;
-      if (!S.user) { S.udraft = null; openSheet('details'); }
+      if (!S.user) openLogin();
       else if (!S.addr) toAddr();
       else openSheet('pay');
     },
-    details: () => { S.udraft = null; openSheet('details'); },
-    udraft: (k, v) => { S.udraft = S.udraft || { name: S.user?.name || '', phone: S.user?.phone || '' }; S.udraft[k] = v; commit(); },
-    saveuser: () => {
-      const d = { name: S.udraft?.name ?? S.user?.name ?? '', phone: (S.udraft?.phone ?? S.user?.phone ?? '').replace(/\D/g, '') };
-      if (d.name.trim().length < 2) { S.uerr = 'Please enter your name'; return commit(); }
-      if (!/^[6-9]\d{9}$/.test(d.phone)) { S.uerr = 'Enter a valid 10-digit mobile number'; return commit(); }
-      S.uerr = ''; S.user = { name: d.name.trim(), phone: d.phone };
-      closeSheet();
-      if (S.toCart && !S.addr) toAddr();
-      else if (S.toCart) { S.toCart = false; go('cart'); }
-      else if (S.checkout && !S.addr) toAddr();
-      else if (S.checkout) setTimeout(() => openSheet('pay'), 330);
-      else toast('Details saved');
+    /* log in (Figma 724:2021 → OTP sheet 724:2395 → 724:2507): number → OTP → name. Any 6 digits verify in the demo. */
+    details: () => openLogin(),
+    lset: (k, v) => { S.login[k] = v; S.login.err = ''; commit(); },
+    sendotp: () => {
+      if (!/^[6-9]\d{9}$/.test(S.login.phone || '')) { S.login.err = 'Enter a valid 10-digit mobile number'; return commit(); }
+      S.login.err = ''; S.login.otp = ''; S.login.oerr = ''; openSheet('otp');
+    },
+    lotp: v => { S.login.otp = v.replace(/\D/g, '').slice(0, 6); S.login.oerr = ''; commit(); },
+    resendotp: () => { S.login.otp = ''; S.login.oerr = ''; commit(); toast(`New code sent to ****${S.login.phone.slice(-4)}`); },
+    verifyotp: () => {
+      if ((S.login.otp || '').length < 6) { S.login.oerr = 'Enter the 6-digit code'; return commit(); }
+      S.login.verified = true; closeSheet(); toast('Mobile number verified');
+    },
+    changephone: () => { closeSheet(); S.login.verified = false; S.login.focusKey = Date.now(); commit(); },
+    loginsave: () => {
+      const name = (S.login.name || '').trim();
+      if (name.length < 2) { S.login.err = 'Please enter your name'; return commit(); }
+      S.user = { name, phone: S.login.phone };
+      back();
+      later('login', () => {
+        if (S.toCart && !S.addr) toAddr();
+        else if (S.toCart) { S.toCart = false; go('cart'); }
+        else if (S.checkout && !S.addr) toAddr();
+        else if (S.checkout) openSheet('pay');
+        else toast(`Logged in as ${name}`);
+      }, 360);
     },
     draft: (k, v) => { S.draft = S.draft || {}; S.draft[k] = k === 'pin' ? v.replace(/\D/g, '') : v; commit(); },
     locate: () => { S.located = true; S.draft = { ...SAMPLE_ADDR }; commit(); toast('Location found'); },

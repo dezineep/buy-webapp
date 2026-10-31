@@ -47,7 +47,7 @@ function CatTabs() {
         {ind && <span className={'bh-cat-ind' + (ind.animate ? ' anim' : '')} style={{ transform: `translateX(${ind.x}px)`, width: ind.w }} aria-hidden="true"><i className="gap" /><i className="ft l" /><i className="ft r" /></span>}
         {CATEGORIES.map(c => (
           <button key={c.id} data-cat={c.id} role="tab" aria-selected={S.cat === c.id} className={'bh-cat' + (S.cat === c.id ? ' on' : '')} onClick={() => A.setcat(c.id)}>
-            <i className="bh-cat-ic" style={{ WebkitMaskImage: `url("${c.icon}")`, maskImage: `url("${c.icon}")` }} />
+            <span className="bh-cat-im">{c.img ? <img src={c.img} alt="" draggable="false" /> : <i className="bh-cat-ic" style={{ WebkitMaskImage: `url("${c.icon}")`, maskImage: `url("${c.icon}")` }} />}</span>
             <span>{c.label.map((l, i) => <span key={i}>{l}</span>)}</span>
           </button>
         ))}
