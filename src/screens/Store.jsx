@@ -3,6 +3,7 @@ import { useBuy } from '../engine.jsx';
 import { STORE, OFFERS, V2, inr } from '../data.js';
 import { Head, ICO, MapPin } from '../ui.jsx';
 import { iconUrl } from '../catIcons.js';
+import LiveMap, { STORE_LL } from '../LiveMap.jsx';
 
 const S_ = V2 + 'store/';
 const OI = { del: ['of-del.svg', 24], pct: ['of-pct.svg', 20], gift: ['of-gift.svg', 20] };
@@ -29,7 +30,7 @@ export default function Store() {
           <div className="bs-days">{STORE.days.map(([d, a, b]) => <span key={d} className={a ? '' : 'off'}><b>{d}</b><small>{a ? <>{a} -<br />{b}</> : 'Closed'}</small></span>)}</div>
         </section>
         <section><p className="bs-sub">Store Location</p>
-          <div className="bs-map"><img className="bs-mapimg" src={S_ + 'map.png'} alt="Map" /><MapPin icon={iconUrl('store-01')} /><button className="bs-ob bs-dir" onClick={A.directions}>Get Directions</button></div>
+          <div className="bs-map"><LiveMap center={STORE_LL} zoom={16} interactive={false}><MapPin icon={iconUrl('store-01')} /></LiveMap><button className="bs-ob bs-dir" onClick={A.directions}>Get Directions</button></div>
         </section>
         <section><p className="bs-sub">Offers Provided</p>
           <div className="bs-ofl">{OFFERS.map(o => (

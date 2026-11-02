@@ -62,8 +62,8 @@ function NoResults({ q }) {
         <g className="bq-bag">
           {/* hard offset shadow, then the bag */}
           <path d="M57 64h96l8 84H49Z" transform="translate(4 5)" fill="#000" />
-          <path d="M57 64h96l8 84H49Z" fill="#f4c8c9" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-          <path d="M57 64h96l2 16H55Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M57 64h96l8 84H49Z" fill="var(--pk)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M57 64h96l2 16H55Z" fill="var(--r)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
           <g className="bq-hanger">
             <path d="M99 37a6 6 0 1 1 6 6v7" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
             <path d="M105 50 80 64M105 50l25 14" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
@@ -75,9 +75,9 @@ function NoResults({ q }) {
           <g transform="translate(150 92)">
             <path d="M18 18l17 17" stroke="#000" strokeWidth="9" strokeLinecap="round" transform="translate(3 4)" />
             <circle r="22" fill="#000" transform="translate(3 4)" />
-            <path d="M18 18l17 17" stroke="#a52226" strokeWidth="9" strokeLinecap="round" />
+            <path d="M18 18l17 17" stroke="var(--r)" strokeWidth="9" strokeLinecap="round" />
             <circle r="22" fill="#fff" stroke="#000" strokeWidth="2.5" />
-            <circle r="15" fill="#fbeaea" />
+            <circle r="15" fill="var(--pk2)" />
             <text className="bq-qm" y="7" textAnchor="middle">?</text>
           </g>
         </g>

@@ -5,7 +5,7 @@
 
 /* banner 201 tall radius 20; logo 92 overlaps its bottom by 31px, 16px in from the banner edge */
 .bs-hero { position: relative; }
-.bs-ban { height: 201px; border-radius: 20px; overflow: hidden; background: #f5cccd; }
+.bs-ban { height: 201px; border-radius: 20px; overflow: hidden; background: var(--tint2); }
 .bs-ban img { width: 100%; height: 100%; object-fit: cover; }
 .bs-id { display: flex; align-items: flex-end; gap: 8px; margin: -31px 0 0 16px; position: relative; }
 .bs-logo { flex: none; width: 92px; height: 92px; border: 1px solid #000; border-radius: 500px; object-fit: cover; background: #fff; }

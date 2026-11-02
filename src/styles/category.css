@@ -17,7 +17,7 @@
 .bk.searching .bk-sbar { opacity: 1; transform: none; clip-path: inset(0 0 0 0 round 20px); }
 .bk-sbar .bk-sic { width: 16px; height: 16px; }
 .ba .bk-sbar input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; padding: 0; font: inherit; font-size: 14px; line-height: 1.2; letter-spacing: -0.14px; color: var(--r); }
-.bk-sbar input::placeholder { color: rgba(165, 34, 38, .5); }
+.bk-sbar input::placeholder { color: rgba(var(--r-rgb), .5); }
 .bk-sbar button { flex: none; display: grid; place-items: center; width: 24px; height: 18px; }
 
 .bk-count { display: flex; align-items: center; justify-content: space-between; height: 18px; margin: 0 16px 16px; }
@@ -27,7 +27,7 @@
 
 /* product page: category row above the description (Figma 2189:5456) */
 .ba .bk-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 20px; background: #fff; text-align: left; transition: transform .15s, background-color .2s; }
-.ba .bk-row:active { transform: scale(.985); background: #fbf3f3; }
+.ba .bk-row:active { transform: scale(.985); background: var(--soft); }
 .bk-row-l { display: flex; align-items: center; gap: 4px; min-width: 0; }
 .bk-row-ic { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 28px; overflow: hidden; background: #fbeee4; }
 .bk-row-ic img { width: 30px; height: 30px; object-fit: contain; }

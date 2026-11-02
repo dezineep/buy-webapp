@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useBuy } from './engine.jsx';
 import { P, PRODUCTS, CATEGORIES, V2, FG, STORE, OFFERS, inr, calcBill, unitPrice, mrpOf, packPrice, customUnit, lineKey, selLabel, packText } from './data.js';
 import { shopOf } from './shops.js';
+import { THEME, DEFAULT_HEX } from './theme.js';
 import { Otp } from './screens/Login.jsx';
 import { iconUrl } from './catIcons.js';
 import { SheetHead, Ring, PriceBox, PriceRow, BigStep, ICO, MiniCard } from './ui.jsx';
@@ -35,9 +36,14 @@ function More() {
           <Tile on={A.support} icon="ic-support.svg" l1="Store" l2="Support" />
           {u ? <Tile on={A.logout} icon="ic-logout.svg" l1="Log Out" l2="Now" /> : <Tile on={A.details} icon="ic-logout.svg" l1="Log In" l2="Now" />}
         </div>
-        <button className="bsh-shop" onClick={A.openpicker}>
+        <button className="bsh-shop" onClick={() => A.openpicker(1)}>
           <i style={{ WebkitMaskImage: `url("${iconUrl(shopOf(S.shop).icon)}")`, maskImage: `url("${iconUrl(shopOf(S.shop).icon)}")` }} aria-hidden="true" />
           <span><small>Shop type</small><b>{shopOf(S.shop).name}</b></span>
+          <em>Change</em>
+        </button>
+        <button className="bsh-shop" onClick={() => A.openpicker(2)}>
+          <i className="bsh-theme-dot" aria-hidden="true" />
+          <span><small>Brand colour</small><b>{THEME.hex === DEFAULT_HEX ? 'BUY Red (default)' : THEME.hex.toUpperCase()}</b></span>
           <em>Change</em>
         </button>
       </div>

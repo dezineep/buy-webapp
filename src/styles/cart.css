@@ -58,7 +58,7 @@
 .bc-hlist { display: flex; gap: 8px; margin: 0 -16px; padding: 0 16px 4px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity; scroll-padding: 0 16px; }
 .bc-hlist::-webkit-scrollbar { display: none; }
 .bc-mini { position: relative; flex: 0 0 160px; display: flex; flex-direction: column; gap: 8px; padding: 9.14px; border: 1.14px solid rgba(0, 0, 0, .09); border-radius: 20px; background: #fff; scroll-snap-align: start; transition: background .3s, border-color .3s; }
-.bc-mini.in-cart { background: rgba(165, 34, 38, .05); border-color: rgba(165, 34, 38, .79); }
+.bc-mini.in-cart { background: rgba(var(--r-rgb), .05); border-color: rgba(var(--r-rgb), .79); }
 .bc .bc-mini-img { position: relative; height: 140px; border-radius: 12px; overflow: visible; cursor: pointer; }
 .bc .bc-mini-img > img { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }
 /* Figma 747:1549: button 14.86 / 107.86 from the card edge = 4.6px in and 12.4px up from the image's bottom-left */
@@ -88,9 +88,9 @@
 .bc-field > span:first-child { font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; color: #585858; }
 .bc-field input { width: 100%; height: 49px; padding: 0 16px; border: 1px solid #ddd; border-radius: 20px; background: #fff; color: #000; font-size: 14px; line-height: 1.2; letter-spacing: -0.14px; outline: 0; transition: border-color .2s, box-shadow .2s; }
 .bc-field input::placeholder { color: #aba7a7; }
-.bc-field input:focus { border-color: var(--r); box-shadow: 0 0 0 3px rgba(165, 34, 38, .1); }
+.bc-field input:focus { border-color: var(--r); box-shadow: 0 0 0 3px rgba(var(--r-rgb), .1); }
 .bc-phone { display: flex; align-items: center; height: 49px; border: 1px solid #ddd; border-radius: 20px; background: #fff; overflow: hidden; transition: border-color .2s, box-shadow .2s; }
-.bc-phone:focus-within { border-color: var(--r); box-shadow: 0 0 0 3px rgba(165, 34, 38, .1); }
+.bc-phone:focus-within { border-color: var(--r); box-shadow: 0 0 0 3px rgba(var(--r-rgb), .1); }
 .bc-phone em { display: grid; place-items: center; align-self: stretch; padding: 0 12px 0 16px; border-right: 1px solid #ddd; font-style: normal; font-size: 14px; font-weight: 500; color: #000; }
 .bc-phone input { flex: 1; min-width: 0; height: 100%; border: 0; border-radius: 0; box-shadow: none !important; }
 .bc-note { font-size: 12px; line-height: 1.4; letter-spacing: -0.24px; color: #a0a0a0; }
@@ -103,7 +103,7 @@
 .bc-pay-n { padding: 4px 8px; border-radius: 33px; background: var(--pk3); color: var(--r); font-size: 10px; line-height: 1.1; }
 .bc-pay-o { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
 .bc-pay-o label { display: flex; align-items: center; gap: 8px; min-height: 58px; padding: 8px 12px; border: 1px solid #eaeaea; border-radius: 15px; background: #fff; cursor: pointer; transition: border-color .2s, background .2s; }
-.bc-pay-o label:has(input:checked) { border-color: var(--r); background: rgba(165, 34, 38, .05); }
+.bc-pay-o label:has(input:checked) { border-color: var(--r); background: rgba(var(--r-rgb), .05); }
 .bc-pay-o input { flex: none; width: 18px; height: 18px; margin: 0; accent-color: var(--r); }
 .bc-pay-t { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .bc-pay-t b { font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.28px; color: #000; }
@@ -146,7 +146,7 @@
 .bu-saved { font-size: 28px; font-weight: 600; letter-spacing: -.8px; margin: 2px 0 12px; animation: buPop .5s .5s both cubic-bezier(.34,1.56,.64,1); }
 .bu-ok { position: relative; z-index: 2; }
 .bu-conf { position: absolute; inset: 0; pointer-events: none; }
-.bu-conf i { position: absolute; top: -10px; width: 7px; height: 7px; background: #a52226; animation: buFall 1.8s ease-in forwards; }
+.bu-conf i { position: absolute; top: -10px; width: 7px; height: 7px; background: var(--r); animation: buFall 1.8s ease-in forwards; }
 .bu-conf i:nth-child(3n) { background: #f2b233; } .bu-conf i:nth-child(3n+1) { background: #01ae0f; }
 .bu-conf i:nth-child(1){left:6%;animation-delay:.1s}.bu-conf i:nth-child(2){left:14%;animation-delay:.3s}.bu-conf i:nth-child(3){left:22%;animation-delay:.05s}.bu-conf i:nth-child(4){left:30%;animation-delay:.4s}.bu-conf i:nth-child(5){left:38%;animation-delay:.2s}.bu-conf i:nth-child(6){left:46%;animation-delay:.5s}.bu-conf i:nth-child(7){left:54%;animation-delay:.15s}.bu-conf i:nth-child(8){left:62%;animation-delay:.35s}.bu-conf i:nth-child(9){left:70%;animation-delay:.25s}.bu-conf i:nth-child(10){left:78%;animation-delay:.45s}.bu-conf i:nth-child(11){left:86%;animation-delay:.1s}.bu-conf i:nth-child(12){left:94%;animation-delay:.3s}.bu-conf i:nth-child(13){left:10%;animation-delay:.6s}.bu-conf i:nth-child(14){left:90%;animation-delay:.55s}
 @keyframes buRide { 50% { transform: translate(3px, -3px); } }
@@ -156,17 +156,17 @@
 @keyframes buRay { 0% { opacity: 0; transform: rotate(calc(var(--k) * 36deg)) translateY(-38px); } 40% { opacity: 1; } 100% { opacity: 0; transform: rotate(calc(var(--k) * 36deg)) translateY(-52px); } }
 @keyframes buFall { to { transform: translateY(330px) rotate(540deg); opacity: 0; } }
 
-.bc-addr { display: flex; align-items: center; gap: 8px; width: calc(100% - 32px); margin: -6px 16px 16px; position: relative; z-index: 4; padding: 10px 12px; border: 1px solid rgba(165,34,38,.18); border-radius: 14px; background: #fff; text-align: left; font-size: 13px; color: #777; cursor: pointer; }
+.bc-addr { display: flex; align-items: center; gap: 8px; width: calc(100% - 32px); margin: -6px 16px 16px; position: relative; z-index: 4; padding: 10px 12px; border: 1px solid rgba(var(--r-rgb),.18); border-radius: 14px; background: #fff; text-align: left; font-size: 13px; color: #777; cursor: pointer; }
 .bc-addr img { width: 14px; height: 14px; flex: none; }
 .bc-addr span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bc-addr b { color: #111; font-weight: 500; }
-.bc-addr em { font-style: normal; flex: none; color: #a52226; font-weight: 600; font-size: 12px; text-decoration: underline; }
+.bc-addr em { font-style: normal; flex: none; color: var(--r); font-weight: 600; font-size: 12px; text-decoration: underline; }
 
 /* empty-cart illustration (see EmptyCart in Cart.jsx) */
 .bc-ill { display: block; width: 220px; height: 170px; margin-bottom: 4px; overflow: visible; }
 .bc-ill * { transform-box: fill-box; transform-origin: center; }
-.bc-floor { fill: #f4e3e3; animation: bcFloor 2.4s ease-in-out infinite; }
-.bc-sparks path, .bc-speed path { fill: none; stroke: #a52226; stroke-width: 2.5; stroke-linecap: round; }
+.bc-floor { fill: var(--soft); animation: bcFloor 2.4s ease-in-out infinite; }
+.bc-sparks path, .bc-speed path { fill: none; stroke: var(--r); stroke-width: 2.5; stroke-linecap: round; }
 .bc-sparks circle { fill: #f2b233; }
 .bc-sparks > * { animation: bcSpark 1.6s ease-in-out infinite alternate; }
 .bc-sparks > :nth-child(2) { animation-delay: .4s; } .bc-sparks > :nth-child(3) { animation-delay: .8s; } .bc-sparks > :nth-child(4) { animation-delay: 1.2s; }

@@ -5,6 +5,7 @@
 import { useBuy } from '../engine.jsx';
 import { STORE, OFFERS, DELIVERY, V2, FG, inr, calcBill } from '../data.js';
 import { Head, MapPin } from '../ui.jsx';
+import LiveMap, { BLR } from '../LiveMap.jsx';
 
 const Q = V2 + 'addr/';
 const STATES = ['Karnataka', 'Maharashtra', 'Tamil Nadu', 'Delhi', 'West Bengal', 'Telangana', 'Kerala', 'Gujarat'];
@@ -29,13 +30,13 @@ export default function Address() {
         sub={current ? 'Save the address and select as Delivery location' : first ? 'Add your address once, we’ll remember it for next time' : 'Enter the address details to get the order delivery'} />
       <div className="na-body">
         {current ? (
-          <div className="na-map tall"><img className="na-mapimg" src={Q + 'map.png'} alt="Map of your current location" /><MapPin drop /></div>
+          <div className="na-map tall"><LiveMap center={S.mapGo || BLR} onMove={A.mapmoved}><MapPin drop /></LiveMap>{S.locating ? <span className="na-finding">Finding your location…</span> : null}</div>
         ) : (
           <div className="na-top">
-            <label className="na-search"><img src={Q + 'search-16.svg'} width="16" height="16" alt="" /><input placeholder="Search your area for delivery" aria-label="Search your area for delivery" /></label>
+            <label className="na-search"><img src={Q + 'search-16.svg'} width="16" height="16" alt="" /><input placeholder="Search your area for delivery" aria-label="Search your area for delivery" enterKeyHint="search" onKeyDown={e => { if (e.key === 'Enter') { A.searcharea(e.currentTarget.value); e.currentTarget.blur(); } }} /></label>
             <div className="na-map">
-              <img className="na-mapimg" src={Q + 'map.png'} alt="Map" />
-              <MapPin drop={S.located} />
+              <LiveMap center={S.mapGo || BLR} onMove={A.mapmoved}><MapPin drop={S.located} /></LiveMap>
+              {S.locating ? <span className="na-finding">Finding your location…</span> : null}
               <button className="na-loc" onClick={A.locate}><span className="na-loc-ic"><img src={FG + 'address/locate.svg'} width="16.875" height="16.875" alt="" /></span>Use Current Location</button>
             </div>
           </div>

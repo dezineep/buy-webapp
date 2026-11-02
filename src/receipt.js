@@ -1,5 +1,6 @@
 /* Order receipt. downloadReceipt saves a PDF directly; receiptHTML is the same receipt as a styled HTML page. */
 import { STORE, inr, fmtTime, fmtShort } from './data.js';
+import { THEME, hexToRgb } from './theme.js';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -60,7 +61,8 @@ export function receiptHTML(o) {
 
 /* Download Receipt: builds a one-page PDF (jsPDF, loaded only when needed) and saves it straight away as
    BUY-Receipt-<id>.pdf — no new tab, no print sheet. Amounts use "Rs." because the built-in PDF fonts have no ₹. */
-const R = [165, 34, 38], INK = [34, 34, 34], MUTED = [142, 142, 142], LINE = [228, 228, 228], GREEN = [1, 138, 12];
+let R = [165, 34, 38];
+const INK = [34, 34, 34], MUTED = [142, 142, 142], LINE = [228, 228, 228], GREEN = [1, 138, 12];
 const rs = n => 'Rs. ' + Math.round(n).toLocaleString('en-IN');
 
 export async function downloadReceipt(o) {
@@ -75,6 +77,8 @@ export async function downloadReceipt(o) {
 
 /* draws the receipt top-down and returns where the content ends */
 function drawReceipt(doc, o) {
+  R = hexToRgb(THEME['--r']); // the store's theme colour
+  const TINT = hexToRgb(THEME['--tint']);
   const b = o.bill || {}, a = o.addr || {}, u = o.user || {};
   const W = doc.internal.pageSize.getWidth(), M = 32;
   let y = 0;
@@ -85,7 +89,7 @@ function drawReceipt(doc, o) {
   const rule = (yy, dash) => { doc.setDrawColor(...LINE); doc.setLineWidth(.8); if (dash) doc.setLineDashPattern([3, 3], 0); doc.line(M, yy, W - M, yy); doc.setLineDashPattern([], 0); };
 
   // header band
-  doc.setFillColor(249, 231, 232); doc.rect(0, 0, W, 96, 'F');
+  doc.setFillColor(...TINT); doc.rect(0, 0, W, 96, 'F');
   text(STORE.name, M, 36, { size: 16, bold: true });
   text(`${STORE.area} · ${STORE.phone}`, M, 52, { size: 8.5, color: MUTED });
   doc.setFillColor(...R); doc.roundedRect(W - M - 46, 24, 46, 18, 9, 9, 'F');

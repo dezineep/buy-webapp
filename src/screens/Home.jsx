@@ -112,13 +112,13 @@ export default function Home({ scRef }) {
   }, []);
 
   /* store bar intro: only the logo shows and spins, then the name / address and the three buttons fly out of it;
-     after ~8s the name and address tuck back into the logo (tap the logo for store details). Replays whenever the
+     the name then stays open (tap the pill for store details). Replays whenever the
      shop-type picker closes (first open and every shop switch). */
   const [intro, setIntro] = useState('i0');
   useEffect(() => {
     if (S.picker) { setIntro('i0'); return; }
-    const t1 = setTimeout(() => setIntro('i1'), 380), t2 = setTimeout(() => setIntro('i2'), 8800);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const t1 = setTimeout(() => setIntro('i1'), 380);
+    return () => clearTimeout(t1);
   }, [S.picker, S.shop]);
 
   // banner auto-advance
@@ -153,7 +153,7 @@ export default function Home({ scRef }) {
       <div ref={top} className={'bh-top ' + intro}>
         <button className="bh-store" onClick={A.store} aria-label={`${STORE.name} store details`}>
           <img className="bh-logo" src={STORE.logo} alt="" />
-          <span className="bh-store-t"><b>{STORE.name} {ICO.verified()}</b><small>{STORE.area}</small></span>
+          <span className="bh-store-t"><b><span>{STORE.name}</span>{ICO.verified()}</b></span>
         </button>
         <span className="bh-btns">
           <button className="ba-rbtn navy" onClick={A.m17} aria-label="Modulus Seventeen">{ICO.m17()}</button>

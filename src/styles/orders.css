@@ -4,8 +4,8 @@
 /* filter tabs (857:1963) */
 .bm-tabs { display: flex; gap: 4px; align-items: center; overflow-x: auto; scrollbar-width: none; }
 .bm-tabs::-webkit-scrollbar { display: none; }
-.bm-tab { flex: none; display: flex; align-items: center; justify-content: center; padding: 7px 16px; border-radius: 10px; border: 1px solid rgba(165, 34, 38, .5); background: rgba(165, 34, 38, .05); color: rgba(165, 34, 38, .69); font-size: 12px; font-weight: 400; line-height: 1.1; letter-spacing: -0.12px; white-space: nowrap; }
-.bm-tab.on { background: #a52226; border-color: transparent; border-width: 0; color: #fff; }
+.bm-tab { flex: none; display: flex; align-items: center; justify-content: center; padding: 7px 16px; border-radius: 10px; border: 1px solid rgba(var(--r-rgb), .5); background: rgba(var(--r-rgb), .05); color: rgba(var(--r-rgb), .69); font-size: 12px; font-weight: 400; line-height: 1.1; letter-spacing: -0.12px; white-space: nowrap; }
+.bm-tab.on { background: var(--r); border-color: transparent; border-width: 0; color: #fff; }
 
 /* list + divider (857:2260 / line 18) */
 .bm-list { display: flex; flex-direction: column; gap: 8px; }
@@ -37,9 +37,9 @@
 
 /* actions (857:2257) */
 .bm-acts { display: flex; gap: 8px; align-items: center; }
-.bm-n, .bm-again { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 8px 16px; background: #fff; border: 1px solid #a52226; border-radius: 10px; box-shadow: 2px 3px 0 #000; color: #a52226; font-size: 16px; font-weight: 500; line-height: 1.2; letter-spacing: -0.48px; white-space: nowrap; }
+.bm-n, .bm-again { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 8px 16px; background: #fff; border: 1px solid var(--r); border-radius: 10px; box-shadow: 2px 3px 0 #000; color: var(--r); font-size: 16px; font-weight: 500; line-height: 1.2; letter-spacing: -0.48px; white-space: nowrap; }
 .bm-n { flex: none; }
 .bm-again { flex: 1 1 0; min-width: max-content; }
 .bm-again img { width: 18px; height: 18px; flex: none; }
-.bm-n em { font-style: normal; width: 20px; height: 20px; border-radius: 51px; background: #a52226; color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; }
+.bm-n em { font-style: normal; width: 20px; height: 20px; border-radius: 51px; background: var(--r); color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; }
 .bm-it i small{font-size:10px}

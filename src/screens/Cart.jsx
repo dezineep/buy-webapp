@@ -45,14 +45,14 @@ function EmptyCart() {
       <g className="bc-trolley">
         <path d="M28 42h16l10 16" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
         <path d="M54 58h126l-12 56H66Z" transform="translate(4 5)" fill="#000" />
-        <path d="M54 58h126l-12 56H66Z" fill="#f4c8c9" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d="M54 58h126l-3 14H57Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M54 58h126l-12 56H66Z" fill="var(--pk)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M54 58h126l-3 14H57Z" fill="var(--r)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
         <path d="M66 114l4 14h96" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
         <circle className="bc-eye" cx="104" cy="88" r="3" fill="#000" /><circle className="bc-eye" cx="130" cy="88" r="3" fill="#000" />
         <path d="M107 103c4-5 16-5 20 0" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
         {[[84, 141], [154, 141]].map(([x, y]) => (
           <g key={x} transform={`translate(${x} ${y})`}>
-            <g className="bc-wheel"><circle r="10" fill="#fff" stroke="#000" strokeWidth="2.5" /><path d="M0-6v12M-6 0h12" stroke="#a52226" strokeWidth="2.2" strokeLinecap="round" /></g>
+            <g className="bc-wheel"><circle r="10" fill="#fff" stroke="#000" strokeWidth="2.5" /><path d="M0-6v12M-6 0h12" stroke="var(--r)" strokeWidth="2.2" strokeLinecap="round" /></g>
           </g>
         ))}
       </g>

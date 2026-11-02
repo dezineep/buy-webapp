@@ -15,7 +15,7 @@ function Badge({ x, y, r = 16 }) {
             <line key={i} x1="0" y1={-(r + 5)} x2="0" y2={-(r + 11)} transform={`rotate(${i * 36})`} style={{ '--i': i }} />
           ))}
         </g>
-        <circle r={r} fill="#a52226" />
+        <circle r={r} fill="var(--r)" />
         <circle r={r - 4} fill="none" stroke="#fff" strokeOpacity=".22" strokeWidth="2" />
         <path className="boa-tick" d={`M${-r * .42} 0.5 L${-r * .1} ${r * .32} L${r * .45} ${-r * .3}`} />
       </g>
@@ -35,25 +35,25 @@ export function PlacedArt() {
         <path d="M34 82h30v52l-5-3-5 3-5-3-5 3-5-3-5 3Z" transform="translate(3 4)" fill="#000" />
         <path d="M34 82h30v52l-5-3-5 3-5-3-5 3-5-3-5 3Z" fill="#fff" stroke="#000" strokeWidth="2.2" strokeLinejoin="round" />
         <path d="M40 92h18M40 100h14M40 108h18M40 118h10" stroke="#c9c9c9" strokeWidth="2.4" strokeLinecap="round" />
-        <path d="M52 118h6" stroke="#a52226" strokeWidth="2.4" strokeLinecap="round" />
+        <path d="M52 118h6" stroke="var(--r)" strokeWidth="2.4" strokeLinecap="round" />
       </g>
       <g className="bpl-box">
         <path d="M66 74h82v76H66ZM148 74l22-16v74l-22 18Z" transform="translate(4 5)" fill="#000" />
-        <path d="M148 74l22-16v74l-22 18Z" fill="#e9a9ab" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d="M66 74h82v76H66Z" fill="#f4c8c9" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d="M66 74l22-16h82l-22 16Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M148 74l22-16v74l-22 18Z" fill="var(--side)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M66 74h82v76H66Z" fill="var(--pk)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M66 74l22-16h82l-22 16Z" fill="var(--r)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
         <path d="M100 74l22-16h14l-22 16Z" fill="#f2d3a4" stroke="#000" strokeWidth="2" strokeLinejoin="round" />
         <path d="M100 74h14v14l-7-4-7 4Z" fill="#f2d3a4" stroke="#000" strokeWidth="2" strokeLinejoin="round" />
         <circle className="bpl-eye" cx="94" cy="108" r="3.2" fill="#000" /><circle className="bpl-eye" cx="120" cy="108" r="3.2" fill="#000" />
         <path d="M98 122q9 9 18 0" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
-        <circle cx="86" cy="120" r="4" fill="#f2a0a4" opacity=".8" /><circle cx="128" cy="120" r="4" fill="#f2a0a4" opacity=".8" />
+        <circle cx="86" cy="120" r="4" fill="var(--blush)" opacity=".8" /><circle cx="128" cy="120" r="4" fill="var(--blush)" opacity=".8" />
       </g>
       {/* tick badge stamped on the corner */}
       <g transform="translate(166 60)">
         <g className="bpl-badge">
           <g className="bpl-rays">{Array.from({ length: 8 }, (_, i) => <line key={i} x1="0" y1="-24" x2="0" y2="-31" transform={`rotate(${i * 45})`} />)}</g>
           <circle r="17" transform="translate(3 4)" fill="#000" />
-          <circle r="17" fill="#a52226" stroke="#000" strokeWidth="2.5" />
+          <circle r="17" fill="var(--r)" stroke="#000" strokeWidth="2.5" />
           <path className="bpl-tick" d="M-7.5 0.5l5 5L8-5.5" />
         </g>
       </g>
@@ -75,7 +75,7 @@ export function DeliveredArt() {
       <g className="bod-sparks"><path d="M22 36v11M16.5 41.5h11" /><path d="M200 26v9M195.5 30.5h9" /><circle cx="204" cy="118" r="3.5" /><circle cx="26" cy="112" r="2.5" /></g>
       <g className="bod-box">
         {/* inside of the box, seen once the flaps open */}
-        <path d="M66 80l22-16h82l-22 16Z" fill="#8f3a3d" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M66 80l22-16h82l-22 16Z" fill="var(--r-deep)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
         {/* green tick badge waits inside the box and rises out */}
         <g className="bod-rise">
           <g transform="translate(118 98)">
@@ -89,17 +89,17 @@ export function DeliveredArt() {
         </g>
         {/* hard offset shadow, side, front */}
         <path d="M66 80h82v70H66ZM148 80l22-16v72l-22 14Z" transform="translate(4 5)" fill="#000" />
-        <path d="M148 80l22-16v72l-22 14Z" fill="#e9a9ab" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d="M66 80h82v70H66Z" fill="#f4c8c9" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M148 80l22-16v72l-22 14Z" fill="var(--side)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M66 80h82v70H66Z" fill="var(--pk)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
         {/* happy face: ^ ^ eyes, big smile, blush */}
         <path d="M89 111q5-6 10 0M115 111q5-6 10 0" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
-        <path className="bod-smile" d="M96 124q11 12 22 0Z" fill="#a52226" stroke="#000" strokeWidth="2.2" strokeLinejoin="round" />
-        <circle cx="84" cy="122" r="4" fill="#f2a0a4" opacity=".8" /><circle cx="130" cy="122" r="4" fill="#f2a0a4" opacity=".8" />
-        <polygon points={L_CLOSED} fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round">{flap(L_CLOSED, L_UP, L_OPEN)}</polygon>
-        <polygon points={R_CLOSED} fill="#c23a3e" stroke="#000" strokeWidth="2.5" strokeLinejoin="round">{flap(R_CLOSED, R_UP, R_OPEN)}</polygon>
+        <path className="bod-smile" d="M96 124q11 12 22 0Z" fill="var(--r)" stroke="#000" strokeWidth="2.2" strokeLinejoin="round" />
+        <circle cx="84" cy="122" r="4" fill="var(--blush)" opacity=".8" /><circle cx="130" cy="122" r="4" fill="var(--blush)" opacity=".8" />
+        <polygon points={L_CLOSED} fill="var(--r)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round">{flap(L_CLOSED, L_UP, L_OPEN)}</polygon>
+        <polygon points={R_CLOSED} fill="var(--r2)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round">{flap(R_CLOSED, R_UP, R_OPEN)}</polygon>
       </g>
       <g className="bod-confetti">
-        {[[78, 40, '#f2b233'], [156, 30, '#a52226'], [62, 62, '#01ae0f'], [176, 52, '#3f4ee3'], [118, 16, '#f2b233'], [92, 18, '#a52226'], [168, 84, '#01ae0f'], [48, 88, '#f2a0a4'], [140, 12, '#3f4ee3']].map(([cx, cy, c], i) => (
+        {[[78, 40, '#f2b233'], [156, 30, 'var(--r)'], [62, 62, '#01ae0f'], [176, 52, '#3f4ee3'], [118, 16, '#f2b233'], [92, 18, 'var(--r)'], [168, 84, '#01ae0f'], [48, 88, 'var(--blush)'], [140, 12, '#3f4ee3']].map(([cx, cy, c], i) => (
           <rect key={i} x={cx - 3.5} y={cy - 2.5} width="7" height="5" rx="1" fill={c} stroke="#000" strokeWidth=".8" style={{ '--i': i, '--dx': `${(cx - 118) * .55}px`, '--dy': `${(cy - 70) * .5}px` }} />
         ))}
       </g>
@@ -127,9 +127,9 @@ export function CancelledArt() {
       <g className="boc-box">
         {/* hard offset shadow, then side, front, lid */}
         <path d="M66 74h82v76H66ZM148 74l22-16v74l-22 18Z" transform="translate(4 5)" fill="#000" />
-        <path d="M148 74l22-16v74l-22 18Z" fill="#e9a9ab" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d="M66 74h82v76H66Z" fill="#f4c8c9" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d="M66 74l22-16h82l-22 16Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M148 74l22-16v74l-22 18Z" fill="var(--side)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M66 74h82v76H66Z" fill="var(--pk)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M66 74l22-16h82l-22 16Z" fill="var(--r)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
         <path d="M100 74l22-16h14l-22 16Z" fill="#f2d3a4" stroke="#000" strokeWidth="2" strokeLinejoin="round" />
         <path d="M100 74h14v14l-7-4-7 4Z" fill="#f2d3a4" stroke="#000" strokeWidth="2" strokeLinejoin="round" />
         <circle className="boc-eye" cx="94" cy="108" r="3.2" fill="#000" /><circle className="boc-eye" cx="120" cy="108" r="3.2" fill="#000" />
@@ -140,7 +140,7 @@ export function CancelledArt() {
       <g className="boc-x" transform="translate(166 60)">
         <g className="boc-x-in">
           <circle r="17" transform="translate(3 4)" fill="#000" />
-          <circle r="17" fill="#a52226" stroke="#000" strokeWidth="2.5" />
+          <circle r="17" fill="var(--r)" stroke="#000" strokeWidth="2.5" />
           <path d="M-6.5-6.5l13 13M6.5-6.5l-13 13" stroke="#fff" strokeWidth="3.4" strokeLinecap="round" />
         </g>
       </g>
@@ -155,7 +155,7 @@ export function RideArt({ moving = true }) {
     <g transform={`translate(${cx} ${cy})`}>
       <circle r="15" transform="translate(3 4)" fill="#000" />
       <circle r="15" fill="#fff" stroke="#000" strokeWidth="2.5" />
-      <g className="bor-spin"><path d="M0-9v18M-9 0h18" stroke="#a52226" strokeWidth="2.6" strokeLinecap="round" /></g>
+      <g className="bor-spin"><path d="M0-9v18M-9 0h18" stroke="var(--r)" strokeWidth="2.6" strokeLinecap="round" /></g>
       <circle r="3.4" fill="#000" />
     </g>
   );
@@ -169,18 +169,18 @@ export function RideArt({ moving = true }) {
         {/* parcel strapped on the back seat */}
         <g className="bor-box">
           <path d="M50 70h52v42H50ZM102 70l14-10v40l-14 12Z" transform="translate(4 5)" fill="#000" />
-          <path d="M102 70l14-10v40l-14 12Z" fill="#e9a9ab" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-          <path d="M50 70h52v42H50Z" fill="#f4c8c9" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-          <path d="M50 70l14-10h52l-14 10Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M102 70l14-10v40l-14 12Z" fill="var(--side)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M50 70h52v42H50Z" fill="var(--pk)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M50 70l14-10h52l-14 10Z" fill="var(--r)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
           <path d="M70 70h12v10l-6-3-6 3Z" fill="#f2d3a4" stroke="#000" strokeWidth="1.8" strokeLinejoin="round" />
           <path d="M64 90q4-5 8 0M80 90q4-5 8 0" fill="none" stroke="#000" strokeWidth="2.2" strokeLinecap="round" />
           <path d="M68 99q8 8 16 0" fill="none" stroke="#000" strokeWidth="2.2" strokeLinecap="round" />
         </g>
         {/* scooter: rear body + seat, floorboard, front shield, handlebar */}
         <path d="M44 116h76v14H40q0-14 4-14Z" transform="translate(4 5)" fill="#000" />
-        <path d="M44 116h76v14H40q0-14 4-14Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d="M118 130h30l-2-8h-28Z" fill="#c23a3e" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d="M146 132l14-50h10l-12 52Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M44 116h76v14H40q0-14 4-14Z" fill="var(--r)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M118 130h30l-2-8h-28Z" fill="var(--r2)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M146 132l14-50h10l-12 52Z" fill="var(--r)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
         <path d="M156 80l-10-4M160 80h14" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" />
         <circle cx="172" cy="94" r="5" fill="#f2b233" stroke="#000" strokeWidth="2" />
         <path className="bor-beam" d="M178 92l26-8v22Z" fill="#f2b233" opacity=".35" />
@@ -199,15 +199,15 @@ export function PackedArt() {
       <g className="bop-sparks"><path d="M28 38v10M23 43h10" /><path d="M192 24v9M187.5 28.5h9" /><circle cx="198" cy="110" r="3.5" /><circle cx="24" cy="104" r="2.5" /></g>
       <g className="bop-box">
         <path d="M60 78h88v72H60ZM148 78l24-17v72l-24 17Z" transform="translate(4 5)" fill="#000" />
-        <path d="M148 78l24-17v72l-24 17Z" fill="#e9a9ab" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d="M60 78h88v72H60Z" fill="#f4c8c9" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d="M60 78l24-17h88l-24 17Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M148 78l24-17v72l-24 17Z" fill="var(--side)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M60 78h88v72H60Z" fill="var(--pk)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M60 78l24-17h88l-24 17Z" fill="var(--r)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
         {/* tape being laid along the lid seam, then down the front */}
         <path className="bop-tape" d="M72 70.5h88" />
         <path className="bop-tape2" d="M104 78v14" />
         <path d="M89 108q5-6 10 0M113 108q5-6 10 0" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
         <path d="M98 122q8 8 16 0" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
-        <circle cx="84" cy="120" r="4" fill="#f2a0a4" opacity=".8" /><circle cx="128" cy="120" r="4" fill="#f2a0a4" opacity=".8" />
+        <circle cx="84" cy="120" r="4" fill="var(--blush)" opacity=".8" /><circle cx="128" cy="120" r="4" fill="var(--blush)" opacity=".8" />
         {/* label stuck on the side once sealed */}
         <g className="bop-label">
           <path d="M152 92l16-11v22l-16 11Z" fill="#fff" stroke="#000" strokeWidth="2" strokeLinejoin="round" />

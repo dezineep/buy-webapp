@@ -16,7 +16,7 @@
 @keyframes bo-in { from { transform: scale(.6); opacity: 0; } }
 .ba-static .bo-ill { animation: none; }
 
-.bo-chip { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border-radius: 32px; background: rgba(165, 34, 38, .1); color: var(--r, #a52226); font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; white-space: nowrap; }
+.bo-chip { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border-radius: 32px; background: rgba(var(--r-rgb), .1); color: var(--r, var(--r)); font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; white-space: nowrap; }
 .st-delivered .bo-chip { min-width: 135px; height: 29px; font-weight: 400; }
 
 .bo-msg { display: flex; flex-direction: column; align-items: center; gap: 4px; }
@@ -25,7 +25,7 @@
 .st-delivered .bo-h { line-height: 1.2; color: #000; }
 .bo .bo-p { margin: 0; max-width: 349px; font-size: 14px; font-weight: 400; line-height: 1.6; letter-spacing: -0.28px; color: #929292; }
 .st-placed .bo-p { max-width: 295px; }
-.bo .bo-small { margin: 0; font-size: 12px; font-weight: 500; line-height: 1.2; letter-spacing: -0.12px; color: var(--r, #a52226); white-space: nowrap; }
+.bo .bo-small { margin: 0; font-size: 12px; font-weight: 500; line-height: 1.2; letter-spacing: -0.12px; color: var(--r, var(--r)); white-space: nowrap; }
 
 /* buttons: 16px apart, full width */
 .bo-btns { display: flex; flex-direction: column; gap: 16px; width: 100%; }
@@ -33,7 +33,7 @@
 /* assigned delivery partner (786:5625) */
 .bo-partner { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%; }
 .bo .bo-partner-h { margin: 0; font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; color: #000; }
-.bo-pcard { display: flex; flex-direction: column; gap: 16px; width: 100%; padding: 8px; border: 1px solid #ececec; border-radius: 15px; background: linear-gradient(90deg, rgba(165, 34, 38, .05), rgba(165, 34, 38, .02)); }
+.bo-pcard { display: flex; flex-direction: column; gap: 16px; width: 100%; padding: 8px; border: 1px solid #ececec; border-radius: 15px; background: linear-gradient(90deg, rgba(var(--r-rgb), .05), rgba(var(--r-rgb), .02)); }
 .bo-pmain { display: flex; align-items: center; gap: 8px; }
 .bo-pav { flex: none; width: 56px; height: 77px; }
 .bo-pinfo { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
@@ -41,10 +41,10 @@
 .bo-pname { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .bo-pname b { font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.16px; color: #2c2c2c; }
 .bo-pname small { font-size: 12px; line-height: 1.6; letter-spacing: -0.12px; color: #827f7f; }
-.bo .bo-call { flex: none; display: flex; align-items: center; padding: 8px 16px; border: 0; border-radius: 35px; background: rgba(165, 34, 38, .1); cursor: pointer; }
+.bo .bo-call { flex: none; display: flex; align-items: center; padding: 8px 16px; border: 0; border-radius: 35px; background: rgba(var(--r-rgb), .1); cursor: pointer; }
 .bo-call img { width: 24px; height: 24px; }
 .bo .bo-pat { margin: 0; font-size: 12px; font-weight: 500; line-height: 1.3; letter-spacing: -0.12px; color: #00a900; white-space: nowrap; }
-.bo .bo-out { margin: 0; display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 10px; background: #f9e1e2; font-size: 12px; line-height: 1.1; letter-spacing: -0.12px; color: #3a3a3a; white-space: nowrap; }
+.bo .bo-out { margin: 0; display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 10px; background: var(--tint2); font-size: 12px; line-height: 1.1; letter-spacing: -0.12px; color: #3a3a3a; white-space: nowrap; }
 .bo-out img { flex: none; width: 16px; height: 16px; }
 
 /* Order Summary card (983:2834) — also used by the next-launch screens, so nothing here depends on .bo */
@@ -64,15 +64,15 @@
 .bo-row-t b { font-size: 14px; font-weight: 600; line-height: 1.1; letter-spacing: -0.28px; color: #000; white-space: nowrap; }
 .bo-row-t small { font-size: 10px; font-weight: 400; line-height: 1.6; color: #8e8e8e; overflow-wrap: anywhere; }
 .bo-row.addr .bo-row-t small { max-width: 220px; }
-.bo-sum .bo-copy, .brd-card .bo-copy { flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 34px; padding: 6px 12px; border: 1px solid var(--r, #a52226); border-radius: 25px; background: transparent; color: var(--r, #a52226); font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.12px; white-space: nowrap; cursor: pointer; }
-.bo-sum .bo-copy:active, .brd-card .bo-copy:active { background: rgba(165, 34, 38, .08); }
+.bo-sum .bo-copy, .brd-card .bo-copy { flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 34px; padding: 6px 12px; border: 1px solid var(--r, var(--r)); border-radius: 25px; background: transparent; color: var(--r, var(--r)); font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.12px; white-space: nowrap; cursor: pointer; }
+.bo-sum .bo-copy:active, .brd-card .bo-copy:active { background: rgba(var(--r-rgb), .08); }
 /* delivered frame uses Medium for the summary labels */
 .st-delivered .bo-sum .bo-sum-h, .st-delivered .bo-row-t b { font-weight: 500; }
 
 /* ---------- animated illustration stage ---------- */
 .bo-art { position: relative; display: grid; place-items: center; margin-top: 10px; } /* room for the float so the header never clips the box */
 .bo-art.placed .bo-ill { animation: bo-in .6s cubic-bezier(.34, 1.56, .64, 1) both, bo-float 2.6s 0.6s ease-in-out infinite; }
-.bo-pulse { position: absolute; left: 33px; top: 47px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #a52226; opacity: 0; animation: bo-pulse 1.8s .7s ease-out infinite; }
+.bo-pulse { position: absolute; left: 33px; top: 47px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--r); opacity: 0; animation: bo-pulse 1.8s .7s ease-out infinite; }
 .bo-art.placed .bo-pulse { animation-name: bo-pulse, bo-float-y; animation-duration: 1.8s, 2.6s; animation-delay: .7s, .6s; animation-iteration-count: infinite, infinite; animation-timing-function: ease-out, ease-in-out; }
 @keyframes bo-pulse { 0% { transform: scale(.8); opacity: .9; } 100% { transform: scale(2.1); opacity: 0; } }
 @keyframes bo-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
@@ -89,7 +89,7 @@
 .bo-art.box .bo-ill { animation: bo-in .6s cubic-bezier(.34, 1.56, .64, 1) both, bo-float 3s .6s ease-in-out infinite; }
 .bo-sparks i { position: absolute; width: 10px; height: 10px; background: #f2b233; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); animation: bo-twinkle 1.6s ease-in-out infinite; }
 .bo-sparks i:nth-child(1) { left: -4px; top: 6px; }
-.bo-sparks i:nth-child(2) { right: -2px; top: 18px; width: 8px; height: 8px; background: #a52226; animation-delay: .4s; }
+.bo-sparks i:nth-child(2) { right: -2px; top: 18px; width: 8px; height: 8px; background: var(--r); animation-delay: .4s; }
 .bo-sparks i:nth-child(3) { left: 18px; bottom: 4px; width: 7px; height: 7px; background: #01ae0f; animation-delay: .8s; }
 .bo-sparks i:nth-child(4) { right: 22px; top: -6px; width: 9px; height: 9px; animation-delay: 1.2s; }
 @keyframes bo-twinkle { 0%, 100% { transform: scale(.3) rotate(0); opacity: 0; } 50% { transform: scale(1) rotate(45deg); opacity: 1; } }
@@ -98,7 +98,7 @@
 
 /* secondary actions side by side: white, red stroke, hard shadow, 44px (smaller than the primary button) */
 .bo-pair { display: flex; gap: 12px; width: 100%; }
-.bo-ob { flex: 1 1 0; min-width: 0; display: grid; place-items: center; height: 44px; padding: 0 10px; border: 1px solid var(--r, #a52226) !important; border-radius: 16px !important; background: #fff !important; box-shadow: 2px 3px 0 #000; font-size: 14px; font-weight: 500; line-height: 1.2; letter-spacing: -0.3px; color: var(--r, #a52226) !important; white-space: nowrap; transition: transform .15s, box-shadow .15s; }
+.bo-ob { flex: 1 1 0; min-width: 0; display: grid; place-items: center; height: 44px; padding: 0 10px; border: 1px solid var(--r, var(--r)) !important; border-radius: 16px !important; background: #fff !important; box-shadow: 2px 3px 0 #000; font-size: 14px; font-weight: 500; line-height: 1.2; letter-spacing: -0.3px; color: var(--r, var(--r)) !important; white-space: nowrap; transition: transform .15s, box-shadow .15s; }
 .bo-ob:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #000; }
 
 /* ---------- SVG status art (OrderArt.jsx) ---------- */
@@ -106,14 +106,14 @@
 /* only the animated parts get a centred origin: elements carrying a transform attribute (badge position, ray
    angles) must keep SVG's default origin */
 .boa-shadow, .boa-box, .boa-badge-in, .boa-rays, .boa-ring, .boa-sparks > *, .boa-rise, .boa-confetti rect { transform-box: fill-box; transform-origin: center; }
-.boa-shadow { fill: #f4e1e1; animation: boaShadow .6s cubic-bezier(.34, 1.56, .64, 1) both; }
+.boa-shadow { fill: var(--soft); animation: boaShadow .6s cubic-bezier(.34, 1.56, .64, 1) both; }
 .boa-box { transform-origin: 50% 100%; animation: boaDrop .7s cubic-bezier(.34, 1.5, .64, 1) both, boaBob 3s 1.8s ease-in-out infinite; }
 .boa-badge-in { animation: boaPop .5s cubic-bezier(.34, 1.8, .64, 1) .55s both; }
 .boa-tick { fill: none; stroke: #fff; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 40; stroke-dashoffset: 40; animation: boaDraw .45s cubic-bezier(.6, 0, .3, 1) .95s forwards; }
-.boa-rays line { stroke: #a52226; stroke-width: 2.4; stroke-linecap: round; }
+.boa-rays line { stroke: var(--r); stroke-width: 2.4; stroke-linecap: round; }
 .boa-rays { animation: boaRays 2.4s cubic-bezier(.2, .8, .3, 1) 1.3s infinite; opacity: 0; }
-.boa-ring { fill: none; stroke: #a52226; stroke-width: 2; opacity: 0; animation: boaRing 2.4s ease-out 1.35s infinite; }
-.boa-sparks path { fill: none; stroke: #a52226; stroke-width: 2.4; stroke-linecap: round; }
+.boa-ring { fill: none; stroke: var(--r); stroke-width: 2; opacity: 0; animation: boaRing 2.4s ease-out 1.35s infinite; }
+.boa-sparks path { fill: none; stroke: var(--r); stroke-width: 2.4; stroke-linecap: round; }
 .boa-sparks circle { fill: #f2b233; }
 .boa-sparks > * { animation: boaSpark 1.6s ease-in-out 1.4s infinite alternate; opacity: 0; }
 .boa-sparks > :nth-child(2) { animation-delay: 1.8s; } .boa-sparks > :nth-child(3) { animation-delay: 2.1s; } .boa-sparks > :nth-child(4) { animation-delay: 2.4s; }
@@ -150,8 +150,8 @@
 
 /* Download Receipt while the PDF is being made: red ring spinner + "Downloading..." */
 .bo-ob.bo-dl { display: flex; align-items: center; justify-content: center; gap: 8px; }
-.bo-ob.bo-dl.busy { cursor: progress; box-shadow: 1px 1px 0 #000; transform: translate(1px, 2px); background: #fbf3f3 !important; }
-.bo-spin { flex: none; width: 16px; height: 16px; border: 2px solid rgba(165, 34, 38, .2); border-top-color: var(--r, #a52226); border-radius: 50%; animation: boSpin .7s linear infinite; }
+.bo-ob.bo-dl.busy { cursor: progress; box-shadow: 1px 1px 0 #000; transform: translate(1px, 2px); background: var(--soft) !important; }
+.bo-spin { flex: none; width: 16px; height: 16px; border: 2px solid rgba(var(--r-rgb), .2); border-top-color: var(--r, var(--r)); border-radius: 50%; animation: boSpin .7s linear infinite; }
 @keyframes boSpin { to { transform: rotate(360deg); } }
 
 /* ---------- cancelled art (OrderArt.jsx CancelledArt) — search "no results" style ---------- */
@@ -161,8 +161,8 @@
 .boc-eye { transform-box: fill-box; transform-origin: center; animation: bocBlink 3.8s 1s infinite; }
 .boc-tear { transform-box: fill-box; transform-origin: 50% 0; opacity: 0; animation: bocTear 2.6s 1.2s ease-in infinite; }
 .boc-x-in { transform-box: fill-box; transform-origin: center; animation: bocStamp .55s cubic-bezier(.3, 1.6, .6, 1) .45s both, bocShake 3.2s 1.4s ease-in-out infinite; }
-.boc-ret { fill: none; stroke: #a52226; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 6 6; animation: bocFlow .9s linear infinite; opacity: 0; animation-name: bocFlow, bocFade; animation-duration: .9s, .4s; animation-delay: 0s, .9s; animation-iteration-count: infinite, 1; animation-fill-mode: none, forwards; }
-.boc-ret-head { fill: none; stroke: #a52226; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; animation: bocFade .4s .9s forwards; }
+.boc-ret { fill: none; stroke: var(--r); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 6 6; animation: bocFlow .9s linear infinite; opacity: 0; animation-name: bocFlow, bocFade; animation-duration: .9s, .4s; animation-delay: 0s, .9s; animation-iteration-count: infinite, 1; animation-fill-mode: none, forwards; }
+.boc-ret-head { fill: none; stroke: var(--r); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; animation: bocFade .4s .9s forwards; }
 .boc-coin { transform-box: fill-box; transform-origin: center; animation: bocCoinIn .5s cubic-bezier(.34, 1.6, .64, 1) 1s both, bocFlip 2.2s 1.6s ease-in-out infinite; }
 .boc-rupee { font: 700 15px "Plus Jakarta Sans", system-ui, sans-serif; fill: #000; }
 .boc-sparks { fill: none; stroke: var(--r); stroke-width: 2.5; stroke-linecap: round; animation: bocSpark 1.6s ease-in-out infinite alternate; }
@@ -252,7 +252,7 @@
 .bpl-badge { transform-box: fill-box; transform-origin: center; animation: bocStamp .55s cubic-bezier(.3, 1.6, .6, 1) .55s both; }
 .bpl-tick { fill: none; stroke: #fff; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 28; stroke-dashoffset: 28; animation: boaDraw .4s cubic-bezier(.6, 0, .3, 1) 1s forwards; }
 .bpl-rays { transform-box: fill-box; transform-origin: center; opacity: 0; animation: boaRays 2.2s cubic-bezier(.2, .8, .3, 1) 1.3s infinite; }
-.bpl-rays line { stroke: #a52226; stroke-width: 2.6; stroke-linecap: round; }
+.bpl-rays line { stroke: var(--r); stroke-width: 2.6; stroke-linecap: round; }
 .bpl-sparks { fill: none; stroke: var(--r); stroke-width: 2.5; stroke-linecap: round; animation: bocSpark 1.6s ease-in-out infinite alternate; }
 .bpl-sparks circle { fill: #f2b233; stroke: none; }
 @keyframes bplSlip { from { transform: translateX(34px); opacity: 0; } to { transform: none; opacity: 1; } }

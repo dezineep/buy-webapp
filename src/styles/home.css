@@ -6,19 +6,20 @@
   position: absolute; top: 0; left: 0; right: 0; z-index: 6; display: flex; align-items: center; justify-content: space-between; gap: 8px;
   padding: calc(var(--sat, 0px) + 32px) 16px 0;
 }
-.bh-store { display: flex; align-items: center; gap: 8px; min-width: 0; text-align: left; }
-.bh-logo { flex: none; width: 40px; height: 40px; border: 1px solid #000; border-radius: 500px; object-fit: cover; background: #fff; }
-.bh-store-t { display: flex; flex-direction: column; justify-content: center; gap: 4px; min-width: 0; }
-.bh-store-t b { display: flex; align-items: center; gap: 5px; font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.48px; color: #000; white-space: nowrap; }
-.bh-store-t b img { flex: none; width: 16px; height: 16px; }
-.bh-store-t small { font-size: 10px; line-height: 1.1; letter-spacing: -0.2px; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* store pill (Figma 2167:7301): white, navy 1px stroke + hard shadow, 28px logo and the store name with the verified tick */
+.bh-store { flex: none; display: flex; align-items: center; height: 40px; padding: 5px 9px 5px 5px; border: 1px solid #261f8e !important; border-radius: 50px !important; background: #fff !important; box-shadow: 2px 3px 0 #000; text-align: left; min-width: 0; transition: padding .7s cubic-bezier(.22, 1, .36, 1), transform .15s; }
+.bh-store:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #000; }
+.bh-logo { flex: none; width: 28px; height: 28px; border: .5px solid var(--r); border-radius: 500px; object-fit: cover; background: #fff; }
+.bh-store-t { display: flex; align-items: center; min-width: 0; overflow: hidden; }
+.bh-store-t b { min-width: 0; display: flex; align-items: center; gap: 5px; font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.48px; color: #000; white-space: nowrap; }
+.bh-store-t b img { flex: none; width: 18px; height: 18px; }
+.bh-store-t b span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .bh-btns { display: flex; align-items: center; gap: 8px; flex: none; }
 
 /* ---------- banner (Figma 2167:7004: 412 x 196, bottom radius 25; dots 2167:7328 37 x 15 at top 170) ---------- */
-.bh-hero { position: relative; z-index: 0; height: calc(var(--sat, 0px) + 196px); border-radius: 0 0 25px 25px; overflow: hidden; background: #f5cccd; }
+.bh-hero { position: relative; z-index: 0; height: calc(var(--sat, 0px) + 196px); border-radius: 0 0 25px 25px; overflow: hidden; background: var(--tint2); }
 .bh-hero-track { display: flex; height: 100%; transition: transform .7s cubic-bezier(.22, 1, .36, 1); }
 .bh-hero-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; }
-.bh-hero::before { content: ""; position: absolute; z-index: 1; inset: 0 0 auto; height: calc(var(--sat, 0px) + 100px); background: linear-gradient(180deg, rgba(245, 204, 205, .92) 0%, rgba(245, 204, 205, .55) 55%, rgba(245, 204, 205, 0) 100%); pointer-events: none; }
 .bh-dots {
   position: absolute; z-index: 2; left: 50%; bottom: 11px; transform: translateX(-50%); display: flex; gap: 4px; padding: 4px;
   border-radius: 7.5px; background: rgba(255, 255, 255, .47); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
@@ -81,7 +82,7 @@
 .bh-cat.on .bh-cat-im { transform: scale(1.06); }
 .bh-cat:active .bh-cat-im { transform: scale(.92); }
 /* selected tab tint; its outline is drawn by .bh-cat-line */
-.bh-cat-ind { position: absolute; z-index: 1; left: 0; top: 2px; bottom: 0; border-radius: 16px 16px 0 0; background: linear-gradient(180deg, rgba(165, 34, 38, .1) 0%, #fff 78%); will-change: transform, width; }
+.bh-cat-ind { position: absolute; z-index: 1; left: 0; top: 2px; bottom: 0; border-radius: 16px 16px 0 0; background: linear-gradient(180deg, rgba(var(--r-rgb), .1) 0%, #fff 78%); will-change: transform, width; }
 
 /* pinned: the photos fold away so only the names stay (the row line and tab follow the new height) */
 .bh-cat-im { transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), height .32s cubic-bezier(.22, 1, .36, 1), opacity .2s, margin .32s cubic-bezier(.22, 1, .36, 1); }
@@ -139,7 +140,7 @@
 .bh-thumbs { display: flex; align-items: center; }
 .bh-thumbs i { flex: none; width: 24px; height: 24px; margin-right: -4px; border: 1px solid #fff; border-radius: 100px; overflow: hidden; background: #fff; }
 .bh-thumbs i img { width: 100%; height: 100%; object-fit: cover; }
-.bh-thumbs em { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 51px; background: #fbeaea; font-size: 12px; font-style: normal; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; color: var(--r); }
+.bh-thumbs em { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 51px; background: var(--pk2); font-size: 12px; font-style: normal; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; color: var(--r); }
 .bh-thumbs i:last-child { margin-right: 0; }
 .bh-pill-go { flex: none; width: 20px; height: 20px; animation: bhNudge 1.8s ease-in-out infinite; }
 @keyframes bhNudge { 0%, 60%, 100% { transform: none; } 30% { transform: translateX(3px); } }
@@ -167,13 +168,15 @@
 .bh-sortl .on i { border: 6px solid var(--r); }
 
 /* ---------- store bar intro (Home.jsx `intro`): i0 = logo only, i1 = everything out, i2 = name tucked back in ---------- */
+/* intro: the pill starts as just the logo (a circle) and widens to reveal the name; i2 folds it back to the logo */
 .bh-logo { transition: transform .9s cubic-bezier(.34, 1.4, .64, 1); }
 .bh-top.i0 .bh-logo { transform: rotate(-300deg) scale(.7); }
 .bh-top.i2 .bh-logo { transform: rotate(360deg); }
-.bh-store { gap: 0; }
-.bh-store-t { max-width: 230px; margin-left: 8px; transform-origin: left center; transition: max-width .7s cubic-bezier(.22, 1, .36, 1) .2s, margin .7s cubic-bezier(.22, 1, .36, 1) .2s, opacity .45s ease .3s, transform .7s cubic-bezier(.34, 1.4, .64, 1) .2s, filter .5s ease .2s; }
-.bh-top.i0 .bh-store-t, .bh-top.i2 .bh-store-t { max-width: 0; margin-left: 0; opacity: 0; transform: translateX(-24px) scale(.6); filter: blur(4px); }
-.bh-top.i2 .bh-store-t { transition-delay: 0s, 0s, 0s, 0s, 0s; }
+.bh-top.i0 .bh-store, .bh-top.i2 .bh-store { padding-right: 5px; }
+.bh-store-t { max-width: min(240px, calc(100vw - 222px)); margin-left: 4px; transition: max-width .75s cubic-bezier(.22, 1, .36, 1) .25s, margin .75s cubic-bezier(.22, 1, .36, 1) .25s, opacity .45s ease .4s, filter .5s ease .3s; }
+.bh-top.i0 .bh-store-t, .bh-top.i2 .bh-store-t { max-width: 0; margin-left: 0; opacity: 0; filter: blur(3px); }
+.bh-top.i2 .bh-store-t { transition-delay: 0s, 0s, 0s, 0s; }
+.bh-top.i0 .bh-store { transition-delay: 0s; }
 /* the buttons start stacked on the logo and spring out to their places one after another */
 .bh-btns > * { transition: transform .75s cubic-bezier(.34, 1.45, .64, 1), opacity .3s ease; }
 .bh-btns > :nth-child(1) { --fx: -230px; transition-delay: .35s; }

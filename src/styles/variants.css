@@ -20,7 +20,7 @@
 .bv-custom-t small { font-size: 10px; font-weight: 400; line-height: 1.5; letter-spacing: -0.2px; color: #6d6d6d; }
 .bv-go { flex: none; display: flex; align-items: center; padding: 8px 16px; border-radius: 35px; background: var(--pk3); }
 .bv-go img { display: block; width: 24px; height: 24px; }
-.bv-custom:active .bv-go { background: rgba(165, 34, 38, .18); }
+.bv-custom:active .bv-go { background: rgba(var(--r-rgb), .18); }
 
 /* ---------- Custom quantity (577-1557) ---------- */
 .bv-cq { display: flex; flex-direction: column; padding: 0 16px; }
@@ -35,7 +35,7 @@
 @keyframes bv-blink { 50% { opacity: 0; } }
 .bv-unit { display: flex; align-items: center; gap: 4px; border-radius: 24px; }
 .bv-unit button { display: flex; align-items: center; justify-content: center; min-width: 58px; padding: 8px 16px; border: 1px solid transparent !important; border-radius: 20px !important; font-size: 10px; font-weight: 500; line-height: 1.2; letter-spacing: -0.2px; color: #848484 !important; white-space: nowrap; }
-.bv-unit button.on { background: var(--pk3) !important; border-color: rgba(165, 34, 38, .2) !important; color: var(--r) !important; }
+.bv-unit button.on { background: var(--pk3) !important; border-color: rgba(var(--r-rgb), .2) !important; color: var(--r) !important; }
 .bv-unit button:not(.on) { min-width: 0; }
 .bv-tot { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding-right: 3px; }
 .bv-tot > div { display: flex; flex-direction: column; gap: 4px; }

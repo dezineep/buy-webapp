@@ -7,12 +7,18 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import { P, OFFERS, PARTNER, STORE, IMG, GIFT, calcBill, lineInfo, lineKey, defaultSel, seedOrders, seedRefunds, seedAddresses } from './data.js';
 import { applyShop } from './shops.js';
+import { applyTheme, watchIcons, DEFAULT_HEX } from './theme.js';
 import { flyToCart, flySource } from './fly.js';
+import { BLR, STORE_LL, reverseGeocode, geocode, kmBetween } from './LiveMap.jsx';
 
 /* the prototype opens on the shop-type picker; the last pick is remembered so it can be confirmed with one tap */
 const SHOP_KEY = 'buy.shop';
 const savedShop = (() => { try { return localStorage.getItem(SHOP_KEY) || 'fashion'; } catch { return 'fashion'; } })();
 applyShop(savedShop);
+/* store colour theme (theme.js): picked on the second step of the opening picker, remembered like the shop type */
+const THEME_KEY = 'buy.theme';
+const savedTheme = (() => { try { return localStorage.getItem(THEME_KEY) || DEFAULT_HEX; } catch { return DEFAULT_HEX; } })();
+applyTheme(savedTheme); watchIcons();
 
 const Ctx = createContext(null);
 export const useBuy = () => useContext(Ctx);
@@ -25,7 +31,7 @@ const initState = () => ({
   stack: [entry('home')], cart: [], cat: 'all', search: '', sort: 'rel', user: null, addr: null,
   orders: seedOrders(), refunds: seedRefunds(), addresses: seedAddresses(), unlocked: new Set(), checkout: false, fresh: {},
   sel: {}, sheet: null, pill: null, toast: null, notif: null, heroI: 0, rtab: 'pending', ofilter: 'all',
-  shop: savedShop, picker: true,
+  shop: savedShop, theme: savedTheme, picker: true, pickerStep: 1,
 });
 
 export function BuyProvider({ children }) {
@@ -155,14 +161,26 @@ export function BuyProvider({ children }) {
 
   /* ---------- actions ---------- */
   // saved addresses exist -> let the customer pick one (Swiggy style); none yet -> straight to the form
-  const toAddr = () => { S.addrFirst = false; if (S.addresses.length) go('addresses'); else { S.editing = null; S.addrMode = 'new'; S.draft = {}; go('address'); } };
+  /* real location: ask the browser for the phone's position, fly the map there (the map then reports its centre and
+     the address fills itself from it). Denied / unavailable: fall back to the sample address so the flow still works. */
+  const findMe = () => {
+    S.locating = true; commit();
+    const fail = msg => { S.locating = false; S.draft = { ...(S.draft || {}), ...SAMPLE_ADDR, ll: BLR, dist: +kmBetween(STORE_LL, BLR).toFixed(1) }; S.mapGo = BLR; commit(); toast(msg); };
+    if (!navigator.geolocation) return fail('Location isn’t available here, showing a sample address');
+    navigator.geolocation.getCurrentPosition(
+      p => { S.locating = false; S.mapGo = [p.coords.latitude, p.coords.longitude]; S.draft = { ...(S.draft || {}), street: '' }; commit(); toast('Location found'); },
+      e => fail(e.code === 1 ? 'Location access is off, showing a sample address' : 'Couldn’t get your location, showing a sample address'),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 });
+  };
+  const toAddr = () => { S.addrFirst = false; if (S.addresses.length) go('addresses'); else { S.editing = null; S.addrMode = 'new'; S.draft = {}; S.mapGo = BLR; go('address'); } };
 
   const A = {
     back, home, go, toast, openSheet, closeSheet, selOf, commit,
     close: closeSheet,
     store: () => { closeSheet(); go('store'); },
     opencat: cat => { closeSheet(); go('category', { cat }); },
-    openpicker: () => { closeSheet(); S.picker = true; commit(); },
+    openpicker: (step = 1) => { closeSheet(); S.pickerStep = step; S.picker = true; commit(); },
+    settheme: hex => { applyTheme(hex); S.theme = hex.toLowerCase(); try { localStorage.setItem(THEME_KEY, S.theme); } catch { /* private mode */ } commit(); },
     pickshop: id => {
       applyShop(id); S.shop = id; S.cat = 'all'; S.prevCat = 'all'; S.picker = false;
       try { localStorage.setItem(SHOP_KEY, id); } catch { /* private mode */ }
@@ -175,9 +193,9 @@ export function BuyProvider({ children }) {
     /* address book: opening it from the home "Deliver to" row / More sheet / cart picks the delivery address */
     address: () => { S.fromHome = cur().n === 'home' && !S.sheet; closeSheet(); S.checkout = false; S.toCart = false; S.addrFirst = false; go('addresses'); },
     /* Figma 2174:7989 "New Address" (search + map + form) and 2174:7773 "Your Current Location" (map + prefilled form) */
-    newaddr: () => { closeSheet(); S.addrFirst = false; S.editing = null; S.located = false; S.addrMode = 'new'; S.draft = {}; go('address'); },
-    curaddr: () => { closeSheet(); S.editing = null; S.located = true; S.addrMode = 'current'; S.draft = { ...SAMPLE_ADDR, dist: 1.4 }; go('address'); },
-    editaddr: id => { closeSheet(); S.addrFirst = false; const a = S.addresses.find(x => x.id === id); S.editing = id; S.located = true; S.addrMode = 'new'; S.draft = { ...a }; go('address'); },
+    newaddr: () => { closeSheet(); S.addrFirst = false; S.editing = null; S.located = false; S.addrMode = 'new'; S.draft = {}; S.mapGo = BLR; go('address'); },
+    curaddr: () => { closeSheet(); S.editing = null; S.located = true; S.addrMode = 'current'; S.draft = {}; S.mapGo = BLR; go('address'); findMe(); },
+    editaddr: id => { closeSheet(); S.addrFirst = false; const a = S.addresses.find(x => x.id === id); S.editing = id; S.located = true; S.addrMode = 'new'; S.draft = { ...a }; S.mapGo = a.ll || BLR; go('address'); },
     deladdr: id => { closeSheet(); S.addresses = S.addresses.filter(x => x.id !== id); if (S.addr && S.addr.id === id) S.addr = null; commit(); toast('Address deleted'); },
     shareaddr: id => { closeSheet(); const a = S.addresses.find(x => x.id === id); const t = `${a.label}: ${[a.street, a.road, a.area, a.city, a.pin].filter(Boolean).join(', ')}`; if (navigator.share) navigator.share({ text: t }).catch(() => {}); else { navigator.clipboard && navigator.clipboard.writeText(t).catch(() => {}); toast('Address copied to share'); } },
     requestaddr: () => window.open('https://wa.me/?text=' + encodeURIComponent(`Hi! Please share your delivery address for my ${STORE.name} order on BUY.`), '_blank'),
@@ -228,7 +246,7 @@ export function BuyProvider({ children }) {
     cartpill: () => {
       closeSheet();
       if (S.addr) { if (cur().n !== 'cart') go('cart'); return; }
-      S.toCart = true; S.addrFirst = true; S.editing = null; S.located = false; S.addrMode = 'new'; S.draft = {};
+      S.toCart = true; S.addrFirst = true; S.editing = null; S.located = false; S.addrMode = 'new'; S.draft = {}; S.mapGo = BLR;
       go('address');
     },
     offers: () => openSheet('offers'),
@@ -267,7 +285,19 @@ export function BuyProvider({ children }) {
       }, 360);
     },
     draft: (k, v) => { S.draft = S.draft || {}; S.draft[k] = k === 'pin' ? v.replace(/\D/g, '') : v; commit(); },
-    locate: () => { S.located = true; S.draft = { ...SAMPLE_ADDR }; commit(); toast('Location found'); },
+    locate: () => { S.located = true; findMe(); },
+    // the map settled on a new centre (the pin): fill the address from it and work out the distance to the store
+    mapmoved: ll => {
+      S.draft = { ...(S.draft || {}), ll, dist: +kmBetween(STORE_LL, ll).toFixed(1) }; S.located = true; commit();
+      later('geo', () => {
+        reverseGeocode(ll).then(r => {
+          if (!S.draft || S.draft.ll !== ll) return; // the map moved again meanwhile
+          const fill = Object.fromEntries(Object.entries(r).filter(([, v]) => v));
+          S.draft = { ...S.draft, ...fill }; S.aerr = ''; commit();
+        }).catch(() => {});
+      }, 450);
+    },
+    searcharea: q => { if (!q.trim()) return; geocode(q).then(ll => { if (ll) { S.mapGo = ll; commit(); } else toast('Couldn’t find that area'); }).catch(() => toast('Couldn’t search right now')); },
     saveaddr: () => {
       const a = S.draft || {};
       const miss = [['street', 'Street / Building'], ['area', 'Area / Locality'], ['city', 'City']].find(([k]) => !(a[k] || '').trim());

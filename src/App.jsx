@@ -75,7 +75,7 @@ function Pill() {
   const box = useRef(null);
   useEffect(() => { // confetti when an offer unlocks
     if (st !== 'congrats' || !box.current) return;
-    const colors = ['#a52226', '#f2b233', '#01ae0f', '#3f4ee3', '#f2a0a4'];
+    const colors = ['var(--r)', '#f2b233', '#01ae0f', '#3f4ee3', 'var(--blush)'];
     for (let i = 0; i < 18; i++) {
       const c = document.createElement('i');
       c.className = 'ba-conf';

@@ -49,7 +49,7 @@
 .bp2-chips::-webkit-scrollbar { display: none; }
 .bp2-chip { flex: none; display: grid; place-items: center; height: 40px; padding: 0 20px; border: 1px solid #dfdfdf !important; border-radius: 10px !important; background: #fff !important; font-size: 16px; font-weight: 600 !important; line-height: 1.1; letter-spacing: -0.4px; color: #8a8a8a !important; white-space: nowrap; transition: border-color .25s, color .25s, transform .15s; }
 .bp2-chip:active { transform: scale(.95); }
-.bp2-chip.on { border-color: rgba(165, 34, 38, .5) !important; color: var(--r) !important; }
+.bp2-chip.on { border-color: rgba(var(--r-rgb), .5) !important; color: var(--r) !important; }
 
 /* description (Figma 2167:5707) */
 .bp2-dsc { display: flex; flex-direction: column; gap: 8px; }
@@ -73,7 +73,7 @@
 
 /* footer (Figma 2167:5884 / 2167:5491): cart button = pink, red stroke, hard shadow, red count badge */
 .bp2-foot { justify-content: flex-start; }
-.bp2-cartbtn { flex: none; display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 20px; border: 1px solid var(--r) !important; border-radius: 20px !important; background: rgba(165, 34, 38, .1) !important; box-shadow: 2px 4px 0 #000; transition: transform .15s, box-shadow .15s; animation: bp2Pop .35s cubic-bezier(.34, 1.56, .64, 1); }
+.bp2-cartbtn { flex: none; display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 20px; border: 1px solid var(--r) !important; border-radius: 20px !important; background: rgba(var(--r-rgb), .1) !important; box-shadow: 2px 4px 0 #000; transition: transform .15s, box-shadow .15s; animation: bp2Pop .35s cubic-bezier(.34, 1.56, .64, 1); }
 .bp2-cartbtn:active { transform: translate(1px, 2px); box-shadow: 1px 2px 0 #000; }
 .bp2-cartbtn img { width: 20px; height: 20px; }
 .bp2-cartbtn.wide { flex: 1 1 0; min-width: 0; justify-content: center; }

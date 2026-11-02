@@ -15,8 +15,14 @@
    .ba-sh-h(.ba-sh-t b small) + .ba-x    sheet title row + 60x42 pink close
    .ba-sheet / .ba-modal / .ba-foot      containers; sheet + foot draw the iOS home bar
    .ba-search .ba-of .ba-div[.dash] .ba-amt .ba-ic14 .ba-toast .ba-notif */
+/* brand tokens: BUY red by default; theme.js rewrites them for a store's own colour (see theme.js for the ladder) */
+:root {
+  --r: #a52226; --r2: #c23a3e; --rd: #6f1418; --r-deep: #8f3a3d; --side: #e9a9ab; --blush: #f2a0a4;
+  --pk: #f4c8c9; --tint2: #f5cccd; --pk2: #fbeaea; --tint: #f9e7e8; --soft: #fbf3f3;
+  --r-rgb: 165, 34, 38; --tint-rgb: 249, 231, 232; --tint2-rgb: 245, 204, 205; --pk3: rgba(165, 34, 38, .1);
+}
 .ba {
-  --r: #a52226; --rd: #6f1418; --pk: #f4c8c9; --pk2: #fbeaea; --pk3: rgba(165, 34, 38, .1);
+  
   --g: #01ae0f; --or: #e88b00; --mt: #696969; --mt2: #9b9b9b; --ln: #ddd; --ln2: rgba(0, 0, 0, .09);
   --hard: 2px 3px 0 #000; --hard-btn: 2px 4px 0 #000;
   position: relative; width: 412px; height: 892px; overflow: hidden; background: #fff;
@@ -41,15 +47,15 @@
 .ba-static *, .ba-static *::before, .ba-static *::after { animation: none !important; transition: none !important; }
 .ba-pad { padding: 0 16px; }
 
-/* ---------- header (Figma: top 16, back 60x42, gap 8, title 20/500, 24px to content; frame bg renders #f9e7e8 at the top -> #fff at 98px) ---------- */
+/* ---------- header (Figma: top 16, back 60x42, gap 8, title 20/500, 24px to content; frame bg renders var(--tint) at the top -> #fff at 98px) ---------- */
 .ba-head {
   position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 8px;
   padding: calc(var(--sat, 0px) + 16px) 16px 24px;
-  background: linear-gradient(180deg, #f9e7e8 var(--sat, 0px), #fff calc(var(--sat, 0px) + 98px));
+  background: linear-gradient(180deg, var(--tint) var(--sat, 0px), #fff calc(var(--sat, 0px) + 98px));
 }
 /* the Figma frame gradient runs 16px past the header: the screen carries the same gradient (scrolling with the
    content), so at rest the header melts into the page exactly like Figma; when scrolled the header keeps its own copy */
-.ba-scr:has(.ba-head) { background: linear-gradient(180deg, #f9e7e8 var(--sat, 0px), #fff calc(var(--sat, 0px) + 98px)) local, #fff; }
+.ba-scr:has(.ba-head) { background: linear-gradient(180deg, var(--tint) var(--sat, 0px), #fff calc(var(--sat, 0px) + 98px)) local, #fff; }
 .ba-head-t { display: flex; flex-direction: column; justify-content: center; gap: 4px; min-width: 0; }
 .ba-head-t b { font-size: 20px; font-weight: 500; line-height: 1.1; letter-spacing: -0.4px; color: #000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ba-head-t small { font-size: 12px; line-height: 1.1; letter-spacing: -0.24px; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -181,7 +187,7 @@
 
 .ba-field { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; font-size: 13px; color: #222; }
 .ba-field input, .ba-field select { height: 52px; padding: 0 16px; border: 1px solid var(--ln); border-radius: 20px; font-size: 16px; outline: 0; background: #fff; color: #000; width: 100%; }
-.ba-field input:focus, .ba-field select:focus { border-color: var(--r); box-shadow: 0 0 0 3px rgba(165, 34, 38, .1); }
+.ba-field input:focus, .ba-field select:focus { border-color: var(--r); box-shadow: 0 0 0 3px rgba(var(--r-rgb), .1); }
 .ba-field input::placeholder { color: #aaa; }
 
 /* ---------- sheets & modals (Figma 593:1779: radius 20 20 0 0, content inset 16, iOS home bar 147x5 9.5px from bottom) ---------- */
@@ -241,10 +247,19 @@
 .ba-mpin { position: absolute; z-index: 1; left: 50%; top: 50%; width: 44px; height: 54px; margin: -51px 0 0 -22px; transform-origin: 50% 100%; pointer-events: none; animation: baPinHop 2.4s ease-in-out infinite; }
 .ba-mpin.drop { animation: baPinDrop .6s cubic-bezier(.34, 1.56, .64, 1), baPinHop 2.4s .6s ease-in-out infinite; }
 .ba-mpin svg { display: block; position: relative; z-index: 1; overflow: visible; }
-.ba-mpin-ic { position: absolute; z-index: 2; left: 13px; top: 11px; width: 18px; height: 18px; background: #a52226; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
+.ba-mpin-ic { position: absolute; z-index: 2; left: 13px; top: 11px; width: 18px; height: 18px; background: var(--r); -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
 .ba-mpin-dot { transform-box: fill-box; transform-origin: center; animation: baPinDot 1.6s ease-in-out infinite; }
-.ba-mpin-ring { position: absolute; left: 50%; top: 100%; width: 26px; height: 10px; margin: -6px 0 0 -13px; border: 2px solid #a52226; border-radius: 50%; opacity: 0; animation: baPinRing 2.4s ease-out infinite; }
+.ba-mpin-ring { position: absolute; left: 50%; top: 100%; width: 26px; height: 10px; margin: -6px 0 0 -13px; border: 2px solid var(--r); border-radius: 50%; opacity: 0; animation: baPinRing 2.4s ease-out infinite; }
 @keyframes baPinHop { 0%, 70%, 100% { transform: none; } 80% { transform: translateY(-6px); } }
 @keyframes baPinDrop { from { transform: translateY(-40px); opacity: 0; } }
 @keyframes baPinDot { 0%, 100% { transform: scale(1); } 50% { transform: scale(.7); } }
 @keyframes baPinRing { 0% { opacity: .8; transform: scale(.4); } 100% { opacity: 0; transform: scale(2.2); } }
+
+/* LiveMap (MapLibre): the map fills its box; small, quiet attribution bottom-left (clear of the map buttons) */
+.ba-lmap { position: absolute; inset: 0; z-index: 0; overflow: hidden; border-radius: inherit; background: #fbf4f3; }
+.ba-lmap-tiles { position: absolute; inset: 0; z-index: 0; }
+.ba-lmap .ba-mpin { z-index: 5; }
+.ba-lmap .maplibregl-ctrl-bottom-right { left: 0; right: auto; }
+.ba-lmap .maplibregl-ctrl-attrib { font: 9px/1.4 "Plus Jakarta Sans", system-ui, sans-serif; }
+.ba-lmap .maplibregl-ctrl-attrib.maplibregl-compact { margin: 0 0 6px 6px; }
+.ba-lmap.static .maplibregl-canvas { cursor: default; }

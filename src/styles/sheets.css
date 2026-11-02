@@ -4,18 +4,18 @@
 
 /* ---- More Options: profile row (Figma 1164:8998) ---- */
 .bsh-prof { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
-.bsh-av { flex: none; display: grid; place-items: center; padding: 8px; border-radius: 50px; background: rgba(165, 34, 38, .1); }
+.bsh-av { flex: none; display: grid; place-items: center; padding: 8px; border-radius: 50px; background: rgba(var(--r-rgb), .1); }
 .bsh-av img { display: block; width: 24px; height: 24px; }
 .bsh-who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; line-height: 1.2; white-space: nowrap; }
 .bsh-who b { font-size: 16px; font-weight: 500; letter-spacing: -0.16px; color: #3b3b3b; overflow: hidden; text-overflow: ellipsis; }
 .bsh-who small { font-size: 12px; font-weight: 400; letter-spacing: -0.12px; color: #9f9f9f; }
-.bsh .bsh-edit { flex: none; display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.42px; color: #a52226; white-space: nowrap; }
+.bsh .bsh-edit { flex: none; display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.42px; color: var(--r); white-space: nowrap; }
 .bsh-edit img { width: 18px; height: 18px; }
 
 /* ---- More Options: 3x2 tile grid (Figma 1164:8947) ---- */
 .bsh-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .bsh .bsh-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 8px; background: #fdfdfd; border: 1px solid #e3e3e3; border-radius: 15px; text-align: left; transition: transform .15s, background-color .2s; }
-.bsh .bsh-tile:active { transform: scale(.97); background: #fbf3f3; }
+.bsh .bsh-tile:active { transform: scale(.97); background: var(--soft); }
 .bsh-tile img { display: block; width: 24px; height: 24px; }
 .bsh-tile-l { font-size: 16px; font-weight: 500; line-height: 1.3; letter-spacing: -0.32px; color: #878787; white-space: nowrap; }
 
@@ -50,7 +50,7 @@
 
 /* More Options → shop type switcher (prototype): opens the shop-type picker */
 .bsh .bsh-shop { display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 8px; padding: 10px 12px; border: 1px solid #e3e3e3; border-radius: 15px; background: #fdfdfd; text-align: left; transition: transform .15s, background-color .2s; }
-.bsh .bsh-shop:active { transform: scale(.98); background: #fbf3f3; }
+.bsh .bsh-shop:active { transform: scale(.98); background: var(--soft); }
 .bsh-shop i { flex: none; width: 24px; height: 24px; background: var(--r); -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
 .bsh-shop span { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .bsh-shop small { font-size: 11px; font-weight: 500; color: var(--mt2); }
@@ -65,7 +65,7 @@
 .bm-hero b { font-weight: 600; color: #000; }
 .bm-apps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .bm-app { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px; border: 1px solid #e3e3e3; border-radius: 15px; background: #fdfdfd; }
-.bm-app.buy { --c: #a52226; }
+.bm-app.buy { --c: var(--r); }
 .bm-app.sell { --c: #261f8e; }
 .bm-logo { height: 28px; width: auto; }
 .bm-who { font-size: 12px; font-weight: 500; line-height: 1.1; letter-spacing: -0.24px; color: #878787; margin-top: -4px; }
@@ -74,3 +74,4 @@
 .bm-go i { width: 18px; height: 18px; background: var(--c); -webkit-mask: url(/assets/m17/arrow-right.svg) center / contain no-repeat; mask: url(/assets/m17/arrow-right.svg) center / contain no-repeat; transition: transform .2s; }
 .bm-go:active i { transform: translateX(3px); }
 .bm-body > .ba-btn { margin-top: 4px; }
+.bsh .bsh-shop .bsh-theme-dot { -webkit-mask: none; mask: none; border-radius: 50%; background: var(--r); box-shadow: 0 0 0 3px var(--pk2); }

@@ -31,7 +31,7 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
 .bp-qv-scroll::-webkit-scrollbar { display: none; }
 .bp-qv .bp-qv-media .bp-track { height: 300px; }
 .bp-qv .bp-qv-dots { position: absolute; z-index: 1; top: 276px; left: 50%; transform: translateX(-50%); }
-.bp-qv .bp-qv-info { gap: 16px; margin-top: 4px; }
+.bp-qv .bp-qv-info { gap: 16px; margin-top: 16px; }
 .bp-qv-qty { display: flex; flex-direction: column; gap: 8px; }
 .bp-qv-head { display: flex; flex-direction: column; gap: 8px; }
 .bp-qv-desc { display: flex; flex-direction: column; gap: 4px; }
@@ -58,7 +58,7 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
   transition: top .4s cubic-bezier(.22, 1, .36, 1), left .4s cubic-bezier(.22, 1, .36, 1), right .4s cubic-bezier(.22, 1, .36, 1), height .4s cubic-bezier(.22, 1, .36, 1), border-radius .4s cubic-bezier(.22, 1, .36, 1), padding .4s cubic-bezier(.22, 1, .36, 1);
   border-radius: 0; padding: calc(var(--sat, 0px) + 82px) 16px 16px; overflow: hidden; isolation: isolate; pointer-events: none;
 }
-.ba-modal.qv-full::before { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, #f9e7e8 var(--sat, 0px), #fff calc(var(--sat, 0px) + 98px)); animation: qvTint .4s ease both; }
+.ba-modal.qv-full::before { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, var(--tint) var(--sat, 0px), #fff calc(var(--sat, 0px) + 98px)); animation: qvTint .4s ease both; }
 @keyframes qvTint { from { opacity: 0; } }
 .ba-layer:has(.qv-full) { pointer-events: none; }
 .qv-full .bp-qv-info, .qv-full .bp-qv-x, .qv-full .bp-qv-dots, .qv-full .bp-qv-foot { opacity: 0; transition: opacity .2s; }
@@ -72,7 +72,7 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
 /* custom quantity keypad fits the narrower sheet */
 .ba-sh-custom .bv-unit button { cursor: default; }
 .bv-err.hint { color: #9b9b9b; }
-.bv-in:focus-within { border-color: var(--r); box-shadow: 0 0 0 3px rgba(165, 34, 38, .1); }
+.bv-in:focus-within { border-color: var(--r); box-shadow: 0 0 0 3px rgba(var(--r-rgb), .1); }
 .bv-num { flex: 1; min-width: 0; padding: 4px 4px 4px 12px; border: 0; outline: 0; background: none; font-size: 16px; font-weight: 500; letter-spacing: -0.48px; color: #454545; caret-color: var(--r); }
 .bv-num::placeholder { color: #b5b5b5; }
 .ba-sh-custom { padding-bottom: calc(24px + var(--sab)); }

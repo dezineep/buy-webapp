@@ -73,14 +73,15 @@ export const SHOPS = [
 /* categories that have a photo in public/assets/cats */
 const PHOTO = {
   fashion: 'mens womens kids ethnic sports acc foot bags beauty inner watch eye hats',
-  food: 'fresh frozen snacks dairy bakery cooking ready dine babyfood nonalc organic meat healthfood bev icecream',
+  food: 'fresh frozen snacks dairy bakery cooking pet ready dine babyfood nonalc alc organic meat healthfood bev icecream',
   home: 'clean care kitchen decor furniture bedding storage candles plants lights laundry',
-  health: 'kit devices kitdev drinks fitness pcare',
+  health: 'meds kit devices kitdev drinks fitness ayur yoga vitamins pcare',
   stationery: 'writing paper art books school printing other',
   electronics: 'mobile laptops appliances audio smarthome gaming kitchenapp',
   baby: 'babyfood diapers skin toys clothes safety furniture books gear',
   auto: 'auto spares maint care bike',
-  gift: 'novelty handmade cards festival flowers choco decor wrap frames',
+  tobacco: 'cig vape hookah tobacco lighters others',
+  gift: 'hampers personal novelty handmade cards festival souvenir flowers choco decor wrap frames others',
 };
 export const catPhoto = (shop, cat) => ((PHOTO[shop] || '').split(' ').includes(cat) ? `/assets/cats/${shop}-${cat}.webp` : null);
 
@@ -105,7 +106,7 @@ export function applyShop(id) {
   const s = shopOf(id);
   const slug = s.store.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   Object.assign(STORE, { name: s.store, slug, category: s.kind, about: `At ${s.store}, ${s.about}. Honest prices. Easy returns.` });
-  CATEGORIES.splice(0, CATEGORIES.length, { id: 'all', label: ['All'], icon: H + 'cat-all.svg', img: s.id === 'tobacco' ? null : `/assets/cats/${s.id}-all.webp` },
+  CATEGORIES.splice(0, CATEGORIES.length, { id: 'all', label: ['All'], icon: H + 'cat-all.svg', img: `/assets/cats/${s.id}-all.webp` },
     ...s.cats.map(x => ({ id: x.id, label: twoLines(x.label), name: x.label, icon: iconUrl(x.icon), img: catPhoto(s.id, x.id) })));
   PRODUCTS.forEach((p, i) => {
     p.cat = s.id === 'fashion' ? FASHION_PID[p.id] || FASHION[p.base] : s.cats[i % s.cats.length].id;

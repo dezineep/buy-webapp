@@ -14,7 +14,7 @@
 .sa-acts { display: flex; gap: 8px; }
 .sa-act { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 8px; border: 1px solid #e6e6e6 !important; border-radius: 15px !important; background: #fff !important; text-align: left; transition: transform .15s, background-color .2s; }
 .sa-act.wide { flex: none; width: 134px; }
-.sa-act:active { transform: scale(.97); background: #fbf3f3 !important; }
+.sa-act:active { transform: scale(.97); background: var(--soft) !important; }
 .sa-act img { width: 20px; height: 20px; }
 .sa-act span { font-size: 12px; font-weight: 500; line-height: 1.4; letter-spacing: -0.3px; color: #6f6f6f; white-space: nowrap; }
 
@@ -64,9 +64,14 @@
 .na-del-l { display: flex; align-items: center; gap: 4px; min-width: 0; }
 .na-del-l > img { flex: none; width: 51.545px; height: 54px; }
 .na-del-t { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0; }
-.na-tag { margin-bottom: 2px; padding: 2px 6px; border-radius: 33px; background: rgba(165, 34, 38, .1); font-size: 8px; line-height: 1.2; letter-spacing: -0.2px; color: var(--r); }
+.na-tag { margin-bottom: 2px; padding: 2px 6px; border-radius: 33px; background: rgba(var(--r-rgb), .1); font-size: 8px; line-height: 1.2; letter-spacing: -0.2px; color: var(--r); }
 .na-del-t b { font-size: 20px; font-weight: 600; line-height: 1.1; letter-spacing: -0.5px; color: var(--r); }
 .na-del-t small { font-size: 10px; line-height: 1.2; letter-spacing: -0.25px; color: #7a7a7a; white-space: nowrap; }
 .na-del-r { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 .na-del-r img { width: 12px; height: 12px; }
 .na-del-r p { font-size: 10px; line-height: 1.4; letter-spacing: -0.25px; color: #939393; text-align: right; white-space: nowrap; }
+.na-map > .na-loc, .bs-map > .bs-dir { z-index: 600; }
+.na-finding { position: absolute; z-index: 600; left: 50%; top: 12px; transform: translateX(-50%); padding: 6px 12px; border: 1px solid var(--r); border-radius: 999px; background: #fff; box-shadow: 2px 3px 0 #000; font-size: 12px; font-weight: 500; color: var(--r); white-space: nowrap; animation: naFind 1.2s ease-in-out infinite alternate; }
+@keyframes naFind { from { opacity: .7; } to { opacity: 1; } }
+/* keep the map's own layers (tiles, pin, buttons) inside the map box so nothing pokes through sheets / overlays */
+.na-map, .bs-map { isolation: isolate; }

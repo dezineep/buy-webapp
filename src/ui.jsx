@@ -63,7 +63,7 @@ export function Ring({ p, kind }) {
     <span className={'ba-ring' + (done ? ' done' : '')} data-kind={k}>
       <svg viewBox="0 0 42 42" aria-hidden="true">
         <circle cx="21" cy="21" r="19" fill="none" stroke="#dbdbdb" strokeWidth="4" />
-        <circle cx="21" cy="21" r="19" fill="none" stroke={done ? '#01ae0f' : '#a52226'} strokeWidth="4" strokeLinecap="round" strokeDasharray={`${len.toFixed(2)} ${RING_C}`} transform="rotate(-90 21 21)" opacity={len < 0.5 ? 0 : 1} />
+        <circle cx="21" cy="21" r="19" fill="none" stroke={done ? '#01ae0f' : 'var(--r)'} strokeWidth="4" strokeLinecap="round" strokeDasharray={`${len.toFixed(2)} ${RING_C}`} transform="rotate(-90 21 21)" opacity={len < 0.5 ? 0 : 1} />
       </svg>
       <i className="ba-ring-ic" style={{ WebkitMaskImage: layers, maskImage: layers }} />
     </span>
@@ -101,9 +101,9 @@ export function MapPin({ icon, drop }) {
       <i className="ba-mpin-ring" />
       <svg viewBox="0 0 44 54" width="44" height="54">
         <path d="M22 51C12 39 4 30 4 20a18 18 0 0 1 36 0c0 10-8 19-18 31Z" transform="translate(3 3)" fill="#000" />
-        <path d="M22 51C12 39 4 30 4 20a18 18 0 0 1 36 0c0 10-8 19-18 31Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M22 51C12 39 4 30 4 20a18 18 0 0 1 36 0c0 10-8 19-18 31Z" fill="var(--r)" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
         <circle cx="22" cy="20" r="12" fill="#fff" stroke="#000" strokeWidth="2" />
-        {icon ? null : <circle className="ba-mpin-dot" cx="22" cy="20" r="5" fill="#a52226" />}
+        {icon ? null : <circle className="ba-mpin-dot" cx="22" cy="20" r="5" fill="var(--r)" />}
       </svg>
       {icon ? <i className="ba-mpin-ic" style={m} /> : null}
     </span>
