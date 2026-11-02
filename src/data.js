@@ -33,7 +33,7 @@ export const STORE = {
 
 /* Figma 2167:7041 — icons are the Figma exports, tinted through a CSS mask so the selected tab can turn red */
 export const CATEGORIES = [
-  { id: 'all', label: ['All'], icon: V2 + 'home/cat-all.svg' },
+  { id: 'all', label: ['All', 'Products'], icon: V2 + 'home/cat-all.svg' },
   { id: 'men', label: ['Men’s', 'wears'], icon: V2 + 'home/cat-men.svg' },
   { id: 'women', label: ['Women’s', 'wears'], icon: V2 + 'home/cat-women.svg' },
   { id: 'kids', label: ['Kid’s', 'wears'], icon: V2 + 'home/cat-kids.svg' },

@@ -51,13 +51,46 @@ function More() {
   );
 }
 
+/* drag the handle / title area down to close a bottom sheet (tapping the dim behind it closes it too) */
+function useDragClose() {
+  const { A } = useBuy();
+  const root = useRef(null), d = useRef(null);
+  const sheet = () => root.current && root.current.closest('.ba-sheet');
+  const onPointerDown = e => {
+    const el = sheet(); if (!el) return;
+    d.current = { y: e.clientY, t: performance.now(), dy: 0 };
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch {}
+    el.style.transition = 'none';
+  };
+  const onPointerMove = e => {
+    const s = d.current, el = sheet(); if (!s || !el) return;
+    const dy = e.clientY - s.y;
+    s.dy = dy;
+    el.style.transform = `translateY(${dy > 0 ? dy : dy / 6}px)`; // a little give upwards, free downwards
+  };
+  const onPointerUp = () => {
+    const s = d.current, el = sheet(); d.current = null; if (!s || !el) return;
+    const fast = s.dy / Math.max(1, performance.now() - s.t) > 0.6;
+    el.style.transition = '';
+    if (s.dy > Math.max(90, el.offsetHeight * 0.3) || (fast && s.dy > 40)) { el.style.transform = 'translateY(100%)'; A.close(); }
+    else el.style.transform = '';
+  };
+  return { root, handlers: { onPointerDown, onPointerMove, onPointerUp, onPointerCancel: onPointerUp } };
+}
+
+/* Sort By — Figma 1476:4666: grab handle, 20px title, radio rows with a muted direction hint, dashed dividers */
+const SORTS = [['rel', 'Relevance', '( Best match )'], ['low', 'Price', '( Low → High )'], ['high', 'Price', '( High → Low )'], ['off', 'Discount', '( High → Low )']];
 function Sort() {
   const { S, A } = useBuy();
+  const { root, handlers } = useDragClose();
   return (
-    <><SheetHead title="Sort By" sub="Arrange products" />
-      <div className="bh-sortl">{[['rel', 'Relevance'], ['low', 'Price: low to high'], ['high', 'Price: high to low'], ['off', 'Biggest discount']].map(([k, l]) => (
-        <button key={k} className={(S.sort || 'rel') === k ? 'on' : ''} onClick={() => A.setsort(k)}><span>{l}</span><i /></button>
-      ))}</div></>
+    <div className="bso" ref={root}>
+      <div className="bso-drag" {...handlers}><i className="bso-grab" aria-hidden="true" /><h3>Sort By</h3></div>
+      <div className="bso-list" role="radiogroup" aria-label="Sort products">{SORTS.map(([k, l, h]) => {
+        const on = (S.sort || 'rel') === k;
+        return <button key={k} role="radio" aria-checked={on} className={'bso-row' + (on ? ' on' : '')} onClick={() => A.setsort(k)}><i className="bso-radio" /><span><b>{l}</b><small>{h}</small></span></button>;
+      })}</div>
+    </div>
   );
 }
 
@@ -171,12 +204,12 @@ function Quick({ pid }) {
     if (scroller.current) scroller.current.scrollTo({ top: 0, behavior: 'smooth' });
     timer.current = setTimeout(() => A.openfull(pid, img), 400);
   };
-  /* scroll freely until "View full details" is fully in view; scrolling 24px past that point opens the full page */
+  /* scroll freely until the options end (the description starts) in view; scrolling 24px past that opens the full page */
   const more = useRef(null);
   const onScroll = e => {
     const sc = e.currentTarget, b = more.current; if (!b) return;
-    const btnBottom = b.getBoundingClientRect().bottom - sc.getBoundingClientRect().top + sc.scrollTop;
-    if (sc.scrollTop >= Math.max(24, btnBottom - sc.clientHeight + 24)) expand();
+    const edge = b.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop;
+    if (sc.scrollTop >= Math.max(24, edge - sc.clientHeight + 24)) expand();
   };
   /* pull-down-to-close: vertical drags that start with the body scrolled to the top (first 8px decide the axis) */
   const onTouchStart = e => { if (busy.current) return; const t = e.touches[0]; drag.current = { x: t.clientX, y: t.clientY, dy: 0, axis: '', top: !scroller.current || scroller.current.scrollTop <= 0 }; };
@@ -214,9 +247,7 @@ function Quick({ pid }) {
           </div>
           {p.opts.length ? <OptionGroups p={p} s={s} /> : null}
           {p.custom ? <div className="bp-qv-qty"><p className="bp2-ol">Quantity</p><PackCards p={p} s={s} /></div> : null}
-          {/* Figma 857:2201 button style: white, red stroke, radius 10, hard shadow, 16/500 red + 18px chevron */}
-          <button className="bp-qv-more" ref={more} onClick={expand}>View Full Details</button>
-          <div className="bp-qv-desc"><p className="bp2-h">Description</p><p>{p.desc}</p></div>
+          <div className="bp-qv-desc" ref={more}><p className="bp2-h">Description</p><p>{p.desc}</p></div>
           <div className="bp-qv-sim"><p className="bp2-h">Similar products</p>
             <div className="bx-hlist">{PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 6).map(o => <MiniCard key={o.id} p={o} />)}</div></div>
         </div>
@@ -282,7 +313,7 @@ function Unlock({ id }) {
       <span className="bu-chip">Congrats!</span><p className="bu-big"><b>Free</b><s>₹49</s></p><p className="bu-sub">You unlocked Free Delivery</p>{btn}</div>
   );
   return (
-    <div className="bu"><div className="bu-tick"><span className="bu-rays">{Array.from({ length: 10 }, (_, i) => <i key={i} />)}</span><span className="bu-c"><svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg></span></div>
+    <div className="bu"><div className="bu-tick"><span className="bu-rays">{Array.from({ length: 10 }, (_, i) => <i key={i} />)}</span><span className="bu-c"><svg viewBox="0 0 24 24" width="32" height="32"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg></span></div>
       <p className="bu-t">{o.id === 'disc' ? 'Festive Offer' : 'Free Gift Unlocked'}</p><p className="bu-sub2">{o.id === 'disc' ? '50% Off Applied !' : 'Canvas Tote Bag added !'}</p>
       <p className="bu-saved">You saved {inr(o.id === 'disc' ? b.disc : 299)}</p>{btn}<span className="bu-conf">{Array.from({ length: 14 }, (_, i) => <i key={i} />)}</span></div>
   );

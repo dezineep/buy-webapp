@@ -168,12 +168,6 @@
 @keyframes bhPillIn { from { opacity: 0; transform: translateY(8px); } }
 
 /* ---------- sort sheet ---------- */
-.bh-sortl { display: flex; flex-direction: column; padding: 0 16px 8px; }
-.bh-sortl button { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 16px 0; border-bottom: 1px dashed #e4e4e4; font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.32px; color: #585858; transition: color .2s; }
-.bh-sortl button:last-child { border-bottom: 0; }
-.bh-sortl button.on { color: #000; }
-.bh-sortl i { flex: none; width: 20px; height: 20px; border: 1.5px solid #c9c9c9; border-radius: 50%; transition: border .2s; }
-.bh-sortl .on i { border: 6px solid var(--r); }
 
 /* ---------- store bar intro (Home.jsx `intro`): i0 = logo only, i1 = everything out, i2 = name tucked back in ---------- */
 /* intro: the pill starts as just the logo (a circle) and widens to reveal the name; i2 folds it back to the logo */

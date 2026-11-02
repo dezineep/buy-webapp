@@ -50,8 +50,6 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
 .bp-qv-grab { display: block; width: 40px; height: 4px; margin: -6px auto 10px; border-radius: 4px; background: #d9d9d9; }
 /* Figma 857:2201 ("Order Again" button style): white, 1px red stroke, radius 10, hard shadow 2px 3px, p 8 16, 16/500 red,
    18px chevron after the label; full width here */
-.bp-qv-more { display: flex; align-items: center; justify-content: center; gap: 4px; width: 100%; padding: 8px 16px; border: 1px solid #c3c3c3 !important; border-radius: 10px !important; background: #fff !important; box-shadow: 2px 3px 0 #c3c3c3; font-size: 14px; font-weight: 500; line-height: 1.2; letter-spacing: -0.42px; color: var(--r) !important; white-space: nowrap; transition: transform .15s, box-shadow .15s; } /* Figma 2198:5641 */
-.bp-qv-more:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #c3c3c3; }
 /* growing quick view: box, corners and padding animate together; nothing inside takes taps while it grows; the
    product page's pink header tint fades in on a layer behind the content (a gradient itself cannot transition) */
 .ba-modal.qv-full {

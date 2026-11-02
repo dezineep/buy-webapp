@@ -18,7 +18,7 @@ export default function Category({ entry }) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   // sub-category tabs (same switcher as the home categories) when the category has more than one
-  const subs = c.subs && c.subs.length > 1 ? [{ id: 'all', label: ['All'], img: c.img, icon: c.icon }, ...c.subs] : null;
+  const subs = c.subs && c.subs.length > 1 ? [{ id: 'all', label: ['All', 'Products'], img: c.img, icon: c.icon }, ...c.subs] : null;
   const [sub, setSub] = useState('all');
   const inp = useRef(null);
   const words = searchTokens(q);

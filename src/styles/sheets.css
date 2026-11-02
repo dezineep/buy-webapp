@@ -75,3 +75,20 @@
 .bm-go:active i { transform: translateX(3px); }
 .bm-body > .ba-btn { margin-top: 4px; }
 .bsh .bsh-shop .bsh-theme-dot { -webkit-mask: none; mask: none; border-radius: 50%; background: var(--r); box-shadow: 0 0 0 3px var(--pk2); }
+
+/* ---------- Sort By (Figma 1476:4666) ---------- */
+.bso { padding: 0 16px 8px; }
+.bso-drag { padding: 8px 0 8px; touch-action: none; cursor: grab; }
+.bso-grab { display: block; width: 52px; height: 4px; margin: 0 auto 8px; border-radius: 13px; background: #c8c8c8; }
+.bso-drag h3 { margin: 0; font-size: 20px; font-weight: 500; line-height: 1.1; letter-spacing: -0.4px; color: #000; }
+.bso-list { display: flex; flex-direction: column; }
+.bso-row { display: flex; align-items: center; gap: 8px; width: 100%; padding: 12px 0; border-bottom: 1px dashed #d6d6d6; text-align: left; }
+.bso-row:last-child { border-bottom: 0; }
+.bso-radio { position: relative; flex: none; width: 24px; height: 24px; border: 1px solid #878787; border-radius: 50%; transition: border-color .2s; }
+.bso-radio::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--r); transform: scale(0); transition: transform .25s cubic-bezier(.34, 1.56, .64, 1); }
+.bso-row.on .bso-radio { border-color: var(--r); }
+.bso-row.on .bso-radio::after { transform: scale(1); }
+.bso-row span { display: flex; align-items: baseline; gap: 4px; font-size: 16px; line-height: 1.2; white-space: nowrap; }
+.bso-row b { font-weight: 500; letter-spacing: -0.24px; color: #656565; }
+.bso-row small { font-size: 16px; font-weight: 400; letter-spacing: -0.4px; color: #929292; }
+.bso-row.on b { color: #000; }

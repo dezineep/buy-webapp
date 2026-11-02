@@ -125,7 +125,7 @@ export function applyShop(id) {
   const s = shopOf(id);
   const slug = s.store.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   Object.assign(STORE, { name: s.store, slug, category: s.kind, about: `At ${s.store}, ${s.about}. Honest prices. Easy returns.` });
-  CATEGORIES.splice(0, CATEGORIES.length, { id: 'all', label: ['All'], icon: H + 'cat-all.svg', img: `/assets/cats/${s.id}-all.webp` },
+  CATEGORIES.splice(0, CATEGORIES.length, { id: 'all', label: ['All', 'Products'], icon: H + 'cat-all.svg', img: `/assets/cats/${s.id}-all.webp` },
     ...s.cats.map(x => ({ id: x.id, label: twoLines(x.label), name: x.label, icon: iconUrl(x.icon), img: catPhoto(s.id, x.id),
       subs: (x.subs || []).map(([id, label]) => ({ id, label: twoLines(label), name: label, img: `/assets/cats/${s.id}-${x.id}-${id}.webp` })) })));
   PRODUCTS.forEach((p, i) => {

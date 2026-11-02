@@ -123,28 +123,28 @@
 .bc-ok img { width: 14px; height: 14px; }
 
 /* offer unlocked modal */
-.ba-sh-unlock.ba-modal { left: 50%; right: auto; width: 290px; margin-left: -145px; padding: 18px 16px 16px; }
+.ba-sh-unlock.ba-modal { left: 50%; right: auto; width: 256px; margin-left: -128px; padding: 14px 14px 12px; }
 .bu { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; overflow: hidden; padding: 0 3px 6px; } /* room for the button's stroke + hard shadow inside the clipped box */
-.bu-ill { position: relative; width: 210px; height: 160px; }
+.bu-ill { position: relative; width: 150px; height: 112px; }
 .bu-ill img { width: 100%; height: 100%; object-fit: contain; animation: buRide 1.1s ease-in-out infinite; }
 .bu-lines { position: absolute; left: 0; top: 60%; display: grid; gap: 7px; }
-.bu-lines i { display: block; height: 2px; width: 34px; background: #222; border-radius: 2px; animation: buLine .8s linear infinite; }
+.bu-lines i { display: block; height: 2px; width: 24px; background: #222; border-radius: 2px; animation: buLine .8s linear infinite; }
 .bu-lines i:nth-child(2) { width: 22px; animation-delay: .2s; } .bu-lines i:nth-child(3) { width: 28px; animation-delay: .4s; }
-.bu-chip { padding: 6px 14px; border-radius: 20px; background: rgba(1,174,15,.1); color: #01ae0f; font-size: 13px; animation: buPop .5s .2s both cubic-bezier(.34,1.56,.64,1); }
+.bu-chip { padding: 4px 10px; border-radius: 20px; background: rgba(1,174,15,.1); color: #01ae0f; font-size: 11px; animation: buPop .5s .2s both cubic-bezier(.34,1.56,.64,1); }
 .bu-big { display: flex; align-items: baseline; gap: 10px; margin: 2px 0 0; }
-.bu-big b { font-size: 46px; font-weight: 700; color: #01ae0f; letter-spacing: -1.5px; animation: buPop .6s .35s both cubic-bezier(.34,1.56,.64,1); }
-.bu-big s { font-size: 22px; color: #9b9b9b; }
-.bu-sub { color: #9b9b9b; font-size: 15px; margin: 0 0 12px; }
-.bu-tick { position: relative; width: 120px; height: 104px; display: grid; place-items: center; }
-.bu-c { width: 64px; height: 64px; border-radius: 50%; background: #01ae0f; display: grid; place-items: center; animation: buPop .55s both cubic-bezier(.34,1.56,.64,1); }
+.bu-big b { font-size: 34px; font-weight: 700; color: #01ae0f; letter-spacing: -1.5px; animation: buPop .6s .35s both cubic-bezier(.34,1.56,.64,1); }
+.bu-big s { font-size: 16px; color: #9b9b9b; }
+.bu-sub { color: #9b9b9b; font-size: 13px; margin: 0 0 8px; }
+.bu-tick { position: relative; width: 100px; height: 88px; display: grid; place-items: center; }
+.bu-c { width: 52px; height: 52px; border-radius: 50%; background: #01ae0f; display: grid; place-items: center; animation: buPop .55s both cubic-bezier(.34,1.56,.64,1); }
 .bu-c path { stroke-dasharray: 30; stroke-dashoffset: 30; animation: buDraw .45s .4s forwards; }
 .bu-rays { position: absolute; inset: 0; }
-.bu-rays i { position: absolute; left: 50%; top: 50%; width: 3px; height: 12px; margin: -6px 0 0 -1.5px; border-radius: 2px; background: #01ae0f; transform: rotate(calc(var(--k) * 36deg)) translateY(-46px); opacity: 0; animation: buRay 1.6s .45s infinite; }
+.bu-rays i { position: absolute; left: 50%; top: 50%; width: 3px; height: 12px; margin: -6px 0 0 -1.5px; border-radius: 2px; background: #01ae0f; transform: rotate(calc(var(--k) * 36deg)) translateY(-38px); opacity: 0; animation: buRay 1.6s .45s infinite; }
 .bu-rays i:nth-child(1){--k:0}.bu-rays i:nth-child(2){--k:1}.bu-rays i:nth-child(3){--k:2}.bu-rays i:nth-child(4){--k:3}.bu-rays i:nth-child(5){--k:4}.bu-rays i:nth-child(6){--k:5}.bu-rays i:nth-child(7){--k:6}.bu-rays i:nth-child(8){--k:7}.bu-rays i:nth-child(9){--k:8}.bu-rays i:nth-child(10){--k:9}
-.bu-t { color: #01ae0f; font-size: 18px; font-weight: 500; margin-top: 4px; }
-.bu-sub2 { color: #9b9b9b; font-size: 13px; }
-.bu-saved { font-size: 28px; font-weight: 600; letter-spacing: -.8px; margin: 2px 0 12px; animation: buPop .5s .5s both cubic-bezier(.34,1.56,.64,1); }
-.bu-ok { position: relative; z-index: 2; }
+.bu-t { color: #01ae0f; font-size: 16px; font-weight: 500; margin-top: 4px; }
+.bu-sub2 { color: #9b9b9b; font-size: 12px; }
+.bu-saved { font-size: 22px; font-weight: 600; letter-spacing: -.6px; margin: 2px 0 8px; animation: buPop .5s .5s both cubic-bezier(.34,1.56,.64,1); }
+.bu-ok { position: relative; z-index: 2; height: 40px; border-radius: 14px !important; font-size: 14px; }
 .bu-conf { position: absolute; inset: 0; pointer-events: none; }
 .bu-conf i { position: absolute; top: -10px; width: 7px; height: 7px; background: var(--r); animation: buFall 1.8s ease-in forwards; }
 .bu-conf i:nth-child(3n) { background: #f2b233; } .bu-conf i:nth-child(3n+1) { background: #01ae0f; }
