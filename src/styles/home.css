@@ -173,14 +173,13 @@
 .bh-top.i0 .bh-logo { transform: rotate(-300deg) scale(.7); }
 .bh-top.i2 .bh-logo { transform: rotate(360deg); }
 .bh-top.i0 .bh-store, .bh-top.i2 .bh-store { padding-right: 5px; }
-.bh-store-t { max-width: min(240px, calc(100vw - 222px)); margin-left: 4px; transition: max-width .75s cubic-bezier(.22, 1, .36, 1) .25s, margin .75s cubic-bezier(.22, 1, .36, 1) .25s, opacity .45s ease .4s, filter .5s ease .3s; }
+.bh-store-t { max-width: min(260px, calc(100vw - 174px)); margin-left: 4px; transition: max-width .75s cubic-bezier(.22, 1, .36, 1) .25s, margin .75s cubic-bezier(.22, 1, .36, 1) .25s, opacity .45s ease .4s, filter .5s ease .3s; }
 .bh-top.i0 .bh-store-t, .bh-top.i2 .bh-store-t { max-width: 0; margin-left: 0; opacity: 0; filter: blur(3px); }
 .bh-top.i2 .bh-store-t { transition-delay: 0s, 0s, 0s, 0s; }
 .bh-top.i0 .bh-store { transition-delay: 0s; }
 /* the buttons start stacked on the logo and spring out to their places one after another */
 .bh-btns > * { transition: transform .75s cubic-bezier(.34, 1.45, .64, 1), opacity .3s ease; }
-.bh-btns > :nth-child(1) { --fx: -230px; transition-delay: .35s; }
-.bh-btns > :nth-child(2) { --fx: -280px; transition-delay: .47s; }
-.bh-btns > :nth-child(3) { --fx: -330px; transition-delay: .59s; }
+.bh-btns > :nth-child(1) { --fx: -280px; transition-delay: .4s; }
+.bh-btns > :nth-child(2) { --fx: -330px; transition-delay: .52s; }
 .bh-top.i0 .bh-btns > * { opacity: 0; transform: translateX(var(--fx)) scale(.2) rotate(-200deg); transition-delay: 0s; }
 @media (prefers-reduced-motion: reduce) { .bh-top * { transition: none !important; } }

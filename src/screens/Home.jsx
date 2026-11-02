@@ -156,7 +156,6 @@ export default function Home({ scRef }) {
           <span className="bh-store-t"><b><span>{STORE.name}</span>{ICO.verified()}</b></span>
         </button>
         <span className="bh-btns">
-          <button className="ba-rbtn navy" onClick={A.m17} aria-label="Modulus Seventeen">{ICO.m17()}</button>
           <button className="ba-rbtn" onClick={A.share} aria-label="Share store">{ICO.share()}</button>
           <button className="ba-rbtn" onClick={A.more} aria-label="More options">{ICO.more()}</button>
         </span>
