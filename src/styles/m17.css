@@ -2,7 +2,7 @@
    The bot rules follow modulusseventeen.com css/bots.css: one SVG unit = one bot pixel, motion snaps in whole pixels. */
 .ba-sh-m17 { max-height: 92%; }
 .bm { padding-bottom: 8px; }
-.bm-drag { padding-top: 8px; touch-action: none; cursor: grab; }
+.bm-drag { position: sticky; top: 0; z-index: 5; padding-top: 8px; background: #fff; touch-action: none; cursor: grab; } /* header + close stay pinned while the sheet scrolls */
 .bm-drag .ba-sh-h { padding-top: 0; }
 .bm .bm-body { gap: 16px; padding-bottom: 16px; }
 
