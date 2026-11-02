@@ -28,10 +28,10 @@
 .bp2-packs::-webkit-scrollbar { display: none; }
 .bp2-pack {
   position: relative; flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 20px;
-  border: 1px solid #8a8a8a !important; border-radius: 10px !important; background: #fff !important; box-shadow: 2px 3px 0 #8a8a8a;
+  border: 1px solid #b5b5b5 !important; border-radius: 10px !important; background: #fff !important; box-shadow: 2px 3px 0 #b5b5b5;
   text-align: center; white-space: nowrap; transition: border-color .25s, box-shadow .25s, transform .15s;
 }
-.bp2-pack:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #8a8a8a; }
+.bp2-pack:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #b5b5b5; }
 .bp2-pack > span { font-size: 14px; line-height: 1.1; letter-spacing: -0.35px; color: #8a8a8a; transition: color .25s; }
 .bp2-pack > b { font-size: 18px; font-weight: 500; line-height: 1.1; letter-spacing: -0.45px; color: #464646; }
 .bp2-pack > b small { font-size: 12px; font-weight: 500; color: #7a7676; letter-spacing: -0.3px; }
@@ -73,7 +73,8 @@
 
 /* footer (Figma 2167:5884 / 2167:5491): cart button = pink, red stroke, hard shadow, red count badge */
 .bp2-foot { justify-content: flex-start; }
-.bp2-cartbtn { flex: none; display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 20px; border: 1px solid var(--r) !important; border-radius: 20px !important; background: rgba(var(--r-rgb), .1) !important; box-shadow: 2px 4px 0 #000; transition: transform .15s, box-shadow .15s; animation: bp2Pop .35s cubic-bezier(.34, 1.56, .64, 1); }
+.bp2-cartbtn { flex: none; display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 20px; border: 1px solid var(--r) !important; border-radius: 20px !important; background: rgba(var(--r-rgb), .1) !important; box-shadow: 2px 4px 0 #000; transition: transform .15s, box-shadow .15s; animation: bp2In .3s ease-out; }
+@keyframes bp2In { from { transform: scale(.94); opacity: 0; } }
 .bp2-cartbtn:active { transform: translate(1px, 2px); box-shadow: 1px 2px 0 #000; }
 .bp2-cartbtn img { width: 20px; height: 20px; }
 .bp2-cartbtn.wide { flex: 1 1 0; min-width: 0; justify-content: center; }

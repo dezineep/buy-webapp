@@ -1,6 +1,6 @@
 /* BUY · PRODUCT DETAILS — Figma 2167:5510 (with variants + bulk packs), 2167:5149 (no variants, item in cart)
    Bulk cards: each pack ("1 x Piece", "3 x Pieces" Best Value, …) + "Custom" (any quantity, sliding per-unit price).
-   Select Variant: one chip row per option group (Size, Color). Tags above the name echo the chosen variant.
+   Variants (above the pack cards, no heading): one chip row per option group (Size, Color). Tags above the name echo the chosen variant.
    Footer: Add to Cart -> [cart button with count] + stepper for the chosen variant/pack. */
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useBuy } from '../engine.jsx';
@@ -87,8 +87,8 @@ export default function Product({ entry }) {
             </div>
             {p.left ? <p className="bp2-left">Only {p.left} left in stock</p> : null}
           </div>
+          {p.opts.length ? <div className="bp2-var"><OptionGroups p={p} s={s} /></div> : null}
           <PackCards p={p} s={s} />
-          {p.opts.length ? <div className="bp2-var"><p className="bp2-h">Select Variant</p><OptionGroups p={p} s={s} /></div> : null}
           <CatRow p={p} />
           <div className="bp2-dsc">
             <div className="bp2-dsc-t"><p className="bp2-h">Description</p><p className={'bp2-desc' + (open ? ' open' : '')}>{p.desc}</p></div>

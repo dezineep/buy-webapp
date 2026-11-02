@@ -11,8 +11,8 @@
 .bh-store:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #000; }
 .bh-logo { flex: none; width: 28px; height: 28px; border: .5px solid var(--r); border-radius: 500px; object-fit: cover; background: #fff; }
 .bh-store-t { display: flex; align-items: center; min-width: 0; overflow: hidden; }
-.bh-store-t b { min-width: 0; display: flex; align-items: center; gap: 5px; font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.48px; color: #000; white-space: nowrap; }
-.bh-store-t b img { flex: none; width: 18px; height: 18px; }
+.bh-store-t b { min-width: 0; display: flex; align-items: center; gap: 4px; font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.48px; color: #000; white-space: nowrap; }
+.bh-store-t b img { flex: none; width: 14px; height: 14px; }
 .bh-store-t b span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .bh-btns { display: flex; align-items: center; gap: 8px; flex: none; }
 
@@ -32,7 +32,7 @@
 /* the block keeps one height (no jump when it pins); once pinned, a white strip fills the safe area above it */
 .bh-stick.pinned::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: var(--sat, 0px); background: #fff; }
 /* right padding keeps room for the collapsed search button (42 wide) that the search bar morphs into */
-.bh-deliver { display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 66px 0 16px; }
+.bh-deliver { display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 75px 0 16px; }
 .bh-addr { display: flex; align-items: center; gap: 8px; min-width: 0; text-align: left; }
 .bh-loc { flex: none; display: grid; place-items: center; padding: 5px 10px; border-radius: 30px; background: var(--r); }
 .bh-loc img { width: 20px; height: 20px; }
@@ -40,8 +40,9 @@
 .bh-addr-t small { font-size: 12px; line-height: 1; letter-spacing: -0.07px; color: var(--r); }
 .bh-addr-t > span { display: flex; align-items: center; gap: 4px; min-width: 0; }
 .bh-addr-t b { font-size: 14px; font-weight: 500; line-height: 1.2; letter-spacing: -0.1px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bh-chev { flex: none; position: relative; width: 14px; height: 14px; transform: rotate(90deg); }
-.bh-chev img { position: absolute; inset: 21.88% 34.38%; width: 31.24%; height: 56.24%; }
+.bh-chev { flex: none; position: relative; width: 14px; height: 14px; }
+/* Figma 2203:5462: 4 x 8 chevron pointing right, at 5,3 in a 14px box */
+.bh-chev img { position: absolute; left: 5px; top: 3px; width: 4px; height: 8px; }
 /* search button (Figma 2170:7418): #ddd stroke, radius 20, p 5 10, 16px glyph centred in a 20px box */
 /* search: expanded = old search bar (p 16, #ddd stroke, radius 20, 14px #aba7a7) 16px under the delivery row;
    pinned = Figma 2170:7418 button (42 x 32, radius 20) centred on the delivery row, right-aligned.
@@ -63,20 +64,27 @@
 .bh-stick.pinned .bh-sbar span { opacity: 0; transition: opacity .12s; }
 .bh-stick.pinned .bh-sbar:active { transform: scale(.94); }
 .bh-stick.pinned .bh-sgap { height: 0; }
+/* Modulus Seventeen chip (Figma 2203:5449): sits where the search button lands; fades and shrinks away as it arrives */
+.bh-m17 { position: absolute; z-index: 1; top: calc(16px + (var(--dh) - 32px) / 2); right: 16px; display: grid; place-items: center; height: 32px; padding: 5px 10px; border: 1px solid #dfdfdf; border-radius: 15px; background: #fff; transition: opacity .3s .08s, transform .38s cubic-bezier(.22, 1, .36, 1); }
+.bh-m17 img { width: 29px; height: 20px; object-fit: contain; }
+.bh-m17:active { transform: scale(.94); }
+.bh-stick.pinned .bh-m17 { opacity: 0; transform: scale(.6); pointer-events: none; transition: opacity .2s, transform .3s cubic-bezier(.22, 1, .36, 1); }
 
 /* category row (Figma 2167:7041: 60px items, gap 8, icon 24, label 10px #696969; selected red medium).
    Blinkit / Zepto tab: the selected tab is an outlined card that opens into the line under the row, with curved feet. */
 .bh-cats { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; margin-top: 8px; -webkit-overflow-scrolling: touch; }
 .bh-cats::-webkit-scrollbar { display: none; }
-.bh-cats-in { position: relative; display: flex; gap: 8px; width: max-content; min-width: 100%; padding: 8px 22px 0; }
+.bh-cats-in { position: relative; display: flex; gap: 6px; width: max-content; min-width: 100%; padding: 4px 22px 0; }
 .bh-cat-line { position: absolute; z-index: 3; left: 0; top: 0; overflow: visible; pointer-events: none; fill: none; stroke: var(--r); stroke-width: 1; }
-.bh-cat { position: relative; z-index: 2; flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 70px; padding: 8px 0 10px; color: #696969; transition: color .3s ease; -webkit-tap-highlight-color: transparent; }
+.bh-cat { position: relative; z-index: 2; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 60px; padding: 6px 0 8px; color: #696969; transition: color .3s ease; -webkit-tap-highlight-color: transparent; }
 /* Zepto / Blinkit style: a real product photo in a soft peach circle (shops without photos keep a line icon there) */
-.bh-cat-im { position: relative; display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: #fbeee4; transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
-.bh-cat-im:has(img) { background: none; } /* the photos carry their own circle */
-.bh-cat-im img { position: absolute; inset: 0; width: 56px; height: 56px; object-fit: contain; }
-.bh-cat-ic { display: block; width: 26px; height: 26px; background: currentColor; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
-.bh-cat > span:last-child { display: flex; flex-direction: column; align-items: center; font-size: 11px; font-weight: 400; line-height: 1.15; letter-spacing: -0.2px; text-align: center; white-space: nowrap; }
+/* transparent photos sit on a soft brand-tinted circle; the selected tab drops the circle and lets the photo grow */
+.bh-cat-im { position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background-color: var(--tint); transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
+.bh-cat-im img { position: absolute; left: 6px; top: 6px; width: 32px; height: 32px; object-fit: contain; transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
+.bh-cat.on .bh-cat-im:has(img) { background-color: transparent; }
+.bh-cat.on .bh-cat-im img { transform: scale(1.3); }
+.bh-cat-ic { display: block; width: 22px; height: 22px; background: currentColor; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
+.bh-cat > span:last-child { display: flex; flex-direction: column; align-items: center; font-size: 8px; font-weight: 400; line-height: 1.2; letter-spacing: -0.1px; text-align: center; white-space: nowrap; }
 .bh-cat.on { color: var(--r); }
 .bh-cat.on > span:last-child { font-weight: 600; }
 .bh-cat.on .bh-cat-im { transform: scale(1.06); }
@@ -85,8 +93,8 @@
 .bh-cat-ind { position: absolute; z-index: 1; left: 0; top: 2px; bottom: 0; border-radius: 16px 16px 0 0; background: linear-gradient(180deg, rgba(var(--r-rgb), .1) 0%, #fff 78%); will-change: transform, width; }
 
 /* pinned: the photos fold away so only the names stay (the row line and tab follow the new height) */
-.bh-cat-im { transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), height .32s cubic-bezier(.22, 1, .36, 1), opacity .2s, margin .32s cubic-bezier(.22, 1, .36, 1); }
-.bh-stick.pinned .bh-cat-im { height: 0; opacity: 0; margin-bottom: -6px; transform: scale(.6); }
+.bh-cat-im { transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), background-color .3s, height .32s cubic-bezier(.22, 1, .36, 1), opacity .2s, margin .32s cubic-bezier(.22, 1, .36, 1); }
+.bh-stick.pinned .bh-cat-im { height: 0; opacity: 0; margin-bottom: -4px; transform: scale(.6); }
 .bh-stick.pinned .bh-cat { padding-top: 6px; }
 .bh-cat { transition: color .3s ease, padding .32s cubic-bezier(.22, 1, .36, 1); }
 
@@ -113,8 +121,8 @@
 .bh-card-img > img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
 .bh-card-img:active > img { transform: scale(1.04); }
 .bh-card-ctl { position: absolute; z-index: 1; left: 6px; top: 97px; }
-.bh-card-name { align-self: stretch; font-size: 12px; font-weight: 500; line-height: 1.5; letter-spacing: -0.24px; color: #696969; cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.bh-card-pr { cursor: pointer; margin-top: auto; } /* prices line up across a row even when one name wraps */
+.bh-card-name { align-self: stretch; font-size: 12px; font-weight: 500; line-height: 1.25; letter-spacing: -0.24px; color: #696969; cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.bh-card-pr { cursor: pointer; }
 .bh-empty { grid-column: 1 / -1; padding: 40px 16px; text-align: center; font-size: 14px; line-height: 1.4; color: #777; }
 
 /* variant chips on product cards: one row per option group (sizes, then colours), "+N" for the rest */

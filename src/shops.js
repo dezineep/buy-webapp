@@ -9,16 +9,21 @@ import { STORE, CATEGORIES, PRODUCTS, V2 } from './data.js';
 import { iconUrl } from './catIcons.js';
 
 const H = V2 + 'home/';
-const c = (id, label, icon) => ({ id, label, icon });
+const c = (id, label, icon, subs) => ({ id, label, icon, subs });
 
 export const SHOPS = [
   { id: 'fashion', name: 'Fashion', icon: 'shirt-01', store: 'Urban Threads BLR', kind: 'Clothing Store',
     about: 'we handpick everyday wear, festive ethnic and sharp formals for the whole family. Fresh styles every week',
-    cats: [c('mens', 'Men’s Wear', H + 'cat-men.svg'), c('womens', 'Women’s Wear', H + 'cat-women.svg'), c('kids', 'Kids Wear', H + 'cat-kids.svg'),
-      c('ethnic', 'Ethnic Wear', H + 'cat-ethnic.svg'), c('sports', 'Sports Wear', 'jogger-pants'), c('acc', 'Accessories', 'belt'),
-      c('foot', 'Footwear', 'sandals'), c('bags', 'Bags & Luggage', 'luggage-01'), c('beauty', 'Beauty & Grooming', 'blush-brush-01'),
-      c('inner', 'Innerwear', 'underpants-01'), c('watch', 'Watches & Jewellery', 'necklace'), c('eye', 'Sunglasses & Eyewear', 'glasses'),
-      c('hats', 'Scarves, Hats & Gloves', 'hat')] },
+    // ethnic, sports, watches, eyewear and hats are folded into the categories a shopper would look in first; each
+    // keeps its own sub-category tab on the category screen ([id, label] — photo at cats/fashion-<cat>-<sub>.webp)
+    cats: [c('mens', 'Men’s Wear', H + 'cat-men.svg', [['shirts', 'Shirts'], ['tees', 'T-Shirts & Polos'], ['suits', 'Suits & Blazers'], ['kurtas', 'Kurtas']]),
+      c('womens', 'Women’s Wear', H + 'cat-women.svg', [['dresses', 'Dresses & Jumpsuits'], ['sarees', 'Sarees'], ['kurtasets', 'Kurta Sets']]),
+      c('kids', 'Kids Wear', H + 'cat-kids.svg', [['girls', 'Dresses & Tops'], ['jackets', 'Jackets'], ['baby', 'Baby Clothing']]),
+      c('acc', 'Accessories', 'belt', [['wallets', 'Wallets & Belts'], ['watches', 'Watches'], ['eye', 'Sunglasses'], ['caps', 'Caps & Scarves']]),
+      c('bags', 'Bags & Luggage', 'luggage-01', [['totes', 'Handbags & Totes'], ['backpacks', 'Backpacks'], ['travel', 'Travel Bags']]),
+      c('foot', 'Footwear', 'sandals', [['sneakers', 'Sneakers'], ['formal', 'Formal Shoes'], ['sandals', 'Sandals'], ['heels', 'Heels']]),
+      c('beauty', 'Beauty & Grooming', 'blush-brush-01', [['fragrance', 'Fragrances'], ['makeup', 'Makeup'], ['grooming', 'Skin & Grooming']]),
+      c('inner', 'Innerwear & Socks', 'underpants-01', [['innerwear', 'Innerwear'], ['socks', 'Socks']])] },
   { id: 'food', name: 'Food & Drinks', icon: 'watermelon', store: 'FreshCart Bengaluru', kind: 'Grocery & Food Store',
     about: 'we stock farm-fresh produce, pantry staples and ready-to-eat favourites, delivered while they are still fresh',
     cats: [c('fresh', 'Fresh Products', 'watermelon'), c('frozen', 'Frozen Foods', 'fridge'), c('snacks', 'Snacks & Sweets', 'popcorn'),
@@ -72,7 +77,7 @@ export const SHOPS = [
 ];
 /* categories that have a photo in public/assets/cats */
 const PHOTO = {
-  fashion: 'mens womens kids ethnic sports acc foot bags beauty inner watch eye hats',
+  fashion: 'mens womens kids acc foot bags beauty inner',
   food: 'fresh frozen snacks dairy bakery cooking pet ready dine babyfood nonalc alc organic meat healthfood bev icecream',
   home: 'clean care kitchen decor furniture bedding storage candles plants lights laundry',
   health: 'meds kit devices kitdev drinks fitness ayur yoga vitamins pcare',
@@ -96,9 +101,23 @@ const twoLines = s => {
   return [w.slice(0, best).join(' '), w.slice(best).join(' ')];
 };
 
-/* the clothing demo's own groups, for the fashion shop */
-const FASHION = { men: 'mens', formal: 'mens', women: 'womens', kids: 'kids', ethnic: 'ethnic' };
-const FASHION_PID = { m3: 'sports', a1: 'acc', a2: 'eye', a3: 'hats', a4: 'bags', a5: 'watch', a6: 'beauty', a7: 'acc', a8: 'inner', a9: 'hats', a10: 'bags' };
+/* the clothing demo's products in the fashion shop: [category, sub-category] */
+const FASHION = {
+  m1: ['mens', 'shirts'], m2: ['mens', 'shirts'], m3: ['mens', 'tees'], m4: ['mens', 'shirts'], f4: ['mens', 'shirts'],
+  f1: ['mens', 'suits'], f2: ['mens', 'suits'], f3: ['mens', 'suits'], e3: ['mens', 'kurtas'],
+  w1: ['womens', 'dresses'], w2: ['womens', 'dresses'], w3: ['womens', 'dresses'], w4: ['womens', 'dresses'],
+  e4: ['womens', 'sarees'], e5: ['womens', 'sarees'], e1: ['womens', 'kurtasets'], e2: ['womens', 'kurtasets'], e6: ['womens', 'kurtasets'],
+  k1: ['kids', 'girls'], k3: ['kids', 'girls'], k2: ['kids', 'jackets'], k5: ['kids', 'jackets'], k4: ['kids', 'baby'],
+  a1: ['acc', 'wallets'], a7: ['acc', 'wallets'], a5: ['acc', 'watches'], a2: ['acc', 'eye'], a3: ['acc', 'caps'], a9: ['acc', 'caps'],
+  a4: ['bags', 'totes'], a10: ['bags', 'backpacks'], a6: ['beauty', 'fragrance'], a8: ['inner', 'socks'],
+  n1: ['mens', 'tees'], n2: ['mens', 'tees'], n3: ['mens', 'tees'], n4: ['mens', 'tees'], n5: ['mens', 'suits'], n6: ['mens', 'kurtas'], n7: ['mens', 'kurtas'],
+  n8: ['womens', 'dresses'], n9: ['womens', 'dresses'], n10: ['womens', 'sarees'], n11: ['womens', 'sarees'],
+  n12: ['kids', 'girls'], n13: ['kids', 'jackets'], n14: ['kids', 'baby'],
+  n15: ['acc', 'wallets'], n16: ['acc', 'watches'], n17: ['acc', 'watches'], n18: ['acc', 'eye'], n19: ['acc', 'eye'], n20: ['acc', 'caps'],
+  n21: ['bags', 'totes'], n22: ['bags', 'totes'], n23: ['bags', 'backpacks'], n24: ['bags', 'travel'],
+  n25: ['foot', 'sneakers'], n26: ['foot', 'formal'], n27: ['foot', 'formal'], n28: ['foot', 'sandals'], n29: ['foot', 'heels'],
+  n30: ['beauty', 'makeup'], n31: ['beauty', 'grooming'], n32: ['beauty', 'grooming'], n33: ['inner', 'socks'], n34: ['inner', 'innerwear'],
+};
 
 PRODUCTS.forEach(p => { p.base = p.cat; });
 
@@ -107,9 +126,11 @@ export function applyShop(id) {
   const slug = s.store.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   Object.assign(STORE, { name: s.store, slug, category: s.kind, about: `At ${s.store}, ${s.about}. Honest prices. Easy returns.` });
   CATEGORIES.splice(0, CATEGORIES.length, { id: 'all', label: ['All'], icon: H + 'cat-all.svg', img: `/assets/cats/${s.id}-all.webp` },
-    ...s.cats.map(x => ({ id: x.id, label: twoLines(x.label), name: x.label, icon: iconUrl(x.icon), img: catPhoto(s.id, x.id) })));
+    ...s.cats.map(x => ({ id: x.id, label: twoLines(x.label), name: x.label, icon: iconUrl(x.icon), img: catPhoto(s.id, x.id),
+      subs: (x.subs || []).map(([id, label]) => ({ id, label: twoLines(label), name: label, img: `/assets/cats/${s.id}-${x.id}-${id}.webp` })) })));
   PRODUCTS.forEach((p, i) => {
-    p.cat = s.id === 'fashion' ? FASHION_PID[p.id] || FASHION[p.base] : s.cats[i % s.cats.length].id;
+    const f = s.id === 'fashion' ? FASHION[p.id] : [s.cats[i % s.cats.length].id];
+    p.cat = f[0]; p.sub = f[1] || null;
   });
   if (typeof document !== 'undefined') document.title = `${s.store} · BUY`;
   return s;

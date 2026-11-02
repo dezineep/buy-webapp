@@ -38,13 +38,13 @@ const tabPath = (x, w, W, H) => {
 };
 const ease = t => 1 - Math.pow(1 - t, 4);
 
-function CatTabs() {
-  const { S, A } = useBuy();
+/* items: [{ id, label: [line, line], img?, icon? }]; used for the home categories and a category's sub-categories */
+export function CatTabs({ items, value, onPick, label = 'Categories' }) {
   const row = useRef(null), inner = useRef(null), cur = useRef(null), raf = useRef(0);
   const [ind, setInd] = useState(null);
   const [box, setBox] = useState({ W: 0, H: 0 });
   const target = () => {
-    const b = row.current?.querySelector(`[data-cat="${S.cat}"]`);
+    const b = row.current?.querySelector(`[data-cat="${value}"]`);
     return b ? { x: b.offsetLeft - 6, w: b.offsetWidth + 12 } : null;
   };
   const place = (animate = true) => {
@@ -63,10 +63,10 @@ function CatTabs() {
       raf.current = requestAnimationFrame(step);
     }
     // keep the selected tab comfortably in view
-    const b = r.querySelector(`[data-cat="${S.cat}"]`);
+    const b = r.querySelector(`[data-cat="${value}"]`);
     r.scrollTo({ left: Math.max(0, b.offsetLeft - (r.clientWidth - b.offsetWidth) / 2), behavior: animate ? 'smooth' : 'auto' });
   };
-  useLayoutEffect(() => { place(ind !== null); }, [S.cat]);
+  useLayoutEffect(() => { place(ind !== null); }, [value]);
   useEffect(() => () => cancelAnimationFrame(raf.current), []);
   // the row's size changes on resize and when the photos fold away while the header is pinned
   useEffect(() => {
@@ -74,14 +74,14 @@ function CatTabs() {
     const ro = new ResizeObserver(() => { setBox({ W: el.offsetWidth, H: el.offsetHeight }); const to = target(); if (to) { cur.current = to; setInd(to); } });
     ro.observe(el);
     return () => ro.disconnect();
-  }, [S.cat]);
+  }, [value]);
   return (
-    <div className="bh-cats" ref={row} role="tablist" aria-label="Categories">
+    <div className="bh-cats" ref={row} role="tablist" aria-label={label}>
       <div className="bh-cats-in" ref={inner}>
         {ind && <span className="bh-cat-ind" style={{ transform: `translateX(${ind.x}px)`, width: ind.w }} aria-hidden="true" />}
         {ind && box.W ? <svg className="bh-cat-line" width={box.W} height={box.H} aria-hidden="true"><path d={tabPath(ind.x, ind.w, box.W, box.H)} /></svg> : null}
-        {CATEGORIES.map(c => (
-          <button key={c.id} data-cat={c.id} role="tab" aria-selected={S.cat === c.id} className={'bh-cat' + (S.cat === c.id ? ' on' : '')} onClick={() => A.setcat(c.id)}>
+        {items.map(c => (
+          <button key={c.id} data-cat={c.id} role="tab" aria-selected={value === c.id} className={'bh-cat' + (value === c.id ? ' on' : '')} onClick={() => onPick(c.id)}>
             <span className="bh-cat-im">{c.img ? <img src={c.img} alt="" draggable="false" /> : <i className="bh-cat-ic" style={{ WebkitMaskImage: `url("${c.icon}")`, maskImage: `url("${c.icon}")` }} />}</span>
             <span>{c.label.map((l, i) => <span key={i}>{l}</span>)}</span>
           </button>
@@ -168,14 +168,15 @@ export default function Home({ scRef }) {
         <div className="bh-deliver">
           <button className="bh-addr" onClick={A.address}>
             <span className="bh-loc"><img src={Q + 'ic-locate.svg'} width="20" height="20" alt="" /></span>
-            <span className="bh-addr-t"><small>Deliver to</small><span><b>{a ? `${a.area}, ${a.city} - ${a.pin}` : 'Add your delivery address'}</b><i className="bh-chev"><img src={Q + 'ic-chev.svg'} alt="" /></i></span></span>
+            <span className="bh-addr-t"><small>Deliver to</small><span><b>{a ? `${a.area}, ${a.city} - ${a.pin}` : 'Add your delivery address'}</b><i className="bh-chev"><img src={H + 'ic-chev-r.svg'} alt="" /></i></span></span>
           </button>
         </div>
+        <button className="bh-m17" onClick={A.m17} aria-label="About Modulus Seventeen" tabIndex={pinned ? -1 : 0}>{ICO.m17()}</button>
         <button className="bh-sbar" onClick={A.opensearch} aria-label="Search products">
           <img src={Q + 'ic-search.svg'} width="16" height="16" alt="" /><span>Search for products, categories...</span>
         </button>
         <i className="bh-sgap" aria-hidden="true" />
-        <CatTabs />
+        <CatTabs items={CATEGORIES} value={S.cat} onPick={A.setcat} />
       </div>
       <div className="bh-count"><b>{list.length} Products</b><button onClick={A.sort}><img src={H + 'ic-sort.svg'} width="18" height="18" alt="" />Sort By</button></div>
       <div ref={gridWrap} className="bh-gridwrap" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
