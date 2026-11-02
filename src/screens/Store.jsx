@@ -2,6 +2,7 @@
 import { useBuy } from '../engine.jsx';
 import { STORE, OFFERS, V2, inr } from '../data.js';
 import { Head, ICO } from '../ui.jsx';
+import { iconUrl } from '../catIcons.js';
 
 const S_ = V2 + 'store/';
 const OI = { del: ['of-del.svg', 24], pct: ['of-pct.svg', 20], gift: ['of-gift.svg', 20] };
@@ -28,7 +29,15 @@ export default function Store() {
           <div className="bs-days">{STORE.days.map(([d, a, b]) => <span key={d} className={a ? '' : 'off'}><b>{d}</b><small>{a ? <>{a} -<br />{b}</> : 'Closed'}</small></span>)}</div>
         </section>
         <section><p className="bs-sub">Store Location</p>
-          <div className="bs-map"><img className="bs-mapimg" src={S_ + 'map.png'} alt="Map" /><img className="bs-pin" src={S_ + 'map-pin.svg'} alt="" width="36" height="39" /><button className="bs-ob bs-dir" onClick={A.directions}>Get Directions</button></div>
+          <div className="bs-map"><img className="bs-mapimg" src={S_ + 'map.png'} alt="Map" /><span className="bs-pin" aria-hidden="true">
+            <i className="bs-pin-ring" />
+            <svg viewBox="0 0 44 54" width="44" height="54">
+              <path d="M22 51C12 39 4 30 4 20a18 18 0 0 1 36 0c0 10-8 19-18 31Z" transform="translate(3 3)" fill="#000" />
+              <path d="M22 51C12 39 4 30 4 20a18 18 0 0 1 36 0c0 10-8 19-18 31Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+              <circle cx="22" cy="20" r="12" fill="#fff" stroke="#000" strokeWidth="2" />
+            </svg>
+            <i className="bs-pin-ic" style={{ WebkitMaskImage: `url("${iconUrl('store-01')}")`, maskImage: `url("${iconUrl('store-01')}")` }} />
+          </span><button className="bs-ob bs-dir" onClick={A.directions}>Get Directions</button></div>
         </section>
         <section><p className="bs-sub">Offers Provided</p>
           <div className="bs-ofl">{OFFERS.map(o => (

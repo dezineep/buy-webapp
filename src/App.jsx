@@ -62,6 +62,9 @@ function Screens() {
   );
 }
 
+/* the icon that sweeps across the pill when an offer unlocks: scooter = free delivery, % = discount, gift = gift */
+const CONGRATS_IC = { del: '/assets/figma/home/ic-congrats-scooter.svg', pct: '/assets/v2/store/of-pct.svg', gift: '/assets/v2/store/of-gift.svg' };
+
 /* floating cart pill — Figma 2167:7332 (364 wide, p 10, radius 25, ring 30, CART + thumbs + chevrons) */
 function Pill() {
   const { S, A } = useBuy();
@@ -86,15 +89,15 @@ function Pill() {
     }
   }, [S.pill?.id]);
   let body;
-  if (st === 'congrats') body = <div className="bh-pill-msg bh-congrats" role="status"><img className="bh-congrats-ic" src="/assets/figma/home/ic-congrats-scooter.svg" width="24" height="24" alt="" /><b>Congratulations !</b></div>;
+  if (st === 'congrats') body = <div className="bh-pill-msg bh-congrats" role="status"><i className="bh-congrats-ic" style={{ '--ic': `url("${CONGRATS_IC[S.pill.offer?.kind] || CONGRATS_IC.del}")` }} aria-hidden="true" /><b>Congratulations !</b></div>;
   else if (st === 'saved') {
     const o = S.pill.offer;
     const saved = o.id === 'disc' ? b.disc : o.id === 'gift' ? 299 : 49;
-    body = <button className="bh-pill-msg bh-saved" onClick={A.cart} role="status"><span>You have unlocked <em>{o.unlocked}</em></span><small>Saved <strong>{inr(saved)}</strong></small></button>;
+    body = <button className="bh-pill-msg bh-saved" onClick={A.cartpill} role="status"><span>You have unlocked <em>{o.unlocked}</em></span><small>Saved <strong>{inr(saved)}</strong></small></button>;
   } else {
     const shown = S.cart.slice(0, 3), more = S.cart.length - shown.length;
     body = (
-      <button key={S.pill?.id || 0} className={'bh-pill' + (S.pill?.enter ? ' enter' : '')} onClick={A.cart} aria-label="View cart">
+      <button key={S.pill?.id || 0} className={'bh-pill' + (S.pill?.enter ? ' enter' : '')} onClick={A.cartpill} aria-label="View cart">
         <span className="bh-pill-l">
           {next ? <Ring p={b.sub / next.min} kind={next.kind} /> : <Ring p={1} kind="gift" />}
           <span className="bh-pill-t">{next ? <><b>{next.short}</b><small>Add more <strong>{inr(next.min - b.sub).replace('₹', '₹ ')}</strong></small></> : <><b>All offers unlocked</b><small>You saved <strong>{inr(b.mrp - b.sub + b.disc)}</strong></small></>}</span>

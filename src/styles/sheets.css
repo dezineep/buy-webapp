@@ -34,11 +34,19 @@
 .bsh-ofl { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 
 /* ---- variant picker ---- */
-.bsh-var .bsh-body { display: flex; flex-direction: column; gap: 16px; }
-.bsh-vtop { display: flex; align-items: center; gap: 12px; }
-.bsh-vtop img { flex: none; width: 64px; height: 64px; border-radius: 12px; object-fit: cover; }
-.bsh-vq { margin-bottom: -8px; }
-.bsh-vfoot { display: flex; gap: 8px; padding-top: 4px; }
+.bsh-var .bsh-body { display: flex; flex-direction: column; gap: 24px; }
+/* Figma 2197:5439: 108x89 photo (radius 15), 13px gap, price block 25px with the "Explore <category>" link under it */
+.bsh-vtop { display: flex; align-items: center; gap: 13px; }
+.bsh-vtop img { flex: none; width: 108px; height: 89px; border-radius: 15px; object-fit: cover; }
+.bsh-vinfo { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.bsh .bsh-vcat { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; }
+.bsh-vcat small { font-size: 10px; line-height: 1.1; letter-spacing: -0.2px; color: #919191; }
+.bsh-vcat b { display: flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.35px; color: var(--r); }
+.bsh-vcat i { flex: none; width: 10px; height: 10px; margin-top: 1px; background: currentColor; -webkit-mask: url(/assets/v2/search/ic-chev.svg) center / contain no-repeat; mask: url(/assets/v2/search/ic-chev.svg) center / contain no-repeat; transition: transform .2s; }
+.bsh-vcat:active i { transform: translateX(3px); }
+.bsh-vqty { display: flex; flex-direction: column; gap: 8px; }
+.bsh-var .bsh-vq { font-size: 12px; letter-spacing: -0.36px; color: #717171; }
+.bsh-vfoot { display: flex; gap: 8px; }
 
 /* More Options → shop type switcher (prototype): opens the shop-type picker */
 .bsh .bsh-shop { display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 8px; padding: 10px 12px; border: 1px solid #e3e3e3; border-radius: 15px; background: #fdfdfd; text-align: left; transition: transform .15s, background-color .2s; }

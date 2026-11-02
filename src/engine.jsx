@@ -155,7 +155,7 @@ export function BuyProvider({ children }) {
 
   /* ---------- actions ---------- */
   // saved addresses exist -> let the customer pick one (Swiggy style); none yet -> straight to the form
-  const toAddr = () => { if (S.addresses.length) go('addresses'); else { S.editing = null; S.addrMode = 'new'; S.draft = {}; go('address'); } };
+  const toAddr = () => { S.addrFirst = false; if (S.addresses.length) go('addresses'); else { S.editing = null; S.addrMode = 'new'; S.draft = {}; go('address'); } };
 
   const A = {
     back, home, go, toast, openSheet, closeSheet, selOf, commit,
@@ -173,11 +173,11 @@ export function BuyProvider({ children }) {
     share: () => { const url = `modulusbuy.com/${STORE.slug}`; if (navigator.share) navigator.share({ title: STORE.name, url: 'https://' + url }).catch(() => {}); else toast(`Store link copied: ${url}`); },
     more: () => openSheet('more'),
     /* address book: opening it from the home "Deliver to" row / More sheet / cart picks the delivery address */
-    address: () => { closeSheet(); S.checkout = false; S.toCart = false; go('addresses'); },
+    address: () => { closeSheet(); S.checkout = false; S.toCart = false; S.addrFirst = false; go('addresses'); },
     /* Figma 2174:7989 "New Address" (search + map + form) and 2174:7773 "Your Current Location" (map + prefilled form) */
-    newaddr: () => { closeSheet(); S.editing = null; S.located = false; S.addrMode = 'new'; S.draft = {}; go('address'); },
+    newaddr: () => { closeSheet(); S.addrFirst = false; S.editing = null; S.located = false; S.addrMode = 'new'; S.draft = {}; go('address'); },
     curaddr: () => { closeSheet(); S.editing = null; S.located = true; S.addrMode = 'current'; S.draft = { ...SAMPLE_ADDR, dist: 1.4 }; go('address'); },
-    editaddr: id => { closeSheet(); const a = S.addresses.find(x => x.id === id); S.editing = id; S.located = true; S.addrMode = 'new'; S.draft = { ...a }; go('address'); },
+    editaddr: id => { closeSheet(); S.addrFirst = false; const a = S.addresses.find(x => x.id === id); S.editing = id; S.located = true; S.addrMode = 'new'; S.draft = { ...a }; go('address'); },
     deladdr: id => { closeSheet(); S.addresses = S.addresses.filter(x => x.id !== id); if (S.addr && S.addr.id === id) S.addr = null; commit(); toast('Address deleted'); },
     shareaddr: id => { closeSheet(); const a = S.addresses.find(x => x.id === id); const t = `${a.label}: ${[a.street, a.road, a.area, a.city, a.pin].filter(Boolean).join(', ')}`; if (navigator.share) navigator.share({ text: t }).catch(() => {}); else { navigator.clipboard && navigator.clipboard.writeText(t).catch(() => {}); toast('Address copied to share'); } },
     requestaddr: () => window.open('https://wa.me/?text=' + encodeURIComponent(`Hi! Please share your delivery address for my ${STORE.name} order on BUY.`), '_blank'),
@@ -222,6 +222,14 @@ export function BuyProvider({ children }) {
       if (cur().n === 'cart') return;
       // the cart opens straight away; login and the delivery address are asked for at checkout
       go('cart');
+    },
+    // cart bar: a shopper without a delivery location adds one first (New Address screen), then lands on the cart;
+    // once a location is set (it's remembered), the bar goes straight to the cart
+    cartpill: () => {
+      closeSheet();
+      if (S.addr) { if (cur().n !== 'cart') go('cart'); return; }
+      S.toCart = true; S.addrFirst = true; S.editing = null; S.located = false; S.addrMode = 'new'; S.draft = {};
+      go('address');
     },
     offers: () => openSheet('offers'),
     amount: () => openSheet('amount'),
@@ -270,7 +278,7 @@ export function BuyProvider({ children }) {
       S.addresses = S.editing ? S.addresses.map(x => (x.id === S.editing ? saved : x)) : [saved, ...S.addresses];
       S.addr = saved; S.editing = null;
       const fromBook = S.stack.length > 1 && S.stack[S.stack.length - 2].n === 'addresses';
-      if (S.toCart) { S.toCart = false; S.stack = S.stack.slice(0, fromBook ? -2 : -1); go('cart'); }
+      if (S.toCart) { S.toCart = false; S.addrFirst = false; S.stack = S.stack.slice(0, fromBook ? -2 : -1); go('cart'); }
       else if (S.checkout && S.cart.length) openSheet('pay');
       else { toast('Address saved'); back(); }
     },

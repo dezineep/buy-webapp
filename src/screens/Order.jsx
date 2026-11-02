@@ -1,17 +1,30 @@
 /* BUY · ORDER STATUS — Figma 925-3325 placed, 781-2949 packed, 786-5443 on the way, 983-2725 delivered (same as the demo)
    OrderSummary is reused by the refund detail screen. Styles: styles/order.css (.bo-*) */
+import { useEffect, useRef, useState } from 'react';
 import { useBuy } from '../engine.jsx';
 import { FG, PARTNER, MON, STORE, fmtTime, fmtDay, fmtLong } from '../data.js';
 import { Head, ICO } from '../ui.jsx';
 import { downloadReceipt } from '../receipt.js';
-import { PlacedArt, DeliveredArt } from './OrderArt.jsx';
+import { PlacedArt, DeliveredArt, CancelledArt, RideArt, PackedArt } from './OrderArt.jsx';
 
 const O = FG + 'order/';
 const Img = ({ f, w, h, cls }) => <img className={cls} src={O + f} width={w} height={h} alt="" aria-hidden="true" />;
 
+/* Copy → "Copied" with a tick that draws itself (green), then back to Copy after 2s */
 export const CopyBtn = ({ v }) => {
-  const { A } = useBuy();
-  return <button className="bo-copy" onClick={() => A.copy(v)}>{ICO.copy()}<span>Copy</span></button>;
+  const [done, setDone] = useState(false);
+  const t = useRef(0);
+  useEffect(() => () => clearTimeout(t.current), []);
+  const copy = () => {
+    navigator.clipboard && navigator.clipboard.writeText(v).catch(() => {});
+    setDone(true); clearTimeout(t.current); t.current = setTimeout(() => setDone(false), 2000);
+  };
+  return (
+    <button className={'bo-copy' + (done ? ' done' : '')} onClick={copy} aria-live="polite">
+      <span className="bo-copy-ic">{done ? <svg key="ok" viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><path d="M2.5 7.3l3 3L11.5 4" /></svg> : ICO.copy()}</span>
+      <span key={done ? 'd' : 'c'} className="bo-copy-t">{done ? 'Copied' : 'Copy'}</span>
+    </button>
+  );
 };
 
 export function ItemChips({ items }) {
@@ -38,6 +51,26 @@ function OrderSummary({ o }) {
   );
 }
 
+/* Download Receipt: shows a small spinner + "Downloading..." while the PDF is built (kept on screen for at least
+   ~0.9s so the feedback is readable even when the file is ready instantly) */
+function ReceiptBtn({ o }) {
+  const { A } = useBuy();
+  const [busy, setBusy] = useState(false);
+  const go = () => {
+    if (busy) return;
+    setBusy(true);
+    const min = new Promise(r => setTimeout(r, 900));
+    Promise.all([downloadReceipt(o), min])
+      .then(() => A.toast('Receipt downloaded'), () => A.toast('Could not create the receipt, please try again'))
+      .finally(() => setBusy(false));
+  };
+  return (
+    <button className={'bo-ob bo-dl' + (busy ? ' busy' : '')} onClick={go} aria-busy={busy} disabled={busy}>
+      {busy ? <><i className="bo-spin" aria-hidden="true" />Downloading...</> : 'Download Receipt'}
+    </button>
+  );
+}
+
 export default function Order({ entry }) {
   const { S, A } = useBuy();
   const o = S.orders.find(x => x.id === entry.id);
@@ -53,12 +86,12 @@ export default function Order({ entry }) {
     p = 'Your order has been placed successfully and the items are yet to be packed soon';
     small = `Order placed on ${fmtTime(o.placedAt)}, ${fmtLong(o.placedAt)}`;
   } else if (st === 'packed' || st === 'dispatched') {
-    ill = <Img f="ill-packed.png" w={151} h={115} cls="bo-ill ride" />;
+    ill = st === 'packed' ? <PackedArt /> : <RideArt />;
     h = <>Your order is Arriving on<br />{fmtDay(arrive)}!</>;
     p = <>Your order has been packed and is arriving on {arriveShort}.<br />{st === 'packed' ? 'Delivery partner is yet to be assigned to your order' : 'Delivery partner has been assigned to your order'}</>;
     if (st === 'packed') small = `Order Packed on ${fmtTime(t.packed || new Date())}, ${fmtLong(t.packed || new Date())}`;
   } else if (st === 'cancelled') {
-    ill = <PlacedArt />;
+    ill = <CancelledArt />;
     h = 'Order Cancelled';
     p = 'This order was cancelled by the store. Your refund is being processed.';
   } else {
@@ -75,7 +108,6 @@ export default function Order({ entry }) {
               speed lines and a moving road. key={st} replays the art when the status changes. */}
           <div key={st} className={'bo-art ' + (st === 'packed' || st === 'dispatched' ? 'ride' : st === 'delivered' ? 'box' : 'placed')}>
             {ill}
-            {st === 'packed' || st === 'dispatched' ? <><span className="bo-speed" aria-hidden="true"><i /><i /><i /></span><span className="bo-road" aria-hidden="true" /></> : null}
           </div>
           <span className="bo-chip">{st === 'delivered' || st === 'cancelled' ? `Order #${o.id}` : `OTP : ${o.otp}`}</span>
           <div className="bo-msg"><h3 className="bo-h">{h}</h3><p className="bo-p">{p}</p></div>
@@ -100,7 +132,7 @@ export default function Order({ entry }) {
           {st !== 'delivered' && st !== 'cancelled' ? <button className="ba-btn wide" onClick={A.myorders}>Track Order Status</button> : null}
           <div className="bo-pair">
             <button className="bo-ob" onClick={A.home}>Continue Shopping</button>
-            {st !== 'cancelled' ? <button className="bo-ob" onClick={() => { if (!downloadReceipt(o)) A.toast('Receipt downloaded'); }}>Download Receipt</button> : null}
+            {st !== 'cancelled' ? <ReceiptBtn o={o} /> : null}
           </div>
         </div>
         <OrderSummary o={o} />

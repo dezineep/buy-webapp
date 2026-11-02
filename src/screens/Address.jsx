@@ -15,6 +15,7 @@ export default function Address() {
   const b = calcBill(S.cart);
   const freeAt = OFFERS[0].min;
   const current = S.addrMode === 'current' && !S.editing;
+  const first = S.addrFirst && !S.editing && !current;
   const pay = S.cart.length && S.checkout;
   const field = (k, label, ph, extra = {}) => (
     <label className="bd-f"><span className="bd-l">{label}</span>
@@ -23,8 +24,9 @@ export default function Address() {
   const dist = a.dist ?? 3.2;
   return (
     <div className="bd na">
-      <Head title={S.editing ? 'Edit Address' : current ? 'Your Current Location' : 'New Address'}
-        sub={current ? 'Save the address and select as Delivery location' : 'Enter the address details to get the order delivery'} />
+      {/* first time from the cart bar: a friendlier header, and saving takes the shopper on to the cart */}
+      <Head title={S.editing ? 'Edit Address' : current ? 'Your Current Location' : first ? 'Where should we deliver?' : 'New Address'}
+        sub={current ? 'Save the address and select as Delivery location' : first ? 'Add your address once, we’ll remember it for next time' : 'Enter the address details to get the order delivery'} />
       <div className="na-body">
         {current ? (
           <div className="na-map tall"><img className="na-mapimg" src={Q + 'map.png'} alt="Map of your current location" /><img className="na-pin drop" src={Q + 'map-pin.svg'} width="36" height="39" alt="" /></div>
@@ -58,7 +60,7 @@ export default function Address() {
       <div className={'ba-foot' + (pay ? ' bd-foot' : '')}>
         {pay ? <><div className="ba-amt"><b>{inr(b.total)}</b><small>{b.delivery ? 'Delivery Charge Included' : 'Free delivery applied'}</small></div>
           <button className="ba-btn" onClick={A.saveaddr}>Proceed to Payment</button></>
-          : <button className="ba-btn wide" onClick={A.saveaddr}>{current ? 'Save Current Location' : S.editing ? 'Save Changes' : 'Save Address'}</button>}
+          : <button className="ba-btn wide" onClick={A.saveaddr}>{S.addrFirst && !S.editing ? 'Save & View Cart' : current ? 'Save Current Location' : S.editing ? 'Save Changes' : 'Save Address'}</button>}
       </div>
     </div>
   );

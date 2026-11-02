@@ -4,7 +4,7 @@
    variants  select size / colour + bulk pack for a product straight from the grid (same chips as the product page) */
 import { useEffect, useRef, useState } from 'react';
 import { useBuy } from './engine.jsx';
-import { P, PRODUCTS, V2, FG, STORE, OFFERS, inr, calcBill, unitPrice, mrpOf, packPrice, customUnit, lineKey, selLabel, packText } from './data.js';
+import { P, PRODUCTS, CATEGORIES, V2, FG, STORE, OFFERS, inr, calcBill, unitPrice, mrpOf, packPrice, customUnit, lineKey, selLabel, packText } from './data.js';
 import { shopOf } from './shops.js';
 import { Otp } from './screens/Login.jsx';
 import { iconUrl } from './catIcons.js';
@@ -89,21 +89,29 @@ function Amount() {
   );
 }
 
+/* Option select sheet — Figma 2197:5439: photo + price + "Explore <category> >", option chips, quantity cards,
+   full-width Add to Cart. Once in the cart the footer becomes View cart + stepper. */
 function Variants({ pid }) {
   const { S, A } = useBuy();
   const p = P(pid), s = A.selOf(pid);
   const price = packPrice(p, s.sel, s.pack), mrp = mrpOf(p, unitPrice(p, s.sel)) * s.pack.n;
   const line = S.cart.find(l => l.key === lineKey(pid, s.sel, s.pack));
+  const cat = CATEGORIES.find(c => c.id === p.cat && c.id !== 'all');
   return (
-    <div className="bsh bsh-var"><SheetHead title={p.name} sub="Select variant" />
+    <div className="bsh bsh-var"><SheetHead title={p.name} sub="Select Option" />
       <div className="bsh-body">
-        <div className="bsh-vtop"><img src={p.img[0]} alt="" data-fly={p.id} /><PriceBox price={price} mrp={mrp} big /></div>
-        <OptionGroups p={p} s={s} />
-        <p className="bp2-ol bsh-vq">Quantity</p>
-        <PackCards p={p} s={s} />
+        <div className="bsh-vtop">
+          <img src={p.img[0]} alt="" data-fly={p.id} />
+          <div className="bsh-vinfo">
+            <PriceBox price={price} mrp={mrp} big />
+            {cat ? <button className="bsh-vcat" onClick={() => A.opencat(cat.id)}><small>Explore</small><b>{cat.name || cat.label.join(' ')}<i aria-hidden="true" /></b></button> : null}
+          </div>
+        </div>
+        {p.opts.length ? <OptionGroups p={p} s={s} /> : null}
+        {p.custom ? <div className="bsh-vqty"><p className="bp2-h bsh-vq">Quantity</p><PackCards p={p} s={s} /></div> : null}
         <div className="bsh-vfoot">
           {line ? <><button className="ba-btn soft grow" onClick={A.cart}>{ICO.cart()}View cart<em>{calcBill(S.cart).count}</em></button><BigStep line={line} grow /></>
-            : <button className="ba-btn wide" onClick={() => A.addsel(pid)}>Add to Cart · {inr(price)}</button>}
+            : <button className="ba-btn wide" onClick={() => A.addsel(pid)}>Add to Cart • {inr(price)}</button>}
         </div>
       </div>
     </div>
@@ -201,7 +209,7 @@ function Quick({ pid }) {
           {p.opts.length ? <OptionGroups p={p} s={s} /> : null}
           {p.custom ? <div className="bp-qv-qty"><p className="bp2-ol">Quantity</p><PackCards p={p} s={s} /></div> : null}
           {/* Figma 857:2201 button style: white, red stroke, radius 10, hard shadow, 16/500 red + 18px chevron */}
-          <button className="bp-qv-more" ref={more} onClick={expand}>View full details<img src={V2 + 'product/ic-chev-red.svg'} width="18" height="18" alt="" /></button>
+          <button className="bp-qv-more" ref={more} onClick={expand}>View Full Details</button>
           <div className="bp-qv-desc"><p className="bp2-h">Description</p><p>{p.desc}</p></div>
           <div className="bp-qv-sim"><p className="bp2-h">Similar products</p>
             <div className="bx-hlist">{PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id).slice(0, 6).map(o => <MiniCard key={o.id} p={o} />)}</div></div>

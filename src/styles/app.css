@@ -50,9 +50,8 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
 .bp-qv-grab { display: block; width: 40px; height: 4px; margin: -6px auto 10px; border-radius: 4px; background: #d9d9d9; }
 /* Figma 857:2201 ("Order Again" button style): white, 1px red stroke, radius 10, hard shadow 2px 3px, p 8 16, 16/500 red,
    18px chevron after the label; full width here */
-.bp-qv-more { display: flex; align-items: center; justify-content: center; gap: 4px; width: 100%; padding: 8px 16px; border: 1px solid var(--r) !important; border-radius: 10px !important; background: #fff !important; box-shadow: var(--hard); font-size: 16px; font-weight: 500; line-height: 1.2; letter-spacing: -0.48px; color: var(--r) !important; white-space: nowrap; transition: transform .15s, box-shadow .15s; }
-.bp-qv-more:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #000; }
-.bp-qv-more img { width: 18px; height: 18px; flex: none; }
+.bp-qv-more { display: flex; align-items: center; justify-content: center; gap: 4px; width: 100%; padding: 8px 16px; border: 1px solid #c3c3c3 !important; border-radius: 10px !important; background: #fff !important; box-shadow: 2px 3px 0 #c3c3c3; font-size: 14px; font-weight: 500; line-height: 1.2; letter-spacing: -0.42px; color: var(--r) !important; white-space: nowrap; transition: transform .15s, box-shadow .15s; } /* Figma 2198:5641 */
+.bp-qv-more:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 #c3c3c3; }
 /* growing quick view: box, corners and padding animate together; nothing inside takes taps while it grows; the
    product page's pink header tint fades in on a layer behind the content (a gradient itself cannot transition) */
 .ba-modal.qv-full {
@@ -85,7 +84,7 @@ html, body { margin: 0; height: 100%; background: #fff; overscroll-behavior: non
 /* Back to top pill (App.jsx BackTop): white, red stroke, hard shadow — same family as the + buttons */
 .ba .ba-totop { position: absolute; z-index: 6; left: 50%; bottom: calc(24px + var(--sab)); display: inline-flex; align-items: center; gap: 5px; height: 36px; padding: 0 16px 0 13px; border: 1px solid var(--r); border-radius: 999px; background: #fff; box-shadow: var(--hard); font-size: 13px; font-weight: 500; letter-spacing: -0.26px; color: var(--r); white-space: nowrap; opacity: 0; pointer-events: none; transform: translate(-50%, 24px) scale(.8); transition: transform .45s cubic-bezier(.34, 1.56, .64, 1), opacity .25s ease, bottom .4s cubic-bezier(.22, 1, .36, 1); }
 .ba .ba-totop.on { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
-.ba .ba-totop.up { bottom: calc(96px + max(var(--sab), var(--kb, 0px))); }
+.ba .ba-totop.up { bottom: calc(88px + max(var(--sab), var(--kb, 0px))); } /* cart bar: 20px from the bottom, 52px tall, then a 16px gap */
 .ba .ba-totop:active { transform: translate(calc(-50% + 1px), 2px); box-shadow: 1px 1px 0 #000; }
 .ba-totop i { flex: none; width: 12px; height: 12px; background: currentColor; -webkit-mask: url(/assets/v2/search/ic-chev.svg) center / contain no-repeat; mask: url(/assets/v2/search/ic-chev.svg) center / contain no-repeat; transform: rotate(-90deg); }
 

@@ -1,5 +1,4 @@
-/* Order receipt: a self-contained, print-ready HTML page (BUY red, Plus Jakarta Sans) opened in a new tab with the
-   browser's print / "Save as PDF" sheet. If the browser blocks the new tab, the same page downloads as an .html file. */
+/* Order receipt. downloadReceipt saves a PDF directly; receiptHTML is the same receipt as a styled HTML page. */
 import { STORE, inr, fmtTime, fmtShort } from './data.js';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -59,21 +58,87 @@ export function receiptHTML(o) {
 </body></html>`;
 }
 
-export function downloadReceipt(o) {
-  const html = receiptHTML(o);
-  const w = window.open('', '_blank');
-  if (w) {
-    w.document.open(); w.document.write(html); w.document.close();
-    // give the web font a moment, then raise the print / Save as PDF sheet (once, whichever fires first)
-    let done = false;
-    const go = () => { if (done) return; done = true; try { w.focus(); w.print(); } catch {} };
-    w.addEventListener('load', () => setTimeout(go, 350));
-    setTimeout(go, 1500);
-    return true;
+/* Download Receipt: builds a one-page PDF (jsPDF, loaded only when needed) and saves it straight away as
+   BUY-Receipt-<id>.pdf — no new tab, no print sheet. Amounts use "Rs." because the built-in PDF fonts have no ₹. */
+const R = [165, 34, 38], INK = [34, 34, 34], MUTED = [142, 142, 142], LINE = [228, 228, 228], GREEN = [1, 138, 12];
+const rs = n => 'Rs. ' + Math.round(n).toLocaleString('en-IN');
+
+export async function downloadReceipt(o) {
+  const { jsPDF } = await import('jspdf');
+  // lay the receipt out once on a tall page to measure it, then again on a page cut to fit (A5 width, never shorter)
+  const probe = new jsPDF({ unit: 'pt', format: [419.53, 2400] });
+  const h = Math.max(595.28, drawReceipt(probe, o) + 56);
+  const doc = new jsPDF({ unit: 'pt', format: [419.53, h] });
+  drawReceipt(doc, o);
+  doc.save(`BUY-Receipt-${o.id}.pdf`);
+}
+
+/* draws the receipt top-down and returns where the content ends */
+function drawReceipt(doc, o) {
+  const b = o.bill || {}, a = o.addr || {}, u = o.user || {};
+  const W = doc.internal.pageSize.getWidth(), M = 32;
+  let y = 0;
+  const text = (t, x, yy, { size = 10, color = INK, bold = false, align = 'left' } = {}) => {
+    doc.setFont('helvetica', bold ? 'bold' : 'normal'); doc.setFontSize(size); doc.setTextColor(...color);
+    doc.text(String(t), x, yy, { align });
+  };
+  const rule = (yy, dash) => { doc.setDrawColor(...LINE); doc.setLineWidth(.8); if (dash) doc.setLineDashPattern([3, 3], 0); doc.line(M, yy, W - M, yy); doc.setLineDashPattern([], 0); };
+
+  // header band
+  doc.setFillColor(249, 231, 232); doc.rect(0, 0, W, 96, 'F');
+  text(STORE.name, M, 36, { size: 16, bold: true });
+  text(`${STORE.area} · ${STORE.phone}`, M, 52, { size: 8.5, color: MUTED });
+  doc.setFillColor(...R); doc.roundedRect(W - M - 46, 24, 46, 18, 9, 9, 'F');
+  text('PAID', W - M - 23, 36.5, { size: 8.5, color: [255, 255, 255], bold: true, align: 'center' });
+  text('ORDER RECEIPT', M, 80, { size: 9, color: R, bold: true });
+
+  // meta
+  y = 118;
+  const meta = [['Order ID', '#' + o.id], ['Placed on', `${fmtShort(o.placedAt)}, ${fmtTime(o.placedAt)}`], ['Transaction ID', o.txn || '—'], ['Payment', 'Modulus Seventeen Pay']];
+  meta.forEach(([k, v], n) => {
+    const x = n % 2 ? W / 2 + 4 : M, yy = y + Math.floor(n / 2) * 30;
+    text(k, x, yy, { size: 8, color: MUTED }); text(v, x, yy + 12, { size: 9.5, bold: true });
+  });
+  y += 66; rule(y, true);
+
+  // items
+  y += 22; text('ITEMS', M, y, { size: 9, color: R, bold: true });
+  text('QTY', W - M - 90, y, { size: 8, color: MUTED, align: 'center' }); text('AMOUNT', W - M, y, { size: 8, color: MUTED, align: 'right' });
+  y += 8;
+  (o.items || []).forEach(i => {
+    y += 18;
+    const name = doc.splitTextToSize(i.name, W - 2 * M - 130);
+    text(name[0], M, y, { size: 10, bold: true });
+    text(i.qty, W - M - 90, y, { size: 10, align: 'center' });
+    text(i.price ? rs(i.price * i.qty) : 'Free', W - M, y, { size: 10, align: 'right', color: i.price ? INK : GREEN });
+    if (i.label) { y += 12; text(i.label, M, y, { size: 8, color: MUTED }); }
+    y += 8; rule(y);
+  });
+
+  // bill
+  y += 24; text('BILL DETAILS', M, y, { size: 9, color: R, bold: true });
+  const row = (k, v, color = INK) => { y += 17; text(k, M, y, { size: 9.5, color: [85, 85, 85] }); text(v, W - M, y, { size: 9.5, color, align: 'right' }); };
+  row(`Item total (${b.count || 0} item${b.count === 1 ? '' : 's'})`, rs(b.sub || 0));
+  row('Delivery charge', b.delivery ? rs(b.delivery) : 'FREE', b.delivery ? INK : GREEN);
+  if (b.disc) row('Discount', '- ' + rs(b.disc), GREEN);
+  row('GST (5%)', rs(b.gst || 0));
+  y += 12; doc.setDrawColor(0, 0, 0); doc.setLineWidth(1); doc.line(M, y, W - M, y);
+  y += 20; text('Total paid', M, y, { size: 13, bold: true }); text(rs(b.total || 0), W - M, y, { size: 13, bold: true, align: 'right' });
+  const saved = (b.mrp || 0) - (b.sub || 0) + (b.disc || 0);
+  if (saved > 0) {
+    y += 16; doc.setFillColor(230, 247, 231); doc.roundedRect(M, y, W - 2 * M, 22, 8, 8, 'F');
+    text(`You saved ${rs(saved)} on this order`, M + 10, y + 14.5, { size: 9, color: GREEN, bold: true }); y += 22;
   }
-  const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
-  const link = Object.assign(document.createElement('a'), { href: url, download: `BUY-Receipt-${o.id}.html` });
-  document.body.append(link); link.click(); link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 4000);
-  return false;
+
+  // deliver to
+  y += 28; rule(y - 14, true);
+  text('DELIVER TO', M, y, { size: 9, color: R, bold: true });
+  const who = [u.name, u.phone && '+91 ' + u.phone].filter(Boolean).join('  ·  ');
+  if (who) { y += 16; text(who, M, y, { size: 10, bold: true }); }
+  else y += 3;
+  const addr = doc.splitTextToSize([a.street, a.road, a.area, a.city && `${a.city} ${a.pin || ''}`].filter(Boolean).join(', '), W - 2 * M);
+  addr.forEach(l => { y += 13; text(l, M, y, { size: 9, color: [85, 85, 85] }); });
+
+  text(`Thank you for shopping with ${STORE.name} on BUY · a Modulus Seventeen product`, W / 2, doc.internal.pageSize.getHeight() - 24, { size: 7.5, color: MUTED, align: 'center' });
+  return y;
 }
