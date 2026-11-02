@@ -20,7 +20,7 @@
 .bk-sbar input::placeholder { color: rgba(var(--r-rgb), .5); }
 .bk-sbar button { flex: none; display: grid; place-items: center; width: 24px; height: 18px; }
 
-.bk-count { display: flex; align-items: center; justify-content: space-between; height: 18px; margin: 0 16px 16px; }
+.bk-count { display: flex; align-items: center; justify-content: space-between; height: 18px; margin: 0 16px 8px; }
 .bk-count b { font-size: 16px; font-weight: 500; line-height: 1.1; letter-spacing: -0.48px; color: #000; }
 .bk-count button { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; line-height: 1.1; letter-spacing: -0.42px; color: var(--r); }
 .bk-count button img { width: 18px; height: 18px; }
