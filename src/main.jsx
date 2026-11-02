@@ -7,6 +7,7 @@ import './styles/product.css';
 import './styles/product2.css';
 import './styles/variants.css';
 import './styles/sheets.css';
+import './styles/m17.css';
 import './styles/cart.css';
 import './styles/address.css';
 import './styles/order.css';

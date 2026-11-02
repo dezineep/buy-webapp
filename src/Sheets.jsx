@@ -11,6 +11,7 @@ import { Otp } from './screens/Login.jsx';
 import { iconUrl } from './catIcons.js';
 import { SheetHead, Ring, PriceBox, PriceRow, BigStep, ICO, MiniCard } from './ui.jsx';
 import { PackCards, OptionGroups } from './screens/Product.jsx';
+import M17Scene from './M17Scene.jsx';
 
 const M = V2 + 'more/';
 
@@ -57,7 +58,7 @@ function useDragClose() {
   const root = useRef(null), d = useRef(null);
   const sheet = () => root.current && root.current.closest('.ba-sheet');
   const onPointerDown = e => {
-    const el = sheet(); if (!el) return;
+    const el = sheet(); if (!el || e.target.closest('button')) return; // buttons in the drag area still tap
     d.current = { y: e.clientY, t: performance.now(), dy: 0 };
     try { e.currentTarget.setPointerCapture(e.pointerId); } catch {}
     el.style.transition = 'none';
@@ -265,15 +266,28 @@ const M17 = [
   { id: 'buy', logo: 'logo-buy.svg', w: 80, who: 'For shoppers', text: 'Order from neighbourhood stores, pay online and track it live.', url: 'https://buy-preview.vercel.app', cta: 'Visit website' },
   { id: 'sell', logo: 'logo-sell.svg', w: 82, who: 'For shop owners', text: 'Billing, stock, sales and your BUY store, all in one app.', url: 'https://sell-landing-page-woad.vercel.app', cta: 'Visit website' },
 ];
+/* Modulus Seventeen: the landing page's SELL + BUY scene, what the ecosystem does in three steps, and both apps.
+   Drag the handle / header down (or tap outside) to close. */
+// [colour, Hugeicons glyph (public/assets/m17/ic-*.svg), text]
+const M17_FLOW = [['buy', 'cart', 'Customer orders on BUY'], ['m17', 'sync', 'Synced to SELL instantly'], ['sell', 'truck', 'Billed, packed and delivered']];
 function About17() {
+  const { A } = useBuy();
+  const { root, handlers } = useDragClose();
   const open = u => window.open(u, '_blank', 'noopener');
   return (
-    <><SheetHead title="Modulus Seventeen" sub="The team behind BUY & SELL" />
+    <div className="bm" ref={root}>
+      <div className="bm-drag" {...handlers}>
+        <i className="bso-grab" aria-hidden="true" />
+        <div className="ba-sh-h"><div className="ba-sh-t"><b>Modulus Seventeen</b><small>The team behind BUY &amp; SELL</small></div>
+          <button className="ba-x" onClick={A.close} aria-label="Close">{ICO.close()}</button></div>
+      </div>
       <div className="bm-body">
-        <div className="bm-hero">
-          <img src="/assets/m17/logo-mark.svg" width="64" height="47" alt="Modulus Seventeen" />
-          <p>One ecosystem for every Indian business. <b>SELL</b> runs the shop, <b>BUY</b> is where its customers order online, and both stay in sync.</p>
+        <M17Scene />
+        <div className="bm-intro">
+          <h3>One ecosystem for every Indian business</h3>
+          <p><b>SELL</b> runs the shop. <b>BUY</b> takes it online. Orders, bills, stock and delivery stay in sync, with zero commission on BUY orders.</p>
         </div>
+        <ol className="bm-flow">{M17_FLOW.map(([k, ic, t], i) => <li key={k} className={'bm-step ' + k} style={{ '--i': i, '--ic': `url(/assets/m17/ic-${ic}.svg)` }}><i aria-hidden="true" /><span>{t}</span></li>)}</ol>
         <div className="bm-apps">{M17.map(a => (
           <div key={a.id} className={'bm-app ' + a.id}>
             <img className="bm-logo" src={'/assets/m17/' + a.logo} width={a.w} height="40" alt={a.id.toUpperCase()} /><span className="bm-who">{a.who}</span>
@@ -282,7 +296,8 @@ function About17() {
           </div>
         ))}</div>
         <button className="ba-btn wide" onClick={() => open('https://modulusseventeen.com')}>Explore Modulus Seventeen</button>
-      </div></>
+      </div>
+    </div>
   );
 }
 
