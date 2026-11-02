@@ -173,7 +173,7 @@ export function BuyProvider({ children }) {
     share: () => { const url = `modulusbuy.com/${STORE.slug}`; if (navigator.share) navigator.share({ title: STORE.name, url: 'https://' + url }).catch(() => {}); else toast(`Store link copied: ${url}`); },
     more: () => openSheet('more'),
     /* address book: opening it from the home "Deliver to" row / More sheet / cart picks the delivery address */
-    address: () => { closeSheet(); S.checkout = false; S.toCart = false; S.addrFirst = false; go('addresses'); },
+    address: () => { S.fromHome = cur().n === 'home' && !S.sheet; closeSheet(); S.checkout = false; S.toCart = false; S.addrFirst = false; go('addresses'); },
     /* Figma 2174:7989 "New Address" (search + map + form) and 2174:7773 "Your Current Location" (map + prefilled form) */
     newaddr: () => { closeSheet(); S.addrFirst = false; S.editing = null; S.located = false; S.addrMode = 'new'; S.draft = {}; go('address'); },
     curaddr: () => { closeSheet(); S.editing = null; S.located = true; S.addrMode = 'current'; S.draft = { ...SAMPLE_ADDR, dist: 1.4 }; go('address'); },
@@ -280,6 +280,8 @@ export function BuyProvider({ children }) {
       const fromBook = S.stack.length > 1 && S.stack[S.stack.length - 2].n === 'addresses';
       if (S.toCart) { S.toCart = false; S.addrFirst = false; S.stack = S.stack.slice(0, fromBook ? -2 : -1); go('cart'); }
       else if (S.checkout && S.cart.length) openSheet('pay');
+      // picked "Use Current Location" from the home delivery bar: confirm it and go straight back home
+      else if (S.fromHome) { S.fromHome = false; home(); toast(`Delivering to ${saved.area || saved.city}`); }
       else { toast('Address saved'); back(); }
     },
     paynow: () => {

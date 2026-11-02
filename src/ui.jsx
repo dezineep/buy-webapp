@@ -91,6 +91,25 @@ export function CatRow({ p }) {
   );
 }
 
+/* map pin in the app's outlined style: red drop with a black stroke + hard shadow and a white disc holding either
+   an icon (data URL / path, tinted red) or a red "you are here" dot. Its tip sits on the centre of the map (the
+   parent must be position: relative), and a ring pulses out from that point. */
+export function MapPin({ icon, drop }) {
+  const m = icon ? { WebkitMaskImage: `url("${icon}")`, maskImage: `url("${icon}")` } : null;
+  return (
+    <span className={'ba-mpin' + (drop ? ' drop' : '')} aria-hidden="true">
+      <i className="ba-mpin-ring" />
+      <svg viewBox="0 0 44 54" width="44" height="54">
+        <path d="M22 51C12 39 4 30 4 20a18 18 0 0 1 36 0c0 10-8 19-18 31Z" transform="translate(3 3)" fill="#000" />
+        <path d="M22 51C12 39 4 30 4 20a18 18 0 0 1 36 0c0 10-8 19-18 31Z" fill="#a52226" stroke="#000" strokeWidth="2.5" strokeLinejoin="round" />
+        <circle cx="22" cy="20" r="12" fill="#fff" stroke="#000" strokeWidth="2" />
+        {icon ? null : <circle className="ba-mpin-dot" cx="22" cy="20" r="5" fill="#a52226" />}
+      </svg>
+      {icon ? <i className="ba-mpin-ic" style={m} /> : null}
+    </span>
+  );
+}
+
 export function AddStep({ n, onAdd, onInc, onDec, fill, label }) {
   const on = n > 0;
   return (

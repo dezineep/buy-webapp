@@ -4,7 +4,7 @@
    Styles: styles/address.css (fields .bd-*) + styles/addresses.css (.na-*) */
 import { useBuy } from '../engine.jsx';
 import { STORE, OFFERS, DELIVERY, V2, FG, inr, calcBill } from '../data.js';
-import { Head } from '../ui.jsx';
+import { Head, MapPin } from '../ui.jsx';
 
 const Q = V2 + 'addr/';
 const STATES = ['Karnataka', 'Maharashtra', 'Tamil Nadu', 'Delhi', 'West Bengal', 'Telangana', 'Kerala', 'Gujarat'];
@@ -29,13 +29,13 @@ export default function Address() {
         sub={current ? 'Save the address and select as Delivery location' : first ? 'Add your address once, we’ll remember it for next time' : 'Enter the address details to get the order delivery'} />
       <div className="na-body">
         {current ? (
-          <div className="na-map tall"><img className="na-mapimg" src={Q + 'map.png'} alt="Map of your current location" /><img className="na-pin drop" src={Q + 'map-pin.svg'} width="36" height="39" alt="" /></div>
+          <div className="na-map tall"><img className="na-mapimg" src={Q + 'map.png'} alt="Map of your current location" /><MapPin drop /></div>
         ) : (
           <div className="na-top">
             <label className="na-search"><img src={Q + 'search-16.svg'} width="16" height="16" alt="" /><input placeholder="Search your area for delivery" aria-label="Search your area for delivery" /></label>
             <div className="na-map">
               <img className="na-mapimg" src={Q + 'map.png'} alt="Map" />
-              <img className={'na-pin' + (S.located ? ' drop' : '')} src={Q + 'map-pin.svg'} width="36" height="39" alt="" />
+              <MapPin drop={S.located} />
               <button className="na-loc" onClick={A.locate}><span className="na-loc-ic"><img src={FG + 'address/locate.svg'} width="16.875" height="16.875" alt="" /></span>Use Current Location</button>
             </div>
           </div>
@@ -60,7 +60,7 @@ export default function Address() {
       <div className={'ba-foot' + (pay ? ' bd-foot' : '')}>
         {pay ? <><div className="ba-amt"><b>{inr(b.total)}</b><small>{b.delivery ? 'Delivery Charge Included' : 'Free delivery applied'}</small></div>
           <button className="ba-btn" onClick={A.saveaddr}>Proceed to Payment</button></>
-          : <button className="ba-btn wide" onClick={A.saveaddr}>{S.addrFirst && !S.editing ? 'Save & View Cart' : current ? 'Save Current Location' : S.editing ? 'Save Changes' : 'Save Address'}</button>}
+          : <button className="ba-btn wide" onClick={A.saveaddr}>{S.addrFirst && !S.editing ? 'Save & View Cart' : current && S.fromHome ? 'Confirm Delivery Address' : current ? 'Save Current Location' : S.editing ? 'Save Changes' : 'Save Address'}</button>}
       </div>
     </div>
   );

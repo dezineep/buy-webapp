@@ -236,3 +236,15 @@
 @keyframes baMcN { from { transform: translate(-50%, -50%) scale(.4); opacity: 0; } }
 .ba-mc > button:active { transform: translate(1px, 2px); }
 .ba-mc.on > .ba-mc-dec:active { transform: translate(1px, 2px); }
+
+/* MapPin (ui.jsx): tip on the exact centre of its map, gentle hop, ring pulsing from the tip */
+.ba-mpin { position: absolute; z-index: 1; left: 50%; top: 50%; width: 44px; height: 54px; margin: -51px 0 0 -22px; transform-origin: 50% 100%; pointer-events: none; animation: baPinHop 2.4s ease-in-out infinite; }
+.ba-mpin.drop { animation: baPinDrop .6s cubic-bezier(.34, 1.56, .64, 1), baPinHop 2.4s .6s ease-in-out infinite; }
+.ba-mpin svg { display: block; position: relative; z-index: 1; overflow: visible; }
+.ba-mpin-ic { position: absolute; z-index: 2; left: 13px; top: 11px; width: 18px; height: 18px; background: #a52226; -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
+.ba-mpin-dot { transform-box: fill-box; transform-origin: center; animation: baPinDot 1.6s ease-in-out infinite; }
+.ba-mpin-ring { position: absolute; left: 50%; top: 100%; width: 26px; height: 10px; margin: -6px 0 0 -13px; border: 2px solid #a52226; border-radius: 50%; opacity: 0; animation: baPinRing 2.4s ease-out infinite; }
+@keyframes baPinHop { 0%, 70%, 100% { transform: none; } 80% { transform: translateY(-6px); } }
+@keyframes baPinDrop { from { transform: translateY(-40px); opacity: 0; } }
+@keyframes baPinDot { 0%, 100% { transform: scale(1); } 50% { transform: scale(.7); } }
+@keyframes baPinRing { 0% { opacity: .8; transform: scale(.4); } 100% { opacity: 0; transform: scale(2.2); } }
