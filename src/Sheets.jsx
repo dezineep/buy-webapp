@@ -52,41 +52,43 @@ function More() {
   );
 }
 
-/* drag the handle / title area down to close a bottom sheet (tapping the dim behind it closes it too) */
-function useDragClose() {
-  const { A } = useBuy();
-  const root = useRef(null), d = useRef(null);
-  const sheet = () => root.current && root.current.closest('.ba-sheet');
+/* Every bottom sheet closes by dragging its grab handle or header down (tapping the dim behind it closes it too).
+   App.jsx's Layer puts these handlers on the sheet container; drags only start in a drag zone, never on a button. */
+const DRAG_ZONE = '.ba-grab, .ba-sh-h, .bso-drag, .bm-drag';
+export function useSheetDrag(close) {
+  const d = useRef(null);
   const onPointerDown = e => {
-    const el = sheet(); if (!el || e.target.closest('button')) return; // buttons in the drag area still tap
+    const el = e.currentTarget;
+    if (!e.target.closest(DRAG_ZONE) || e.target.closest('button, input, a, textarea, select, label')) return;
     d.current = { y: e.clientY, t: performance.now(), dy: 0 };
-    try { e.currentTarget.setPointerCapture(e.pointerId); } catch {}
+    try { el.setPointerCapture(e.pointerId); } catch {}
     el.style.transition = 'none';
   };
   const onPointerMove = e => {
-    const s = d.current, el = sheet(); if (!s || !el) return;
+    const s = d.current; if (!s) return;
     const dy = e.clientY - s.y;
     s.dy = dy;
-    el.style.transform = `translateY(${dy > 0 ? dy : dy / 6}px)`; // a little give upwards, free downwards
+    e.currentTarget.style.transform = `translateY(${dy > 0 ? dy : dy / 6}px)`; // a little give upwards, free downwards
   };
-  const onPointerUp = () => {
-    const s = d.current, el = sheet(); d.current = null; if (!s || !el) return;
+  const onPointerUp = e => {
+    const s = d.current, el = e.currentTarget; d.current = null; if (!s) return;
     const fast = s.dy / Math.max(1, performance.now() - s.t) > 0.6;
     el.style.transition = '';
-    if (s.dy > Math.max(90, el.offsetHeight * 0.3) || (fast && s.dy > 40)) { el.style.transform = 'translateY(100%)'; A.close(); }
+    if (s.dy > Math.max(90, el.offsetHeight * 0.3) || (fast && s.dy > 40)) { el.style.transform = 'translateY(100%)'; close(); }
     else el.style.transform = '';
   };
-  return { root, handlers: { onPointerDown, onPointerMove, onPointerUp, onPointerCancel: onPointerUp } };
+  return { onPointerDown, onPointerMove, onPointerUp, onPointerCancel: onPointerUp };
 }
+// sheets that draw their own handle inside their header
+export const OWN_GRAB = new Set(['sort', 'm17']);
 
 /* Sort By — Figma 1476:4666: grab handle, 20px title, radio rows with a muted direction hint, dashed dividers */
 const SORTS = [['rel', 'Relevance', '( Best match )'], ['low', 'Price', '( Low → High )'], ['high', 'Price', '( High → Low )'], ['off', 'Discount', '( High → Low )']];
 function Sort() {
   const { S, A } = useBuy();
-  const { root, handlers } = useDragClose();
   return (
-    <div className="bso" ref={root}>
-      <div className="bso-drag" {...handlers}><i className="bso-grab" aria-hidden="true" /><h3>Sort By</h3></div>
+    <div className="bso">
+      <div className="bso-drag"><i className="bso-grab" aria-hidden="true" /><h3>Sort By</h3></div>
       <div className="bso-list" role="radiogroup" aria-label="Sort products">{SORTS.map(([k, l, h]) => {
         const on = (S.sort || 'rel') === k;
         return <button key={k} role="radio" aria-checked={on} className={'bso-row' + (on ? ' on' : '')} onClick={() => A.setsort(k)}><i className="bso-radio" /><span><b>{l}</b><small>{h}</small></span></button>;
@@ -272,11 +274,10 @@ const M17 = [
 const M17_FLOW = [['buy', 'cart', 'Customer orders on BUY'], ['m17', 'sync', 'Synced to SELL instantly'], ['sell', 'truck', 'Billed, packed and delivered']];
 function About17() {
   const { A } = useBuy();
-  const { root, handlers } = useDragClose();
   const open = u => window.open(u, '_blank', 'noopener');
   return (
-    <div className="bm" ref={root}>
-      <div className="bm-drag" {...handlers}>
+    <div className="bm">
+      <div className="bm-drag">
         <i className="bso-grab" aria-hidden="true" />
         <div className="ba-sh-h"><div className="ba-sh-t"><b>Modulus Seventeen</b><small>The team behind BUY &amp; SELL</small></div>
           <button className="ba-x" onClick={A.close} aria-label="Close">{ICO.close()}</button></div>
@@ -301,24 +302,6 @@ function About17() {
   );
 }
 
-function Pay() {
-  const { S, A } = useBuy();
-  const b = calcBill(S.cart);
-  const opts = [['UPI', 'Google Pay, PhonePe, Paytm & more', <img key="u" src={FG + 'cart/ic-upi.svg'} width="30" height="30" alt="" />], ['Credit / Debit Card', 'Visa, Mastercard, RuPay'], ['Net Banking', 'All major banks']];
-  return (
-    <div className="bc-pay"><SheetHead title="Modulus Seventeen Pay" sub={`Paying ${STORE.name}`} />
-      <div className="bc-sh">
-        <div className="bc-pay-amt"><small>Amount to pay</small><b>{inr(b.total)}</b><span className="bc-pay-n">{b.count} Item{b.count === 1 ? '' : 's'} · {STORE.name}</span></div>
-        <div className="bc-pay-o">{opts.map(([t, s, ic], i) => <label key={t}><input type="radio" name="bapm" defaultChecked={!i} /><span className="bc-pay-t"><b>{t}</b><small>{s}</small></span>{ic}</label>)}</div>
-        <p className="bc-note">Your money is held safely in the Modulus Seventeen gateway and settled to the store only after delivery.</p>
-        <button className="ba-btn wide" onClick={A.paynow}>Pay {inr(b.total)}</button>
-      </div>
-      <div className="bc-paying"><span className="bc-spin" /><b>Processing payment</b><small>Do not close this window</small></div>
-      <div className="bc-paid"><span className="bc-tick"><img src={FG + 'cart/ic-check-green.svg'} width="14" height="14" alt="" /></span><b>Payment successful</b><span className="bc-ok"><img src={FG + 'cart/ic-check-green.svg'} width="14" height="14" alt="" />{inr(b.total)} paid</span></div>
-    </div>
-  );
-}
-
 function Unlock({ id }) {
   const { S, A } = useBuy();
   const o = OFFERS.find(x => x.id === id) || OFFERS[0], b = calcBill(S.cart);
@@ -334,6 +317,6 @@ function Unlock({ id }) {
   );
 }
 
-export const SHEETS = { more: More, sort: Sort, offers: Offers, amount: Amount, variants: Variants, custom: Custom, quick: Quick, otp: Otp, m17: About17, pay: Pay, unlock: Unlock };
+export const SHEETS = { more: More, sort: Sort, offers: Offers, amount: Amount, variants: Variants, custom: Custom, quick: Quick, otp: Otp, m17: About17, unlock: Unlock };
 export const MODALS = new Set(['quick', 'unlock']);
 export const renderSheet = (name, arg) => { const C = SHEETS[name]; return C ? <C pid={arg} id={arg} /> : null; };

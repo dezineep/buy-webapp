@@ -265,3 +265,9 @@
 .ba-lmap .maplibregl-ctrl-attrib { font: 9px/1.4 "Plus Jakarta Sans", system-ui, sans-serif; }
 .ba-lmap .maplibregl-ctrl-attrib.maplibregl-compact { margin: 0 0 6px 6px; }
 .ba-lmap.static .maplibregl-canvas { cursor: default; }
+
+/* every bottom sheet: a grab handle (Figma 1476:4666) — it and the header drag the sheet down to close (Sheets.jsx useSheetDrag) */
+.ba-grab { display: flex; justify-content: center; height: 20px; padding-top: 8px; touch-action: none; cursor: grab; }
+.ba-grab::before { content: ""; width: 52px; height: 4px; border-radius: 13px; background: #c8c8c8; }
+.ba-sheet .ba-sh-h { touch-action: none; }
+.ba-sheet:has(> .ba-grab) .ba-sh-h { padding-top: 4px; }

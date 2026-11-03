@@ -1,0 +1,110 @@
+/* BUY · checkout (screens/Pay.jsx): loader + failed screens (Figma 2242:8034 / 2242:8081) and the Cashfree page */
+.bpy { min-height: 100%; background: linear-gradient(180deg, var(--tint) 0, #fff 11%); }
+
+/* opening / processing */
+.bpy-wait { display: grid; place-items: center; padding: 16px; }
+.bpy-wait-in { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; max-width: 380px; margin-top: -40px; text-align: center; }
+.bpy-wait h2 { margin: 6px 0 0; font-size: 22px; font-weight: 500; line-height: 1.2; letter-spacing: -.44px; color: #000; }
+.bpy-amt { font-size: 32px; font-weight: 600; line-height: 1.2; letter-spacing: -.64px; color: var(--r); }
+.bpy-wait p { margin: 0; font-size: 14px; line-height: 1.5; letter-spacing: -.28px; color: #6b6b6b; }
+.bpy-sec { display: flex; align-items: center; gap: 6px; font-size: 11px; letter-spacing: -.22px; color: #8a8989; }
+
+/* failed */
+.bpy-fail { display: flex; flex-direction: column; padding-bottom: 150px; }
+.bpy-body { display: flex; flex-direction: column; gap: 16px; padding: 0 16px; }
+.bpy-hero { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 4px 0 8px; text-align: center; }
+.bpy-hero h2 { margin: 0; font-size: 22px; font-weight: 500; line-height: 1.2; letter-spacing: -.44px; color: #000; }
+.bpy-hero p { margin: 0; font-size: 14px; line-height: 1.5; letter-spacing: -.28px; color: #6b6b6b; }
+.bpy-sum { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 1px solid #e6e6e6; border-radius: 15px; background: #fff; }
+.bpy-sum > b { font-size: 16px; font-weight: 500; line-height: 1.2; letter-spacing: -.32px; color: #000; }
+.bpy-sum p { display: flex; justify-content: space-between; gap: 8px; margin: 0; font-size: 13px; line-height: 1.2; letter-spacing: -.26px; color: #5f5f5f; }
+.bpy-sum p span:last-child { color: #000; }
+.bpy-sum i { display: block; border-top: 1px dashed #d9d9d9; }
+.bpy-sum .bpy-total span:first-child { font-size: 14px; font-weight: 500; color: #000; }
+.bpy-sum .bpy-total span:last-child { font-size: 18px; font-weight: 600; letter-spacing: -.36px; color: var(--r); }
+.bpy-note { margin: 0; font-size: 12px; line-height: 1.2; letter-spacing: -.24px; color: #8a8989; text-align: center; }
+.bpy-foot { flex-direction: column; gap: 12px; }
+.bpy-foot .ba-btn { width: 100%; }
+.bpy-foot .bpy-ghost { background: var(--pk2) !important; color: var(--r) !important; }
+
+/* ---------- illustrations (screens/PayArt.jsx), same language as the order art ---------- */
+.bpa, .bpf { display: block; overflow: visible; }
+.bpa *, .bpf * { transform-box: fill-box; }
+.bpa-floor, .bpf-floor { fill: var(--soft); }
+.bpa-card { transform-origin: 50% 100%; animation: bpaCard 2.2s cubic-bezier(.45, 0, .3, 1) infinite; }
+@keyframes bpaCard { 0%, 100% { transform: translateY(-6px); } 45%, 55% { transform: translateY(34px); } }
+.bpa-coin { transform-origin: center; opacity: 0; }
+.bpa-coin.c1 { animation: bpaCoinL 2.2s ease-in-out infinite; }
+.bpa-coin.c2 { animation: bpaCoinR 2.2s ease-in-out .5s infinite; }
+@keyframes bpaCoinL { 0% { opacity: 0; transform: translate(-14px, -6px) scale(.6); } 20% { opacity: 1; transform: translate(0, -30px) scale(1); } 50% { opacity: 1; transform: translate(26px, 10px) scale(.9); } 60%, 100% { opacity: 0; transform: translate(30px, 24px) scale(.5); } }
+@keyframes bpaCoinR { 0% { opacity: 0; transform: translate(14px, -6px) scale(.6); } 20% { opacity: 1; transform: translate(0, -28px) scale(1); } 50% { opacity: 1; transform: translate(-28px, 10px) scale(.9); } 60%, 100% { opacity: 0; transform: translate(-32px, 24px) scale(.5); } }
+.bpa-wallet { transform-origin: 50% 100%; animation: bpaWallet 2.2s ease-in-out infinite; }
+@keyframes bpaWallet { 0%, 40%, 100% { transform: none; } 50% { transform: scale(1.04, .95); } 60% { transform: scale(.98, 1.03); } }
+.bpa-eye, .bpf-eye { transform-origin: center; animation: bpaBlink 3.2s infinite; }
+@keyframes bpaBlink { 0%, 92%, 100% { transform: none; } 95% { transform: scaleY(.15); } }
+.bpa-sparks path { fill: none; stroke: var(--r); stroke-width: 2.4; stroke-linecap: round; }
+.bpa-sparks circle { fill: #f2b233; }
+.bpa-sparks > * { transform-origin: center; animation: bpaSpark 1.6s ease-in-out infinite alternate; opacity: .2; }
+.bpa-sparks > :nth-child(2) { animation-delay: .4s; } .bpa-sparks > :nth-child(3) { animation-delay: .8s; } .bpa-sparks > :nth-child(4) { animation-delay: 1.2s; }
+@keyframes bpaSpark { to { opacity: 1; transform: scale(1.25) rotate(20deg); } }
+.bpa-dots circle { fill: var(--r); transform-origin: center; animation: bpaDot 1s ease-in-out infinite; }
+.bpa-dots circle:nth-child(2) { animation-delay: .15s; } .bpa-dots circle:nth-child(3) { animation-delay: .3s; }
+@keyframes bpaDot { 0%, 60%, 100% { transform: none; opacity: .35; } 30% { transform: translateY(-7px); opacity: 1; } }
+
+.bpf-card { transform-origin: 50% 100%; animation: bpfDrop .7s cubic-bezier(.34, 1.5, .64, 1) both, bpfShake .5s ease-in-out .9s 2, bpfSad 3.4s ease-in-out 2s infinite; }
+@keyframes bpfDrop { from { transform: translateY(-40px) scale(.8); opacity: 0; } }
+@keyframes bpfShake { 25% { transform: translateX(-5px) rotate(-3deg); } 75% { transform: translateX(5px) rotate(3deg); } }
+@keyframes bpfSad { 50% { transform: rotate(-2deg) translateY(2px); } }
+.bpf-drop { opacity: 0; animation: bpfDropFall 2.4s ease-in 1.4s infinite; }
+@keyframes bpfDropFall { 0% { opacity: 0; transform: translateY(-4px); } 15% { opacity: 1; } 70% { opacity: 1; transform: translateY(14px); } 100% { opacity: 0; transform: translateY(22px); } }
+.bpf-badge { transform-origin: center; animation: bpfPop .5s cubic-bezier(.34, 1.8, .64, 1) .55s both; }
+@keyframes bpfPop { from { transform: scale(0) rotate(-40deg); } }
+.bpf-x { fill: none; stroke: #fff; stroke-width: 3.4; stroke-linecap: round; stroke-dasharray: 18; stroke-dashoffset: 18; animation: bpfDraw .4s ease-out 1s forwards; }
+@keyframes bpfDraw { to { stroke-dashoffset: 0; } }
+.bpf-rays line { stroke: #e00004; stroke-width: 2.4; stroke-linecap: round; }
+.bpf-rays { transform-origin: center; opacity: 0; animation: bpfRays 2.4s cubic-bezier(.2, .8, .3, 1) 1.3s infinite; }
+@keyframes bpfRays { 0% { opacity: 0; transform: scale(.6); } 30% { opacity: 1; } 100% { opacity: 0; transform: scale(1.25); } }
+
+/* ---------- Cashfree hosted checkout (their page, their look) ---------- */
+.bcf { --cf: #6933d3; min-height: 100%; display: flex; flex-direction: column; background: #f5f5fa; font-family: inherit; }
+.bcf-top { display: flex; align-items: center; gap: 10px; padding: calc(12px + var(--sat, 0px)) 16px 14px; background: var(--cf); color: #fff; }
+.bcf-x { flex: none; width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, .16); font-size: 22px; line-height: 1; color: #fff; }
+.bcf-mer { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
+.bcf-mer img { width: 32px; height: 32px; border-radius: 8px; background: #fff; object-fit: cover; }
+.bcf-mer span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.bcf-mer b { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bcf-mer small, .bcf-amt small { font-size: 11px; opacity: .8; }
+.bcf-amt { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.bcf-amt b { font-size: 16px; font-weight: 700; }
+.bcf-body { flex: 1; padding: 16px; }
+.bcf-h { margin: 0 0 10px; font-size: 13px; font-weight: 600; color: #4b4b5b; }
+.bcf-list { display: flex; flex-direction: column; gap: 8px; }
+.bcf-m { border: 1px solid #e4e4ee; border-radius: 10px; background: #fff; overflow: hidden; transition: border-color .2s; }
+.bcf-m.on { border-color: var(--cf); }
+.bcf-mh { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px; text-align: left; }
+.bcf-mh span { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.bcf-mh b { font-size: 14px; font-weight: 600; color: #1d1d2b; }
+.bcf-mh small { font-size: 11.5px; color: #7a7a8c; }
+.bcf-mh em { width: 18px; height: 18px; border: 1.5px solid #c4c4d4; border-radius: 50%; }
+.bcf-m.on .bcf-mh em { border: 5px solid var(--cf); }
+.bcf-ic { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 8px; background: #efeafc; font-size: 10px; font-style: normal; font-weight: 700; color: var(--cf); }
+.bcf-ic.upi::before { content: "UPI"; } .bcf-ic.card::before { content: "CARD"; font-size: 8px; } .bcf-ic.nb::before { content: "BANK"; font-size: 8px; } .bcf-ic.wallet::before { content: "W"; } .bcf-ic.later::before { content: "PL"; }
+.bcf-mb { display: flex; flex-direction: column; gap: 10px; padding: 0 12px 12px; }
+.bcf-apps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.bcf-app { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0; border: 1px solid #ececf3; border-radius: 8px; }
+.bcf-app.on { border-color: var(--cf); background: #f7f3ff; }
+.bcf-app i { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font-size: 12px; font-style: normal; font-weight: 700; color: #fff; }
+.bcf-app small { font-size: 10.5px; color: #4b4b5b; }
+.bcf-or { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 11px; color: #8a8a9c; }
+.bcf-or::before, .bcf-or::after { content: ""; flex: 1; border-top: 1px solid #ececf3; }
+.bcf-in { width: 100%; min-width: 0; padding: 10px 12px; border: 1px solid #dcdce8; border-radius: 8px; font: inherit; font-size: 14px; color: #1d1d2b; background: #fff; }
+.bcf-row { display: flex; gap: 8px; }
+.bcf-test { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 16px; padding: 10px 12px; border: 1px dashed #c9bdf2; border-radius: 10px; background: #faf8ff; font-size: 11.5px; color: #5a4a8c; }
+.bcf-seg { display: flex; padding: 2px; border-radius: 8px; background: #ece6fb; }
+.bcf-seg button { padding: 6px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #5a4a8c; }
+.bcf-seg button.on { background: #fff; color: #0a8a3a; box-shadow: 0 1px 2px rgba(0, 0, 0, .1); }
+.bcf-seg button.on.fail { color: #e00004; }
+.bcf-foot { position: sticky; bottom: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 16px calc(12px + var(--sab, 0px)); background: #fff; border-top: 1px solid #ececf3; }
+.bcf-pay { width: 100%; height: 48px; border-radius: 10px; background: var(--cf); font-size: 16px; font-weight: 600; color: #fff; }
+.bcf-pay:active { opacity: .9; }
+.bcf-by { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: #8a8a9c; }

@@ -6,7 +6,7 @@ import { useBuy } from './engine.jsx';
 import ShopPicker from './screens/ShopPicker.jsx';
 import { STORE, P, inr, calcBill, nextOffer, V2 } from './data.js';
 import { Ring } from './ui.jsx';
-import { renderSheet, MODALS } from './Sheets.jsx';
+import { renderSheet, MODALS, useSheetDrag, OWN_GRAB } from './Sheets.jsx';
 import Home from './screens/Home.jsx';
 import Product from './screens/Product.jsx';
 import Cart from './screens/Cart.jsx';
@@ -18,9 +18,10 @@ import Orders from './screens/Orders.jsx';
 import Store from './screens/Store.jsx';
 import Login from './screens/Login.jsx';
 import Category from './screens/Category.jsx';
+import Pay from './screens/Pay.jsx';
 import Refunds, { RefundDetail } from './screens/Refunds.jsx';
 
-const SCREENS = { home: Home, login: Login, category: Category, product: Product, cart: Cart, address: Address, addresses: Addresses, search: Search, order: Order, orders: Orders, store: Store, refunds: Refunds, refund: RefundDetail };
+const SCREENS = { home: Home, login: Login, category: Category, product: Product, cart: Cart, address: Address, addresses: Addresses, search: Search, order: Order, orders: Orders, store: Store, refunds: Refunds, refund: RefundDetail, pay: Pay };
 
 function Scr({ e, cls }) {
   const ref = useRef(null);
@@ -118,11 +119,13 @@ function Layer() {
   const { S, A } = useBuy();
   const sh = S.sheet;
   const kind = sh && MODALS.has(sh.name) ? 'modal' : 'sheet';
+  const drag = useSheetDrag(A.close);
   return (
     <div className={'ba-layer' + (sh && sh.on ? ' on' : '')}>
       {sh ? <>
         <div className="ba-dim" onClick={A.close} />
-        <div className={`ba-${kind} ba-sh-${sh.name}${sh.bye ? ' bye' : ''}${sh.paying ? ' paying' : ''}${sh.paid ? ' paid' : ''}`} role="dialog" aria-modal="true">
+        <div className={`ba-${kind} ba-sh-${sh.name}${sh.bye ? ' bye' : ''}${sh.paying ? ' paying' : ''}${sh.paid ? ' paid' : ''}`} role="dialog" aria-modal="true" {...(kind === 'sheet' ? drag : {})}>
+          {kind === 'sheet' && !OWN_GRAB.has(sh.name) ? <i className="ba-grab" aria-hidden="true" /> : null}
           {renderSheet(sh.name, sh.arg)}
         </div>
       </> : null}

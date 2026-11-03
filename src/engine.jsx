@@ -2,8 +2,8 @@
    State lives in one mutable object (S) held in a ref; every action mutates it and calls commit() to re-render,
    exactly like the landing-page demo engine, so screens stay simple readers of S.
 
-   Screens: home, login, category{cat}, product{pid}, cart, address, order{id}, orders, store, refunds, refund{id}
-   Sheets : more, sort, amount, offers, variants{pid}, custom{pid}, quick{pid} (modal), otp, m17, pay, unlock{id} (modal) */
+   Screens: home, login, category{cat}, product{pid}, cart, address, order{id}, orders, store, refunds, refund{id}, pay (checkout)
+   Sheets : more, sort, amount, offers, variants{pid}, custom{pid}, quick{pid} (modal), otp, m17, unlock{id} (modal) */
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import { P, OFFERS, PARTNER, STORE, IMG, GIFT, calcBill, lineInfo, lineKey, defaultSel, seedOrders, seedRefunds, seedAddresses } from './data.js';
 import { applyShop } from './shops.js';
@@ -202,7 +202,7 @@ export function BuyProvider({ children }) {
     pickaddr: id => {
       S.addr = S.addresses.find(x => x.id === id);
       if (S.toCart) { S.toCart = false; S.stack = S.stack.slice(0, -1); go('cart'); }
-      else if (S.checkout && S.cart.length) { back(); setTimeout(() => openSheet('pay'), 400); }
+      else if (S.checkout && S.cart.length) { back(); setTimeout(() => go('pay'), 400); }
       else { toast(`Delivering to ${S.addr.label}`); back(); }
     },
     sort: () => openSheet('sort'),
@@ -255,7 +255,7 @@ export function BuyProvider({ children }) {
       S.checkout = true;
       if (!S.user) openLogin();
       else if (!S.addr) toAddr();
-      else openSheet('pay');
+      else go('pay');
     },
     /* log in (Figma 724:2021 → OTP sheet 724:2395 → 724:2507): number → OTP → name. Any 6 digits verify in the demo. */
     details: () => openLogin(),
@@ -280,7 +280,7 @@ export function BuyProvider({ children }) {
         if (S.toCart && !S.addr) toAddr();
         else if (S.toCart) { S.toCart = false; go('cart'); }
         else if (S.checkout && !S.addr) toAddr();
-        else if (S.checkout) openSheet('pay');
+        else if (S.checkout) go('pay');
         else toast(`Logged in as ${name}`);
       }, 360);
     },
@@ -309,16 +309,15 @@ export function BuyProvider({ children }) {
       S.addr = saved; S.editing = null;
       const fromBook = S.stack.length > 1 && S.stack[S.stack.length - 2].n === 'addresses';
       if (S.toCart) { S.toCart = false; S.addrFirst = false; S.stack = S.stack.slice(0, fromBook ? -2 : -1); go('cart'); }
-      else if (S.checkout && S.cart.length) openSheet('pay');
+      else if (S.checkout && S.cart.length) go('pay');
       // picked "Use Current Location" from the home delivery bar: confirm it and go straight back home
       else if (S.fromHome) { S.fromHome = false; home(); toast(`Delivering to ${saved.area || saved.city}`); }
       else { toast('Address saved'); back(); }
     },
-    paynow: () => {
-      S.sheet = { ...S.sheet, paying: true }; commit();
-      setTimeout(() => { S.sheet = { ...S.sheet, paying: false, paid: true }; commit(); }, 1500);
-      setTimeout(() => { closeSheet(); placeOrder(); }, 2500);
-    },
+    // payment screen (screens/Pay.jsx): Cashfree checkout succeeded → place the order
+    payok: () => placeOrder(),
+    // failed payment → "Back to cart": drop everything above the cart (address / login steps) in one go
+    backtocart: () => { const i = S.stack.map(e => e.n).lastIndexOf('cart'); if (i > 0) { S.stack = S.stack.slice(0, i + 1); commit(); } else reset(['cart']); },
     myorders: () => { closeSheet(); reset(['orders']); },
     refunds: () => { closeSheet(); reset(['refunds']); },
     openrefund: id => go('refund', { id }),
@@ -345,5 +344,6 @@ export function BuyProvider({ children }) {
     support: () => { closeSheet(); go('store'); },
   };
 
+  if (import.meta.env.DEV) window.__buy = { S, A }; // dev-only handle for poking the prototype from the console
   return <Ctx.Provider value={{ S, A }}>{children}</Ctx.Provider>;
 }
