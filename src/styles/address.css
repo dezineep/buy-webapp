@@ -58,3 +58,7 @@
 /* footer (730:2744): items top-aligned; subtitle plain #585858 12px */
 .bd .bd-foot { align-items: flex-start; }
 .bd .bd-foot .ba-amt small { font-weight: 400; line-height: 1.2; letter-spacing: 0; color: #585858; text-decoration: none; }
+/* empty required field after "Save": red stroke (and label) until the shopper types in it */
+.bd .bd-f.bad .bd-in, .bd .bd-f.bad .bd-in:focus { border-color: #e00004; box-shadow: 0 0 0 3px rgba(224, 0, 4, .1); animation: bdShake .35s ease-in-out; }
+.bd .bd-f.bad .bd-l { color: #e00004; }
+@keyframes bdShake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }

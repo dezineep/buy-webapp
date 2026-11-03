@@ -284,7 +284,7 @@ export function BuyProvider({ children }) {
         else toast(`Logged in as ${name}`);
       }, 360);
     },
-    draft: (k, v) => { S.draft = S.draft || {}; S.draft[k] = k === 'pin' ? v.replace(/\D/g, '') : v; commit(); },
+    draft: (k, v) => { S.draft = S.draft || {}; S.draft[k] = k === 'pin' ? v.replace(/\D/g, '') : v; if (S.amiss && S.amiss.includes(k)) { S.amiss = S.amiss.filter(x => x !== k); if (!S.amiss.length) S.aerr = ''; } commit(); },
     locate: () => { S.located = true; findMe(); },
     // the map settled on a new centre (the pin): fill the address from it and work out the distance to the store
     mapmoved: ll => {
@@ -300,10 +300,18 @@ export function BuyProvider({ children }) {
     searcharea: q => { if (!q.trim()) return; geocode(q).then(ll => { if (ll) { S.mapGo = ll; commit(); } else toast('Couldn’t find that area'); }).catch(() => toast('Couldn’t search right now')); },
     saveaddr: () => {
       const a = S.draft || {};
-      const miss = [['street', 'Street / Building'], ['area', 'Area / Locality'], ['city', 'City']].find(([k]) => !(a[k] || '').trim());
-      if (miss) { S.aerr = `Please fill ${miss[1]}`; return commit(); }
-      if (!/^\d{6}$/.test(a.pin || '')) { S.aerr = 'Enter a valid 6-digit pincode'; return commit(); }
-      S.aerr = '';
+      // every empty required box gets a red stroke (Address.jsx reads S.amiss); the first one is scrolled to and focused
+      const need = [['street', 'Street / Building'], ['area', 'Area / Locality'], ['pin', 'Pincode'], ['city', 'City']];
+      const bad = need.filter(([k]) => (k === 'pin' ? !/^\d{6}$/.test(a.pin || '') : !(a[k] || '').trim()));
+      if (bad.length) {
+        S.amiss = bad.map(([k]) => k);
+        const [k0, l0] = bad[0];
+        S.aerr = bad.length > 1 ? 'Please fill the highlighted fields' : k0 === 'pin' && (a.pin || '') ? 'Enter a valid 6-digit pincode' : `Please fill ${l0}`;
+        commit();
+        requestAnimationFrame(() => { const el = document.querySelector(`.ba-screens > :last-child [data-k="${k0}"]`); if (el) { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); el.focus({ preventScroll: true }); } });
+        return;
+      }
+      S.aerr = ''; S.amiss = [];
       const saved = { state: 'Karnataka', type: 'home', label: 'Home', phone: S.user?.phone || '', dist: +(0.5 + Math.random() * 4).toFixed(1), ...a, id: S.editing || 'a' + Date.now() };
       S.addresses = S.editing ? S.addresses.map(x => (x.id === S.editing ? saved : x)) : [saved, ...S.addresses];
       S.addr = saved; S.editing = null;

@@ -19,8 +19,8 @@ export default function Address() {
   const first = S.addrFirst && !S.editing && !current;
   const pay = S.cart.length && S.checkout;
   const field = (k, label, ph, extra = {}) => (
-    <label className="bd-f"><span className="bd-l">{label}</span>
-      <input className="bd-in" value={a[k] || ''} placeholder={ph} onChange={e => A.draft(k, e.target.value)} {...extra} /></label>
+    <label className={'bd-f' + (S.amiss && S.amiss.includes(k) ? ' bad' : '')}><span className="bd-l">{label}</span>
+      <input className="bd-in" data-k={k} value={a[k] || ''} placeholder={ph} onChange={e => A.draft(k, e.target.value)} aria-invalid={S.amiss && S.amiss.includes(k) ? true : undefined} {...extra} /></label>
   );
   const dist = a.dist ?? 3.2;
   return (
